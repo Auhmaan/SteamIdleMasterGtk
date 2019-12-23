@@ -86,3 +86,9 @@ Desktop.ini
 
 # Certificate file extensions
 *.pfx
+/Source/.vs/IdleMaster/v15/Server/sqlite3/storage.ide-wal
+/Source/.vs/IdleMaster/v15/Server/sqlite3/storage.ide-shm
+/Source/.vs/IdleMaster/v15/Server/sqlite3/storage.ide
+/Source/.vs/IdleMaster/v15/Server/sqlite3/db.lock
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite
