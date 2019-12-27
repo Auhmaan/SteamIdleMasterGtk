@@ -1,22 +1,22 @@
-﻿using System;
+﻿using IdleMaster.Properties;
+using System;
 using System.Windows.Forms;
-using IdleMaster.Properties;
 
 namespace IdleMaster
 {
-  public partial class frmChangelog : Form
-  {
-    public frmChangelog()
+    public partial class frmChangelog : Form
     {
-      InitializeComponent();
-    }
+        public frmChangelog()
+        {
+            InitializeComponent();
+        }
 
-    private void frmChangelog_Load(object sender, EventArgs e)
-    {
-      // Localize Form
-      this.Text = localization.strings.release_notes_title;
+        private void frmChangelog_Load(object sender, EventArgs e)
+        {
+            // Localize Form
+            this.Text = localization.strings.release_notes_title;
 
-      rtbChangelog.Rtf = Resources.Changelog;
+            rtbChangelog.Rtf = Resources.Changelog;
+        }
     }
-  }
 }

@@ -1,22 +1,22 @@
-﻿using System;
+﻿using IdleMaster.Properties;
+using Newtonsoft.Json;
+using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Management;
+using System.Net;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using IdleMaster.Properties;
-using Newtonsoft.Json;
-using Steamworks;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
-using System.Globalization;
-using System.Security.Principal;
 
 namespace IdleMaster
 {
@@ -92,10 +92,10 @@ namespace IdleMaster
                         }
                         AllBadges = AllBadges.OrderByDescending(b => b.AveragePrice).ToList();
                     }
-                    catch  
+                    catch
                     {
 
-                    }                    
+                    }
                     break;
                 default:
                     return;
@@ -158,7 +158,7 @@ namespace IdleMaster
         {
             // Kill all existing processes before starting any new ones
             // This prevents rogue processes from interfering with idling time and slowing card drops
-            try 
+            try
             {
                 String username = WindowsIdentity.GetCurrent().Name;
                 foreach (var process in Process.GetProcessesByName("steam-idle"))
@@ -178,14 +178,14 @@ namespace IdleMaster
                             }
                         }
                     }
-                    
+
                 }
             }
             catch (Exception)
             {
 
             }
-            
+
             // Check if user is authenticated and if any badge left to idle
             // There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
             if (string.IsNullOrWhiteSpace(Settings.Default.sessionid) || !IsSteamReady)
@@ -233,8 +233,8 @@ namespace IdleMaster
                                 StartSoloIdle(CanIdleBadges.First());
                             }
                         }
-                        
-                        
+
+
                     }
                 }
                 else
@@ -679,8 +679,8 @@ namespace IdleMaster
                         language_string = "en";
                         break;
                 }
-                Thread.CurrentThread.CurrentUICulture = new CultureInfo(language_string);                
-            }            
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo(language_string);
+            }
 
             // Localize form elements
             fileToolStripMenuItem.Text = localization.strings.file;
@@ -701,7 +701,7 @@ namespace IdleMaster
             lnkResetCookies.Text = "(" + localization.strings.sign_out + ")";
             toolStripStatusLabel1.Text = localization.strings.next_check;
             toolStripStatusLabel1.ToolTipText = localization.strings.next_check;
-            
+
             lblSignedOnAs.Text = localization.strings.signed_in_as;
             GamesState.Columns[0].Text = localization.strings.name;
             GamesState.Columns[1].Text = localization.strings.hours;
@@ -937,7 +937,7 @@ namespace IdleMaster
             {
                 lblSignedOnAs.Text = SteamProfile.GetSignedAs();
                 lblSignedOnAs.Visible = Settings.Default.showUsername;
-            }            
+            }
         }
 
         private void pauseIdlingToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1035,7 +1035,7 @@ namespace IdleMaster
         {
             ReloadCount = ReloadCount + 1;
             lblDrops.Text = localization.strings.badge_didnt_load.Replace("__num__", (10 - ReloadCount).ToString());
-            
+
             if (ReloadCount == 10)
             {
                 tmrBadgeReload.Enabled = false;

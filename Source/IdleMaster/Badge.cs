@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using IdleMaster.Properties;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using IdleMaster.Properties;
 
 namespace IdleMaster
 {
