@@ -5,15 +5,15 @@ namespace IdleMaster
 {
     partial class frmBrowser
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
+        ///<summary>
+        ///Required designer variable.
+        ///</summary>
         private IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        ///<summary>
+        ///Clean up any resources being used.
+        ///</summary>
+        ///<param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -25,34 +25,34 @@ namespace IdleMaster
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
+        ///<summary>
+        ///Required method for Designer support - do not modify
+        ///the contents of this method with the code editor.
+        ///</summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBrowser));
-            this.wbAuth = new System.Windows.Forms.WebBrowser();
+            this.wbSteam = new System.Windows.Forms.WebBrowser();
             this.lblSaving = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tmrCheck = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // wbAuth
+            // wbSteam
             // 
-            this.wbAuth.AllowWebBrowserDrop = false;
-            this.wbAuth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.wbAuth.Location = new System.Drawing.Point(0, 0);
-            this.wbAuth.MinimumSize = new System.Drawing.Size(20, 20);
-            this.wbAuth.Name = "wbAuth";
-            this.wbAuth.ScriptErrorsSuppressed = true;
-            this.wbAuth.ScrollBarsEnabled = false;
-            this.wbAuth.Size = new System.Drawing.Size(976, 798);
-            this.wbAuth.TabIndex = 0;
-            this.wbAuth.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.wbAuth_DocumentCompleted);
-            this.wbAuth.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.wbAuth_Navigating);
+            this.wbSteam.AllowWebBrowserDrop = false;
+            this.wbSteam.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wbSteam.Location = new System.Drawing.Point(0, 0);
+            this.wbSteam.MinimumSize = new System.Drawing.Size(20, 20);
+            this.wbSteam.Name = "wbSteam";
+            this.wbSteam.ScriptErrorsSuppressed = true;
+            this.wbSteam.ScrollBarsEnabled = false;
+            this.wbSteam.Size = new System.Drawing.Size(976, 798);
+            this.wbSteam.TabIndex = 0;
+            this.wbSteam.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.wbAuth_DocumentCompleted);
+            this.wbSteam.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.wbSteam_Navigating);
             // 
             // lblSaving
             // 
@@ -82,7 +82,7 @@ namespace IdleMaster
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 798);
-            this.Controls.Add(this.wbAuth);
+            this.Controls.Add(this.wbSteam);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblSaving);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -99,7 +99,7 @@ namespace IdleMaster
 
         #endregion
 
-        private WebBrowser wbAuth;
+        private WebBrowser wbSteam;
         private Label lblSaving;
         private PictureBox pictureBox1;
         private Timer tmrCheck;

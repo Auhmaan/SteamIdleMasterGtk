@@ -7,23 +7,23 @@ namespace IdleMaster
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        ///<summary>
+        ///The main entry point for the application.
+        ///</summary>
         [STAThread]
         static void Main()
         {
-            // Set the Browser emulation version for embedded browser control
+            //Set the browser emulation version for embedded browser control
             try
             {
                 RegistryKey ie_root = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION");
                 RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
-                String programName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
-                key.SetValue(programName, (int)10001, RegistryValueKind.DWord);
+                string programName = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
+                key.SetValue(programName, 10001, RegistryValueKind.DWord);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                throw ex;
             }
 
             Application.ThreadException += (o, a) => Logger.Exception(a.Exception);

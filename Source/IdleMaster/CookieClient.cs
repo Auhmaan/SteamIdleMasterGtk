@@ -29,11 +29,11 @@ namespace IdleMaster
 
                 var cookies = (baseResponse as HttpWebResponse).Cookies;
 
-                // Check, if cookie should be deleted. This means that sessionID is now invalid and user has to log in again.
-                // Maybe this shoud be done other way (authenticate exception), but because of shared settings and timers in frmMain...
+                //Check, if cookie should be deleted. This means that sessionID is now invalid and user has to log in again.
+                //Maybe this shoud be done other way (authenticate exception), but because of shared settings and timers in frmMain...
                 if (cookies.Count > 0)
                 {
-                    if (cookies["steamLogin"] != null && cookies["steamLogin"].Value == "deleted")
+                    if (cookies["steamLoginSecure"] != null && cookies["steamLoginSecure"].Value == "deleted")
                     {
                         Settings.Default.sessionid = string.Empty;
                         Settings.Default.steamLogin = string.Empty;
@@ -59,7 +59,7 @@ namespace IdleMaster
             var cookies = new CookieContainer();
             var target = new Uri("http://steamcommunity.com");
             cookies.Add(new Cookie("sessionid", Settings.Default.sessionid) { Domain = target.Host });
-            cookies.Add(new Cookie("steamLogin", Settings.Default.steamLogin) { Domain = target.Host });
+            cookies.Add(new Cookie("steamLoginSecure", Settings.Default.steamLogin) { Domain = target.Host });
             cookies.Add(new Cookie("steamparental", Settings.Default.steamparental) { Domain = target.Host });
             cookies.Add(new Cookie("steamRememberLogin", Settings.Default.steamRememberLogin) { Domain = target.Host });
             cookies.Add(new Cookie(GetSteamMachineAuthCookieName(), Settings.Default.steamMachineAuth) { Domain = target.Host });
@@ -81,7 +81,7 @@ namespace IdleMaster
                 var content = string.Empty;
                 try
                 {
-                    // If user is NOT authenticated (cookie got deleted in GetWebResponse()), return empty result
+                    //If user is NOT authenticated (cookie got deleted in GetWebResponse()), return empty result
                     if (String.IsNullOrEmpty(Settings.Default.sessionid))
                     {
                         return string.Empty;

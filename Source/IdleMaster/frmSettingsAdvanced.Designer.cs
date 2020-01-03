@@ -5,15 +5,15 @@ namespace IdleMaster
 {
     partial class frmSettingsAdvanced
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
+        ///<summary>
+        ///Required designer variable.
+        ///</summary>
         private IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        ///<summary>
+        ///Clean up any resources being used.
+        ///</summary>
+        ///<param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -25,10 +25,10 @@ namespace IdleMaster
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
+        ///<summary>
+        ///Required method for Designer support - do not modify
+        ///the contents of this method with the code editor.
+        ///</summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -43,63 +43,63 @@ namespace IdleMaster
             this.btnView = new System.Windows.Forms.Button();
             this.ttHelp = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
-            // 
-            // label1
-            // 
+            //
+            //label1
+            //
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "sessionid:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label2
-            // 
+            //
+            //label2
+            //
             this.label2.Location = new System.Drawing.Point(13, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(85, 23);
             this.label2.TabIndex = 1;
             this.label2.Text = "steamLogin:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label3
-            // 
+            //
+            //label3
+            //
             this.label3.Location = new System.Drawing.Point(12, 60);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(86, 23);
             this.label3.TabIndex = 2;
             this.label3.Text = "steamparental:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // txtSessionID
-            // 
+            //
+            //txtSessionID
+            //
             this.txtSessionID.Location = new System.Drawing.Point(104, 10);
             this.txtSessionID.Name = "txtSessionID";
             this.txtSessionID.PasswordChar = '*';
             this.txtSessionID.Size = new System.Drawing.Size(299, 20);
             this.txtSessionID.TabIndex = 3;
             this.txtSessionID.TextChanged += new System.EventHandler(this.txtSessionID_TextChanged);
-            // 
-            // txtSteamLogin
-            // 
+            //
+            //txtSteamLogin
+            //
             this.txtSteamLogin.Location = new System.Drawing.Point(104, 33);
             this.txtSteamLogin.Name = "txtSteamLogin";
             this.txtSteamLogin.PasswordChar = '*';
             this.txtSteamLogin.Size = new System.Drawing.Size(299, 20);
             this.txtSteamLogin.TabIndex = 4;
             this.txtSteamLogin.TextChanged += new System.EventHandler(this.txtSteamLogin_TextChanged);
-            // 
-            // txtSteamParental
-            // 
+            //
+            //txtSteamParental
+            //
             this.txtSteamParental.Location = new System.Drawing.Point(104, 57);
             this.txtSteamParental.Name = "txtSteamParental";
             this.txtSteamParental.PasswordChar = '*';
             this.txtSteamParental.Size = new System.Drawing.Size(299, 20);
             this.txtSteamParental.TabIndex = 5;
             this.txtSteamParental.TextChanged += new System.EventHandler(this.txtSteamParental_TextChanged);
-            // 
-            // btnUpdate
-            // 
+            //
+            //btnUpdate
+            //
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdate.Location = new System.Drawing.Point(327, 83);
             this.btnUpdate.Name = "btnUpdate";
@@ -108,9 +108,9 @@ namespace IdleMaster
             this.btnUpdate.Text = "&Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
-            // btnView
-            // 
+            //
+            //btnView
+            //
             this.btnView.Image = global::IdleMaster.Properties.Resources.imgView;
             this.btnView.Location = new System.Drawing.Point(104, 83);
             this.btnView.Name = "btnView";
@@ -121,15 +121,15 @@ namespace IdleMaster
         "ount.");
             this.btnView.UseVisualStyleBackColor = true;
             this.btnView.Click += new System.EventHandler(this.btnView_Click);
-            // 
-            // ttHelp
-            // 
+            //
+            //ttHelp
+            //
             this.ttHelp.AutoPopDelay = 9000;
             this.ttHelp.InitialDelay = 500;
             this.ttHelp.ReshowDelay = 100;
-            // 
-            // frmSettingsAdvanced
-            // 
+            //
+            //frmSettingsAdvanced
+            //
             this.AcceptButton = this.btnUpdate;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

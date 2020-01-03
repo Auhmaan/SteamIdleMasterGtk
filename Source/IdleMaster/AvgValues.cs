@@ -2,17 +2,17 @@
 
 namespace IdleMaster
 {
-    public class EnhancedsteamHelper
+    public class EnhancedSteamHelper
     {
-        // ReSharper disable once InconsistentNaming
-        public List<Avg> Avg_Values { get; set; }
+        //ReSharper disable once InconsistentNaming
+        public List<Avg> AvgValues { get; set; }
     }
 
     public class Avg
     {
         public int AppId { get; set; }
 
-        // ReSharper disable once InconsistentNaming
-        public double Avg_Price { get; set; }
+        //ReSharper disable once InconsistentNaming
+        public double AvgPrice { get; set; }
     }
 }

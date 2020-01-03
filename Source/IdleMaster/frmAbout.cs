@@ -19,7 +19,7 @@ namespace IdleMaster
 
         private void frmAbout_Load(object sender, EventArgs e)
         {
-            // Localize the form
+            //Localize the form
             btnOK.Text = localization.strings.ok;
 
             if (ApplicationDeployment.IsNetworkDeployed)

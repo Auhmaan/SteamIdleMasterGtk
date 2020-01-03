@@ -21,7 +21,7 @@ namespace IdleMaster
 
         private void frmBlacklist_Load(object sender, EventArgs e)
         {
-            // Localize form
+            //Localize form
             btnAdd.Text = localization.strings.add;
             btnSave.Text = localization.strings.save;
             this.Text = localization.strings.manage_blacklist;
@@ -38,8 +38,7 @@ namespace IdleMaster
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            int result;
-            if (int.TryParse(txtAppid.Text, out result))
+            if (int.TryParse(txtAppid.Text, out int result))
             {
                 if (lstBlacklist.Items.Cast<string>().All(blApp => blApp != txtAppid.Text))
                     lstBlacklist.Items.Add(txtAppid.Text);

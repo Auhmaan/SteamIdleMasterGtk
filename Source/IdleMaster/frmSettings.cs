@@ -99,7 +99,7 @@ namespace IdleMaster
                     break;
             }
 
-            // Load translation
+            //Load translation
             this.Text = localization.strings.idle_master_settings;
             grpGeneral.Text = localization.strings.general;
             grpIdlingQuantity.Text = localization.strings.idling_behavior;

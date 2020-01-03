@@ -13,7 +13,7 @@ namespace IdleMaster
 
         private void frmChangelog_Load(object sender, EventArgs e)
         {
-            // Localize Form
+            //Localize Form
             this.Text = localization.strings.release_notes_title;
 
             rtbChangelog.Rtf = Resources.Changelog;

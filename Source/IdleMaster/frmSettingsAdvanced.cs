@@ -27,7 +27,7 @@ namespace IdleMaster
 
         private void frmSettingsAdvanced_Load(object sender, EventArgs e)
         {
-            // Localize Form
+            //Localize Form
             btnUpdate.Text = localization.strings.update;
             this.Text = localization.strings.auth_data;
             ttHelp.SetToolTip(btnView, localization.strings.cookie_warning);
@@ -107,7 +107,7 @@ namespace IdleMaster
                 Logger.Exception(ex, "frmSettingsAdvanced -> CheckAndSave");
             }
 
-            // Invalid cookie data, reset the form
+            //Invalid cookie data, reset the form
             btnUpdate.Text = localization.strings.update;
             txtSessionID.Text = "";
             txtSteamLogin.Text = "";

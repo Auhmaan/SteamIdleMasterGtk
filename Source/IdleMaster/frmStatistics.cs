@@ -14,7 +14,7 @@ namespace IdleMaster
 
         private void frmStatistics_Load(object sender, EventArgs e)
         {
-            // Localize Form
+            //Localize Form
             this.Text = localization.strings.statistics.Replace("&", "");
             btnOK.Text = localization.strings.accept;
             lblSessionHeader.Text = localization.strings.this_session + ":";

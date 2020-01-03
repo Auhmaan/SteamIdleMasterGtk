@@ -52,7 +52,7 @@ namespace IdleMaster
             {
                 var document = new HtmlDocument();
                 var response = await CookieClient.GetHttpAsync(Settings.Default.myProfileURL + "/gamecards/" + StringId);
-                // Response should be empty. User should be unauthorised.
+                //Response should be empty. User should be unauthorised.
                 if (string.IsNullOrEmpty(response))
                 {
                     return false;
@@ -83,7 +83,7 @@ namespace IdleMaster
 
         public override bool Equals(object obj)
         {
-            var badge = obj as Badge;
+            Badge badge = obj as Badge;
             return badge != null && Equals(AppId, badge.AppId);
         }
 

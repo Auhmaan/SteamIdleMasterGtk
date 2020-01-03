@@ -10,8 +10,8 @@ namespace IdleMaster
     {
         internal static string GetSteamId()
         {
-            var steamid = WebUtility.UrlDecode(Settings.Default.steamLogin);
-            var index = steamid.IndexOfAny(new[] { '|' }, 0);
+            string steamid = WebUtility.UrlDecode(Settings.Default.steamLogin);
+            int index = steamid.IndexOfAny(new[] { '|' }, 0);
             return index != -1 ? steamid.Remove(index) : steamid;
         }
 
@@ -22,23 +22,30 @@ namespace IdleMaster
 
         internal static string GetSignedAs()
         {
-            var steamUrl = GetSteamUrl();
-            var userName = "User " + GetSteamId();
+            string steamUrl = GetSteamUrl();
+            string userName = $"User {GetSteamId()}";
+
             try
             {
-                var xmlRaw = new WebClient() { Encoding = Encoding.UTF8 }.DownloadString(string.Format("{0}/?xml=1", steamUrl));
-                var xml = new XmlDocument();
+                string xmlRaw = new WebClient() { Encoding = Encoding.UTF8 }.DownloadString($"{steamUrl}/?xml=1");
+
+                XmlDocument xml = new XmlDocument();
                 xml.LoadXml(xmlRaw);
-                var nameNode = xml.SelectSingleNode("//steamID");
-                if (nameNode != null)
-                    userName = WebUtility.HtmlDecode(nameNode.InnerText);
+
+                XmlNode xmlNode = xml.SelectSingleNode("//steamID");
+
+                if (xmlNode != null)
+                {
+                    userName = WebUtility.HtmlDecode(xmlNode.InnerText);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Logger.Exception(ex, "frmMain -> GetSignedAs, for steamUrl = " + steamUrl);
+                Logger.Exception(ex, $"frmMain -> GetSignedAs, for steamUrl = {steamUrl}");
             }
-            return localization.strings.signed_in_as + " " + userName;
+
+            return $"{localization.strings.signed_in_as} {userName}";
         }
     }
 }
