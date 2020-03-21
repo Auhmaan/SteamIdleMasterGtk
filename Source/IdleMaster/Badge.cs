@@ -10,60 +10,73 @@ namespace IdleMaster
 {
     public class Badge
     {
-        public double AveragePrice { get; set; }
-
-        public int AppId { get; set; }
+        public string AppId { get; set; }
 
         public string Name { get; set; }
-
-        public string StringId
-        {
-            get { return AppId.ToString(); }
-            set { AppId = string.IsNullOrWhiteSpace(value) ? 0 : int.Parse(value); }
-        }
 
         public int RemainingCard { get; set; }
 
         public double HoursPlayed { get; set; }
 
+        public double AveragePrice { get; set; }
 
         private Process idleProcess;
 
-        public bool InIdle { get { return idleProcess != null && !idleProcess.HasExited; } }
+        public bool InIdle
+        {
+            get
+            {
+                return idleProcess != null && !idleProcess.HasExited;
+            }
+        }
+
+        public Badge(string appId, string name, string remaining, string hours)
+        {
+            AppId = appId;
+            Name = name;
+            UpdateStats(remaining, hours);
+        }
 
         public Process Idle()
         {
             if (InIdle)
+            {
                 return idleProcess;
+            }
 
-            idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId.ToString()) { WindowStyle = ProcessWindowStyle.Hidden });
+            idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId) { WindowStyle = ProcessWindowStyle.Hidden });
+
             return idleProcess;
         }
 
         public void StopIdle()
         {
             if (InIdle)
+            {
                 idleProcess.Kill();
+            }
         }
 
         public async Task<bool> CanCardDrops()
         {
             try
             {
-                var document = new HtmlDocument();
-                var response = await CookieClient.GetHttpAsync(Settings.Default.myProfileURL + "/gamecards/" + StringId);
+                HtmlDocument document = new HtmlDocument();
+                string response = await CookieClient.GetHttpAsync($"{Settings.Default.myProfileURL}/gamecards/{AppId})");
+
                 //Response should be empty. User should be unauthorised.
-                if (string.IsNullOrEmpty(response))
+                if (string.IsNullOrWhiteSpace(response))
                 {
                     return false;
                 }
+
                 document.LoadHtml(response);
 
-                var hoursNode = document.DocumentNode.SelectSingleNode("//div[@class=\"badge_title_stats_playtime\"]");
-                var hours = Regex.Match(hoursNode.InnerText, @"[0-9\.,]+").Value;
+                HtmlNode hoursNode = document.DocumentNode.SelectSingleNode("//div[@class=\"badge_title_stats_playtime\"]");
+                string hours = Regex.Match(hoursNode.InnerText, @"[0-9\.,]+").Value;
 
-                var cardNode = hoursNode.ParentNode.SelectSingleNode(".//span[@class=\"progress_info_bold\"]");
-                var cards = cardNode == null ? string.Empty : Regex.Match(cardNode.InnerText, @"[0-9]+").Value;
+                HtmlNode cardNode = hoursNode.ParentNode.SelectSingleNode(".//span[@class=\"progress_info_bold\"]");
+                string cards = cardNode == null ? string.Empty : Regex.Match(cardNode.InnerText, @"[0-9]+").Value;
 
                 UpdateStats(cards, hours);
                 return RemainingCard != 0;
@@ -72,6 +85,7 @@ namespace IdleMaster
             {
                 Logger.Exception(ex, "Badge -> CanCardDrops, for id = " + AppId);
             }
+
             return false;
         }
 
@@ -94,18 +108,7 @@ namespace IdleMaster
 
         public override string ToString()
         {
-            return string.IsNullOrWhiteSpace(Name) ? StringId : Name;
+            return string.IsNullOrWhiteSpace(Name) ? AppId : Name;
         }
-
-        public Badge(string id, string name, string remaining, string hours)
-          : this()
-        {
-            StringId = id;
-            Name = name;
-            UpdateStats(remaining, hours);
-        }
-
-        public Badge()
-        { }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using IdleMaster.Properties;
+using System;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using HtmlAgilityPack;
-using IdleMaster.Properties;
 
 namespace IdleMaster
 {
@@ -13,11 +13,21 @@ namespace IdleMaster
 
         internal Uri ResponseUri;
 
+        public CookieClient()
+        {
+            Cookie = GenerateCookies();
+            Encoding = Encoding.UTF8;
+        }
+
         protected override WebRequest GetWebRequest(Uri address)
         {
-            var request = base.GetWebRequest(address);
+            WebRequest request = base.GetWebRequest(address);
+
             if (request is HttpWebRequest)
+            {
                 (request as HttpWebRequest).CookieContainer = Cookie;
+            }
+
             return request;
         }
 
@@ -25,9 +35,9 @@ namespace IdleMaster
         {
             try
             {
-                var baseResponse = base.GetWebResponse(request);
+                WebResponse baseResponse = base.GetWebResponse(request);
 
-                var cookies = (baseResponse as HttpWebResponse).Cookies;
+                CookieCollection cookies = (baseResponse as HttpWebResponse).Cookies;
 
                 //Check, if cookie should be deleted. This means that sessionID is now invalid and user has to log in again.
                 //Maybe this shoud be done other way (authenticate exception), but because of shared settings and timers in frmMain...
@@ -44,32 +54,37 @@ namespace IdleMaster
                     }
                 }
 
-                this.ResponseUri = baseResponse.ResponseUri;
-                return baseResponse;                
+                ResponseUri = baseResponse.ResponseUri;
+                return baseResponse;
             }
             catch (Exception)
             {
 
             }
+
             return null;
         }
 
         public static CookieContainer GenerateCookies()
         {
-            var cookies = new CookieContainer();
-            var target = new Uri("http://steamcommunity.com");
+            CookieContainer cookies = new CookieContainer();
+            Uri target = new Uri("http://steamcommunity.com");
             cookies.Add(new Cookie("sessionid", Settings.Default.sessionid) { Domain = target.Host });
             cookies.Add(new Cookie("steamLoginSecure", Settings.Default.steamLogin) { Domain = target.Host });
             cookies.Add(new Cookie("steamparental", Settings.Default.steamparental) { Domain = target.Host });
             cookies.Add(new Cookie("steamRememberLogin", Settings.Default.steamRememberLogin) { Domain = target.Host });
             cookies.Add(new Cookie(GetSteamMachineAuthCookieName(), Settings.Default.steamMachineAuth) { Domain = target.Host });
+
             return cookies;
         }
 
         public static string GetSteamMachineAuthCookieName()
         {
             if (Settings.Default.steamLogin != null && Settings.Default.steamLogin.Length > 17)
+            {
                 return string.Format("steamMachineAuth{0}", Settings.Default.steamLogin.Substring(0, 17));
+            }
+
             return "steamMachineAuth";
         }
 
@@ -77,12 +92,13 @@ namespace IdleMaster
         {
             while (true)
             {
-                var client = new CookieClient();
-                var content = string.Empty;
+                CookieClient client = new CookieClient();
+                string content = string.Empty;
+
                 try
                 {
                     //If user is NOT authenticated (cookie got deleted in GetWebResponse()), return empty result
-                    if (String.IsNullOrEmpty(Settings.Default.sessionid))
+                    if (string.IsNullOrWhiteSpace(Settings.Default.sessionid))
                     {
                         return string.Empty;
                     }
@@ -95,24 +111,21 @@ namespace IdleMaster
                 }
 
                 if (!string.IsNullOrWhiteSpace(content) || count == 0)
+                {
                     return content;
+                }
 
-                count = count - 1;
+                count--;
             }
         }
 
         public static async Task<bool> IsLogined()
         {
-            var response = await GetHttpAsync(Settings.Default.myProfileURL);
-            var document = new HtmlDocument();
+            string response = await GetHttpAsync(Settings.Default.myProfileURL);
+            HtmlDocument document = new HtmlDocument();
             document.LoadHtml(response);
-            return document.DocumentNode.SelectSingleNode("//a[@class=\"global_action_link\"]") == null;
-        }
 
-        public CookieClient()
-        {
-            Cookie = GenerateCookies();
-            Encoding = Encoding.UTF8;
+            return document.DocumentNode.SelectSingleNode("//a[@class=\"global_action_link\"]") == null;
         }
     }
 }

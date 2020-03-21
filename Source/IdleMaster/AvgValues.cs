@@ -10,7 +10,7 @@ namespace IdleMaster
 
     public class Avg
     {
-        public int AppId { get; set; }
+        public string AppId { get; set; }
 
         //ReSharper disable once InconsistentNaming
         public double AvgPrice { get; set; }

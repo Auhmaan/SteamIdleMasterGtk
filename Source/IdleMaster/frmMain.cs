@@ -1,4 +1,5 @@
-﻿using IdleMaster.Properties;
+﻿using HtmlAgilityPack;
+using IdleMaster.Properties;
 using Newtonsoft.Json;
 using Steamworks;
 using System;
@@ -12,7 +13,6 @@ using System.Management;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -477,7 +477,7 @@ namespace IdleMaster
             //Update game image
             try
             {
-                picApp.Load($"http://cdn.akamai.steamstatic.com/steam/apps/{CurrentBadge.StringId}/header_292x136.jpg");
+                picApp.Load($"http://cdn.akamai.steamstatic.com/steam/apps/{CurrentBadge.AppId}/header_292x136.jpg");
                 picApp.Visible = true;
             }
             catch (Exception ex)
@@ -625,77 +625,47 @@ namespace IdleMaster
 
         private async Task LoadBadgesAsync()
         {
-            //Settings.Default.myProfileURL = http://steamcommunity.com/id/USER
-            string profileLink = $"{Settings.Default.myProfileURL}/badges";
-            List<string> pages = new List<string>() { "?p=1" };
-            int pagesCount = 1;
-
             try
             {
-                //Load Page 1 and check how many pages there are
-                string pageURL = $"{profileLink}/?p=1";
-                string response = await CookieClient.GetHttpAsync(pageURL);
+                string profileLink = $"{Settings.Default.myProfileURL}/badges";
+                int currentPage = 0;
+                int totalPages = 1;
 
-                //Response should be empty. User should be unauthorised
-                if (string.IsNullOrEmpty(response))
+                do
                 {
-                    RetryCount++;
+                    currentPage++;
+                    string response = await CookieClient.GetHttpAsync($"{profileLink}?p={currentPage}");
 
-                    if (RetryCount == 18)
+                    if (string.IsNullOrWhiteSpace(response))
                     {
                         ResetClientStatus();
                         return;
                     }
 
-                    throw new Exception();
-                }
-
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(response);
-
-                //If user is authenticated, check page count. If user is not authenticated, pages are different
-                HtmlAgilityPack.HtmlNodeCollection pageNodes = document.DocumentNode.SelectNodes("//a[@class=\"pagelink\"]");
-
-                if (pageNodes != null)
-                {
-                    pages.AddRange(pageNodes.Select(p => p.Attributes["href"].Value).Distinct());
-                    pages = pages.Distinct().ToList();
-                }
-
-                string lastpage = pages.Last().ToString().Replace("?p=", "");
-                pagesCount = Convert.ToInt32(lastpage);
-
-                //Get all badges from current page
-                ProcessBadgesOnPage(document);
-
-                //Load other pages
-                for (int index = 2; index <= pagesCount; index++)
-                {
-                    lblDrops.Text = $"{localization.strings.reading_badge_page} {index}/{pagesCount}, {localization.strings.please_wait}";
-
-                    //Load Page 2+
-                    pageURL = string.Format("{0}/?p={1}", profileLink, index);
-                    response = await CookieClient.GetHttpAsync(pageURL);
-
-                    //Response should be empty. User should be unauthorised.
-                    if (string.IsNullOrWhiteSpace(response))
-                    {
-                        RetryCount++;
-
-                        if (RetryCount == 18)
-                        {
-                            ResetClientStatus();
-                            return;
-                        }
-
-                        throw new Exception();
-                    }
-
+                    HtmlDocument document = new HtmlDocument();
                     document.LoadHtml(response);
 
-                    //Get all badges from current page
-                    ProcessBadgesOnPage(document);
+                    //Process badges in the current page, if the current page has no droppable badges the process stops
+                    if (!ProcessBadgesOnPage(document))
+                    {
+                        break;
+                    }
+
+                    lblDrops.Text = $"{localization.strings.reading_badge_page} {currentPage}/{totalPages}, {localization.strings.please_wait}";
+
+                    //If the current page is the first one, calculate how many pages exist
+                    if (currentPage != 1)
+                    {
+                        continue;
+                    }
+
+                    HtmlNodeCollection pages = document.DocumentNode.SelectNodes("//a[@class=\"pagelink\"]");
+
+                    string href = pages?.Last().Attributes["href"]?.Value;
+                    string maxPages = href?.Split('=').Last();
+                    int.TryParse(maxPages, out totalPages);
                 }
+                while (currentPage < totalPages);
             }
             catch (Exception ex)
             {
@@ -731,42 +701,42 @@ namespace IdleMaster
             }
         }
 
-        ///<summary>
-        ///Processes all badges on page
-        ///</summary>
-        ///<param name="document">HTML document (1 page) from x</param>
-        private void ProcessBadgesOnPage(HtmlDocument document)
+        private bool ProcessBadgesOnPage(HtmlDocument document)
         {
-            foreach (HtmlAgilityPack.HtmlNode badge in document.DocumentNode.SelectNodes("//div[@class=\"badge_row is_link\"]"))
-            {
-                string appIdNode = badge.SelectSingleNode(".//a[@class=\"badge_row_overlay\"]").Attributes["href"].Value;
-                string appId = Regex.Match(appIdNode, @"gamecards/(\d+)/").Groups[1].Value;
+            HtmlNodeCollection droppableBadges = document.DocumentNode.SelectNodes("//span[text()='PLAY']/ancestor::div[contains(@class,'is_link')]");
 
-                if (string.IsNullOrWhiteSpace(appId) || Settings.Default.blacklist.Contains(appId) || appId == "368020" || appId == "335590" || appIdNode.Contains("border=1"))
+            if (droppableBadges == null)
+            {
+                return false;
+            }
+
+            foreach (HtmlNode badge in droppableBadges)
+            {
+                HtmlNode urlNode = badge.SelectSingleNode(".//a[@class='badge_row_overlay']");
+                string appId = urlNode?.Attributes["href"]?.Value.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
+
+                HtmlNode nameNode = badge.SelectSingleNode(".//div[@class='badge_title']");
+                string name = WebUtility.HtmlDecode(nameNode?.FirstChild.InnerText).Trim();
+
+                HtmlNode cardsNode = badge.SelectSingleNode(".//span[@class='progress_info_bold']");
+                string cards = cardsNode?.InnerText.Split(' ').First();
+
+                HtmlNode playtimeNode = badge.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
+                string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
+
+                Badge existingBadge = AllBadges.FirstOrDefault(x => x.AppId == appId);
+
+                if (existingBadge != null)
                 {
+                    existingBadge.UpdateStats(cards, playtime);
                     continue;
                 }
 
-                HtmlAgilityPack.HtmlNode hoursNode = badge.SelectSingleNode(".//div[@class=\"badge_title_stats_playtime\"]");
-                string hours = hoursNode == null ? string.Empty : Regex.Match(hoursNode.InnerText, @"[0-9\.,]+").Value;
-
-                HtmlAgilityPack.HtmlNode nameNode = badge.SelectSingleNode(".//div[@class=\"badge_title\"]");
-                string name = WebUtility.HtmlDecode(nameNode.FirstChild.InnerText).Trim();
-
-                HtmlAgilityPack.HtmlNode cardNode = badge.SelectSingleNode(".//span[@class=\"progress_info_bold\"]");
-                string cards = cardNode == null ? string.Empty : Regex.Match(cardNode.InnerText, @"[0-9]+").Value;
-
-                Badge badgeInMemory = AllBadges.FirstOrDefault(b => b.StringId == appId);
-
-                if (badgeInMemory != null)
-                {
-                    badgeInMemory.UpdateStats(cards, hours);
-                }
-                else
-                {
-                    AllBadges.Add(new Badge(appId, name, cards, hours));
-                }
+                Badge newBadge = new Badge(appId, name, cards, playtime);
+                AllBadges.Add(newBadge);
             }
+
+            return true;
         }
 
         private async Task CheckCardDrops(Badge badge)
@@ -787,9 +757,6 @@ namespace IdleMaster
             UpdateStateInfo();
         }
 
-        ///<summary>
-        ///Performs reset to initial state
-        ///</summary>
         private void ResetClientStatus()
         {
             //Clear the settings
@@ -1058,7 +1025,7 @@ namespace IdleMaster
             frmBlacklist form = new frmBlacklist();
             form.ShowDialog();
 
-            if (Settings.Default.blacklist.Cast<string>().Any(appid => appid == CurrentBadge.StringId))
+            if (Settings.Default.blacklist.Cast<string>().Any(x => x == CurrentBadge.AppId))
             {
                 btnSkip.PerformClick();
             }
@@ -1066,7 +1033,7 @@ namespace IdleMaster
 
         private void blacklistCurrentGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings.Default.blacklist.Add(CurrentBadge.StringId);
+            Settings.Default.blacklist.Add(CurrentBadge.AppId);
             Settings.Default.Save();
 
             btnSkip.PerformClick();
