@@ -62,7 +62,7 @@ namespace IdleMaster
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            //Copy external references to the output directory.This allows ClickOnce install.
+            //Copy external references to the output directory. This allows ClickOnce install.
             if (File.Exists("steam_api.dll") == false)
             {
                 CopyResource("IdleMaster.Resources.steam_api.dll", $@"{Environment.CurrentDirectory}\steam_api.dll");

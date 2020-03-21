@@ -1,6 +1,5 @@
 ﻿using IdleMaster.Properties;
 using System;
-using System.Drawing;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,12 +15,8 @@ namespace IdleMaster
         [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern bool InternetSetCookie(string lpszUrlName, string lpszCookieName, string lpszCookieData);
 
-        //Imports the InternetGetCookieEx function from wininet.dll which allows the application to access the cookie data from the web browser control
-        //Reference: http://stackoverflow.com/questions/3382498/is-it-possible-to-transfer-authentication-from-webbrowser-to-webrequest
         [DllImport("wininet.dll", SetLastError = true)]
         public static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, int dwFlags, IntPtr lpReserved);
-
-        public int SecondsWaiting = 30;
 
         public frmBrowser()
         {
@@ -30,7 +25,6 @@ namespace IdleMaster
 
         private void frmBrowser_Load(object sender, EventArgs e)
         {
-            //Localize form
             Text = localization.strings.please_login;
             lblSaving.Text = localization.strings.saving_info;
 
@@ -42,107 +36,66 @@ namespace IdleMaster
             InternetSetCookie("http://steamcommunity.com", "steamLoginSecure", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
             InternetSetCookie("http://steamcommunity.com", "steamRememberLogin", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
 
-            //When the form is loaded, navigate to the Steam login page using the web browser control
-            wbSteam.Navigate("https://steamcommunity.com/login/home/?goto=my/profile", "_self", null, "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko");
+            wbSteam.Navigate("https://steamcommunity.com/login", "_self", null, "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko");
         }
 
         //This code block executes each time a new document is loaded into the web browser control
         private void wbAuth_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            //Find the page header, and remove it. This gives the login form a more streamlined look.
-            dynamic htmldoc = wbSteam.Document.DomDocument;
-            dynamic globalHeader = htmldoc.GetElementById("global_header");
+            wbSteam.Document.Body.Style = "overflow:hidden";
 
-            if (globalHeader != null)
+            if (wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/login" ||
+                wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
             {
-                try
+                dynamic htmldoc = wbSteam.Document.DomDocument;
+                dynamic idElement = htmldoc.GetElementById("global_header");
+
+                if (!object.ReferenceEquals(idElement, DBNull.Value))
                 {
-                    globalHeader.parentNode.removeChild(globalHeader);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    idElement.parentNode.removeChild(idElement);
                 }
             }
 
-            //Get the URL of the page that just finished loading
-            string url = wbSteam.Url.AbsoluteUri;
-
-            //If the page it just finished loading is the login page
-            if (url == "https://steamcommunity.com/login/home/?goto=my/profile" ||
-                url == "https://store.steampowered.com/login/transfer" ||
-                url == "https://store.steampowered.com//login/transfer")
+            //Only gather the cookie information after reaching the profile page
+            if (!wbSteam.Url.AbsoluteUri.StartsWith("https://steamcommunity.com/id/"))
             {
-                //Get a list of cookies from the current page
-                CookieContainer container = GetUriCookieContainer(wbSteam.Url);
-                CookieCollection cookies = container.GetCookies(wbSteam.Url);
+                return;
+            }
 
-                foreach (Cookie cookie in cookies)
+            CookieContainer container = GetUriCookieContainer(wbSteam.Url);
+            CookieCollection cookies = container.GetCookies(wbSteam.Url);
+
+            foreach (Cookie cookie in cookies)
+            {
+                switch (cookie.Name)
                 {
-                    if (cookie.Name.StartsWith("steamMachineAuth"))
-                    {
+                    case "steamMachineAuth":
                         Settings.Default.steamMachineAuth = cookie.Value;
-                    }
+                        break;
+                    case "sessionid":
+                        Settings.Default.sessionid = cookie.Value;
+                        break;
+                    case "steamLoginSecure":
+                        Settings.Default.steamLogin = cookie.Value;
+                        Settings.Default.myProfileURL = SteamProfile.GetSteamUrl();
+                        break;
+                    case "steamparental":
+                        Settings.Default.steamparental = cookie.Value;
+                        break;
+                    case "steamRememberLogin":
+                        Settings.Default.steamRememberLogin = cookie.Value;
+                        break;
                 }
             }
 
-            //If the page it just finished loading isn't the login page
-            if (url.StartsWith("javascript:") == false && url.StartsWith("about:") == false)
-            {
-                try
-                {
-                    dynamic parentalNotice = htmldoc.GetElementById("parental_notice");
+            //Save all of the data to the program settings file
+            Settings.Default.Save();
 
-                    if (parentalNotice != null)
-                    {
-                        if (parentalNotice.OuterHtml != "")
-                        {
-                            //Steam family options enabled
-                            wbSteam.Show();
-                            Width = 1000;
-                            Height = 350;
-                            return;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-
-                //Get a list of cookies from the current page
-                CookieContainer container = GetUriCookieContainer(wbSteam.Url);
-                CookieCollection cookies = container.GetCookies(wbSteam.Url);
-
-                //Go through the cookie data so that we can extract the cookies we are looking for
-                foreach (Cookie cookie in cookies)
-                {
-                    switch (cookie.Name)
-                    {
-                        case "sessionid":
-                            Settings.Default.sessionid = cookie.Value;
-                            break;
-                        case "steamLoginSecure":
-                            Settings.Default.steamLogin = cookie.Value;
-                            Settings.Default.myProfileURL = SteamProfile.GetSteamUrl();
-                            break;
-                        case "steamparental":
-                            Settings.Default.steamparental = cookie.Value;
-                            break;
-                        case "steamRememberLogin":
-                            Settings.Default.steamRememberLogin = cookie.Value;
-                            break;
-                    }
-                }
-
-                //Save all of the data to the program settings file, and close this form
-                Settings.Default.Save();
-                Close();
-            }
+            Close();
         }
 
         //This function returns cookie data based on a uniform resource identifier
-        public static CookieContainer GetUriCookieContainer(Uri uri)
+        private CookieContainer GetUriCookieContainer(Uri uri)
         {
             //First, create a null cookie container
             CookieContainer cookies = null;
@@ -176,43 +129,6 @@ namespace IdleMaster
 
             //Return the cookie container
             return cookies;
-        }
-
-        //This code executes each time the web browser control is in the process of navigating
-        private void wbSteam_Navigating(object sender, WebBrowserNavigatingEventArgs e)
-        {
-            //Get the url that's being navigated to
-            string url = e.Url.AbsoluteUri;
-
-            //Check to see if the page it's navigating to isn't the Steam login page or related calls
-            if (url != "https://steamcommunity.com/login/home/?goto=my/profile" && url != "https://store.steampowered.com/login/transfer" && url != "https://store.steampowered.com//login/transfer" && url.StartsWith("javascript:") == false && url.StartsWith("about:") == false)
-            {
-                //start the sanity check timer
-                tmrCheck.Enabled = true;
-
-                //If it's navigating to a page other than the Steam login page, hide the browser control and resize the form
-                wbSteam.Visible = false;
-
-                //Scale the form based on the user's DPI settings
-                Graphics graphics = CreateGraphics();
-                double scaleY = graphics.DpiY * 0.84375;
-                double scaleX = graphics.DpiX * 2.84;
-                Height = Convert.ToInt32(scaleY);
-                Width = Convert.ToInt32(scaleX);
-            }
-        }
-
-        private void tmrCheck_Tick(object sender, EventArgs e)
-        {
-            //Prevents the application from "saving" for more than 30 seconds and will attempt to save the cookie data after that time
-            if (SecondsWaiting > 0)
-            {
-                SecondsWaiting = SecondsWaiting - 1;
-                return;
-            }
-
-            tmrCheck.Enabled = false;
-            Close();
         }
     }
 }

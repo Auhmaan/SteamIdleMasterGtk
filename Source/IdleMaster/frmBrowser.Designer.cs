@@ -31,12 +31,10 @@ namespace IdleMaster
         ///</summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmBrowser));
             this.wbSteam = new System.Windows.Forms.WebBrowser();
             this.lblSaving = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tmrCheck = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,11 +46,9 @@ namespace IdleMaster
             this.wbSteam.MinimumSize = new System.Drawing.Size(20, 20);
             this.wbSteam.Name = "wbSteam";
             this.wbSteam.ScriptErrorsSuppressed = true;
-            this.wbSteam.ScrollBarsEnabled = false;
-            this.wbSteam.Size = new System.Drawing.Size(976, 798);
+            this.wbSteam.Size = new System.Drawing.Size(991, 481);
             this.wbSteam.TabIndex = 0;
             this.wbSteam.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.wbAuth_DocumentCompleted);
-            this.wbSteam.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.wbSteam_Navigating);
             // 
             // lblSaving
             // 
@@ -72,16 +68,11 @@ namespace IdleMaster
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // tmrCheck
-            // 
-            this.tmrCheck.Interval = 1000;
-            this.tmrCheck.Tick += new System.EventHandler(this.tmrCheck_Tick);
-            // 
             // frmBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 798);
+            this.ClientSize = new System.Drawing.Size(991, 481);
             this.Controls.Add(this.wbSteam);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lblSaving);
@@ -89,6 +80,7 @@ namespace IdleMaster
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmBrowser";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Please Login to Steam";
             this.Load += new System.EventHandler(this.frmBrowser_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -102,6 +94,5 @@ namespace IdleMaster
         private WebBrowser wbSteam;
         private Label lblSaving;
         private PictureBox pictureBox1;
-        private Timer tmrCheck;
     }
 }
