@@ -157,7 +157,7 @@ namespace IdleMaster
 
         private void btnAdvanced_Click(object sender, EventArgs e)
         {
-            var frm = new frmSettingsAdvanced();
+            frmSettingsAdvanced frm = new frmSettingsAdvanced();
             frm.ShowDialog();
         }
     }

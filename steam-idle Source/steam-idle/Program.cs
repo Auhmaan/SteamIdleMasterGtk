@@ -10,7 +10,7 @@ namespace steam_idle
         static void Main(string[] args)
         {
             long.TryParse(args[0], out long appId);
-            Environment.SetEnvironmentVariable("SteamAppId", AppId);
+            Environment.SetEnvironmentVariable("SteamAppId", appId.ToString());
 
             if (!SteamAPI.Init())
             {

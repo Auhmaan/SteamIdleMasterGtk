@@ -31,7 +31,6 @@ namespace IdleMaster
         ///</summary>
         private void InitializeComponent()
         {
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(frmChangelog));
             this.rtbChangelog = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             //
@@ -52,6 +51,7 @@ namespace IdleMaster
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(564, 578);
             this.Controls.Add(this.rtbChangelog);
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(frmChangelog));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmChangelog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

@@ -1,5 +1,6 @@
 ﻿using IdleMaster.Properties;
 using System;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Xml;
@@ -11,13 +12,12 @@ namespace IdleMaster
         internal static string GetSteamId()
         {
             string steamid = WebUtility.UrlDecode(Settings.Default.steamLogin);
-            int index = steamid.IndexOfAny(new[] { '|' }, 0);
-            return index != -1 ? steamid.Remove(index) : steamid;
+            return steamid?.Split('|').First();
         }
 
         internal static string GetSteamUrl()
         {
-            return "https://steamcommunity.com/profiles/" + GetSteamId();
+            return $"https://steamcommunity.com/profiles/{GetSteamId()}";
         }
 
         internal static string GetSignedAs()
@@ -27,12 +27,17 @@ namespace IdleMaster
 
             try
             {
-                string xmlRaw = new WebClient() { Encoding = Encoding.UTF8 }.DownloadString($"{steamUrl}/?xml=1");
+                WebClient webClient = new WebClient
+                {
+                    Encoding = Encoding.UTF8
+                };
 
-                XmlDocument xml = new XmlDocument();
-                xml.LoadXml(xmlRaw);
+                string xml = webClient.DownloadString($"{steamUrl}/?xml=1");
 
-                XmlNode xmlNode = xml.SelectSingleNode("//steamID");
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(xml);
+
+                XmlNode xmlNode = xmlDocument.SelectSingleNode("//steamID");
 
                 if (xmlNode != null)
                 {

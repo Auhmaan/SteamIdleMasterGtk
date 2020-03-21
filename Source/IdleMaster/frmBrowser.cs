@@ -56,11 +56,18 @@ namespace IdleMaster
                 }
             }
 
+            if(wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
+            {
+                Height = 370;
+            }
+
             //Only gather the cookie information after reaching the profile page
             if (!wbSteam.Url.AbsoluteUri.StartsWith("https://steamcommunity.com/id/"))
             {
                 return;
             }
+
+            Height = 520;
 
             CookieContainer container = GetUriCookieContainer(wbSteam.Url);
             CookieCollection cookies = container.GetCookies(wbSteam.Url);

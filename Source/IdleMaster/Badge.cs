@@ -3,6 +3,8 @@ using IdleMaster.Properties;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -14,7 +16,7 @@ namespace IdleMaster
 
         public string Name { get; set; }
 
-        public int RemainingCard { get; set; }
+        public int RemainingCards { get; set; }
 
         public double HoursPlayed { get; set; }
 
@@ -22,7 +24,7 @@ namespace IdleMaster
 
         private Process idleProcess;
 
-        public bool InIdle
+        public bool IsIdling
         {
             get
             {
@@ -37,32 +39,46 @@ namespace IdleMaster
             UpdateStats(remaining, hours);
         }
 
+        public void UpdateStats(string remaining, string hours)
+        {
+            int.TryParse(remaining, out int remainingCards);
+            double.TryParse(hours, NumberStyles.Any, new NumberFormatInfo(), out double hoursPlayed);
+
+            RemainingCards = remainingCards;
+            HoursPlayed = hoursPlayed;
+        }
+
         public Process Idle()
         {
-            if (InIdle)
+            if (IsIdling)
             {
                 return idleProcess;
             }
 
-            idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId) { WindowStyle = ProcessWindowStyle.Hidden });
+            idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId)
+            {
+                WindowStyle = ProcessWindowStyle.Hidden
+            });
 
             return idleProcess;
         }
 
         public void StopIdle()
         {
-            if (InIdle)
+            if (!IsIdling)
             {
-                idleProcess.Kill();
+                return;
             }
+
+            idleProcess.Kill();
         }
 
-        public async Task<bool> CanCardDrops()
+        public async Task<bool> CanDropCards()
         {
             try
             {
                 HtmlDocument document = new HtmlDocument();
-                string response = await CookieClient.GetHttpAsync($"{Settings.Default.myProfileURL}/gamecards/{AppId})");
+                string response = await CookieClient.GetHttpAsync($"{Settings.Default.myProfileURL}/gamecards/{AppId}");
 
                 //Response should be empty. User should be unauthorised.
                 if (string.IsNullOrWhiteSpace(response))
@@ -72,38 +88,22 @@ namespace IdleMaster
 
                 document.LoadHtml(response);
 
-                HtmlNode hoursNode = document.DocumentNode.SelectSingleNode("//div[@class=\"badge_title_stats_playtime\"]");
-                string hours = Regex.Match(hoursNode.InnerText, @"[0-9\.,]+").Value;
+                HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
+                string cards = cardsNode?.InnerText.Split(' ').First();
 
-                HtmlNode cardNode = hoursNode.ParentNode.SelectSingleNode(".//span[@class=\"progress_info_bold\"]");
-                string cards = cardNode == null ? string.Empty : Regex.Match(cardNode.InnerText, @"[0-9]+").Value;
+                HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
+                string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
 
-                UpdateStats(cards, hours);
-                return RemainingCard != 0;
+                UpdateStats(cards, playtime);
+
+                return RemainingCards != 0;
             }
             catch (Exception ex)
             {
-                Logger.Exception(ex, "Badge -> CanCardDrops, for id = " + AppId);
+                Logger.Exception(ex, "Badge -> CanDropCards, for id = " + AppId);
             }
 
             return false;
-        }
-
-        public void UpdateStats(string remaining, string hours)
-        {
-            RemainingCard = string.IsNullOrWhiteSpace(remaining) ? 0 : int.Parse(remaining);
-            HoursPlayed = string.IsNullOrWhiteSpace(hours) ? 0 : double.Parse(hours, new NumberFormatInfo());
-        }
-
-        public override bool Equals(object obj)
-        {
-            Badge badge = obj as Badge;
-            return badge != null && Equals(AppId, badge.AppId);
-        }
-
-        public override int GetHashCode()
-        {
-            return AppId.GetHashCode();
         }
 
         public override string ToString()

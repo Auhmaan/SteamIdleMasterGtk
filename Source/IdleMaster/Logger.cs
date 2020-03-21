@@ -15,8 +15,7 @@ namespace IdleMaster
 
         public static void Exception(Exception ex, params string[] messages)
         {
-            var contents = string.Concat(DateTime.Now, "   ", string.Join(Environment.NewLine, messages),
-              Environment.NewLine, ex.ToString(), Environment.NewLine);
+            string contents = string.Concat(DateTime.Now, "   ", string.Join(Environment.NewLine, messages), Environment.NewLine, ex.ToString(), Environment.NewLine);
             Write(contents, ExceptionPath);
         }
 
@@ -29,7 +28,6 @@ namespace IdleMaster
             }
         }
     }
-
 
     //Thanks to Eric Gunnerson for recommending this be a struct rather
     //than a class - avoids a heap allocation.
@@ -48,7 +46,8 @@ namespace IdleMaster
 
         public static TimedLock Lock(object o, TimeSpan timeout)
         {
-            var tl = new TimedLock(o);
+            TimedLock tl = new TimedLock(o);
+
             if (!Monitor.TryEnter(o, timeout))
             {
 #if DEBUG
