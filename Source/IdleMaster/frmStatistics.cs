@@ -20,7 +20,7 @@ namespace IdleMaster
             lblSessionHeader.Text = localization.strings.this_session + ":";
             lblTotalHeader.Text = localization.strings.total + ":";
 
-            TimeSpan sessionMinutesIdled = TimeSpan.FromMinutes(statistics.getSessionMinutesIdled());
+            TimeSpan sessionMinutesIdled = TimeSpan.FromMinutes(statistics.GetSessionMinutesIdled());
             TimeSpan totalMinutesIdled = TimeSpan.FromMinutes(Properties.Settings.Default.totalMinutesIdled);
 
             int sessionHoursIdled = (sessionMinutesIdled.Days * 24) + sessionMinutesIdled.Hours;
@@ -41,7 +41,7 @@ namespace IdleMaster
                         sessionMinutesIdled.Minutes,
                         sessionMinutesIdled.Minutes == 1 ? "" : "s");
             }
-            lblSessionCards.Text = statistics.getSessionCardIdled().ToString() + " cards idled";
+            lblSessionCards.Text = statistics.GetSessionCardIdled().ToString() + " cards idled";
 
             //Total
             if (totalHoursIdled > 0)

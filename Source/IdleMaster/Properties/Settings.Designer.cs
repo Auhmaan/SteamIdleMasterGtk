@@ -184,9 +184,9 @@ namespace IdleMaster.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public uint totalCardIdled {
+        public int totalCardIdled {
             get {
-                return ((uint)(this["totalCardIdled"]));
+                return ((int)(this["totalCardIdled"]));
             }
             set {
                 this["totalCardIdled"] = value;
@@ -238,6 +238,30 @@ namespace IdleMaster.Properties {
             }
             set {
                 this["steamLoginSecure"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Setting {
+            get {
+                return ((string)(this["Setting"]));
+            }
+            set {
+                this["Setting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Both")]
+        public global::IdleMaster.IdleType IdleStyle {
+            get {
+                return ((global::IdleMaster.IdleType)(this["IdleStyle"]));
+            }
+            set {
+                this["IdleStyle"] = value;
             }
         }
     }

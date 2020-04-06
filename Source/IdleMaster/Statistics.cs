@@ -2,56 +2,55 @@
 {
     public class Statistics
     {
-        private uint sessionMinutesIdled = 0;
-        private uint sessionCardIdled = 0;
-        private uint remainingCards = 0;
+        private int SessionMinutesIdled;
+        private int SessionCardIdled;
+        private int RemainingCards;
 
-        public uint getSessionMinutesIdled()
+        public int GetSessionMinutesIdled()
         {
-            return sessionMinutesIdled;
+            return SessionMinutesIdled;
         }
 
-        public uint getSessionCardIdled()
+        public int GetSessionCardIdled()
         {
-            return sessionCardIdled;
+            return SessionCardIdled;
         }
 
-        public uint getRemainingCards()
+        public int GetRemainingCards()
         {
-            return remainingCards;
+            return RemainingCards;
         }
 
-        public void setRemainingCards(uint remainingCards)
+        public void SetRemainingCards(int remainingCards)
         {
-            this.remainingCards = remainingCards;
+            RemainingCards = remainingCards;
         }
 
-        public void checkCardRemaining(uint actualCardRemaining)
+        public void CheckCardRemaining(int actualCardRemaining)
         {
-            if (actualCardRemaining < remainingCards)
+            if (actualCardRemaining < RemainingCards)
             {
-                increaseCardIdled(remainingCards - actualCardRemaining);
-                remainingCards = actualCardRemaining;
+                IncreaseCardIdled(RemainingCards - actualCardRemaining);
+                RemainingCards = actualCardRemaining;
             }
-            else if (actualCardRemaining > remainingCards)
+            else if (actualCardRemaining > RemainingCards)
             {
-                remainingCards = actualCardRemaining;
+                RemainingCards = actualCardRemaining;
             }
-
         }
 
-        public void increaseCardIdled(uint number)
+        public void IncreaseCardIdled(int number)
         {
             Properties.Settings.Default.totalCardIdled += number;
             Properties.Settings.Default.Save();
-            sessionCardIdled += number;
+            SessionCardIdled += number;
         }
 
-        public void increaseMinutesIdled()
+        public void IncreaseMinutesIdled()
         {
             Properties.Settings.Default.totalMinutesIdled++;
             Properties.Settings.Default.Save();
-            sessionMinutesIdled++;
+            SessionMinutesIdled++;
         }
     }
 }

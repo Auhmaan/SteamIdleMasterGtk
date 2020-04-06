@@ -577,76 +577,46 @@ namespace IdleMaster
                 return;
             }
 
-            statistics.setRemainingCards((uint)CardsRemaining);
+            statistics.SetRemainingCards(CardsRemaining);
             tmrStatistics.Enabled = true;
             tmrStatistics.Start();
 
-            if (Settings.Default.OnlyOneGameIdle)
+            IEnumerable<Badge> multi = null;
+
+            switch (Settings.Default.IdleStyle)
             {
-                StartSoloIdle(Badges.First());
-                UpdateStateInfo();
-                return;
-            }
+                case IdleType.Single:
+                    StartSoloIdle(Badges.First());
+                    break;
+                case IdleType.Multiple:
+                    multi = Badges.Where(x => x.HoursPlayed < 2);
 
-            if (Settings.Default.OneThenMany)
-            {
-                IEnumerable<Badge> multi = Badges.Where(x => x.HoursPlayed >= 2);
+                    if (multi.Count() >= 2)
+                    {
+                        StartMultipleIdle();
+                    }
+                    else
+                    {
+                        StartSoloIdle(Badges.First());
+                    }
 
-                if (multi.Count() > 0)
-                {
-                    StartSoloIdle(multi.First());
-                }
-                else
-                {
-                    StartMultipleIdle();
-                }
+                    break;
+                case IdleType.Both:
+                    multi = Badges.Where(x => x.HoursPlayed >= 2);
 
-                UpdateStateInfo();
-            }
+                    if (multi.Count() > 0)
+                    {
+                        StartSoloIdle(multi.First());
+                    }
+                    else
+                    {
+                        StartMultipleIdle();
+                    }
 
-            IEnumerable<Badge> multi = Badges.Where(x => x.HoursPlayed < 2);
-
-            if (multi.Count() >= 2)
-            {
-                StartMultipleIdle();
-            }
-            else
-            {
-                StartSoloIdle(Badges.First());
+                    break;
             }
 
             UpdateStateInfo();
-        }
-
-        private void NextIdle()
-        {
-            //Stop idling the current game
-            StopIdle();
-
-            //Check if user is authenticated and if any badge left to idle
-            //There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
-            if (string.IsNullOrWhiteSpace(Settings.Default.sessionid) || !IsSteamReady)
-            {
-                ResetClientStatus();
-                return;
-            }
-
-            if (Badges.Any())
-            {
-                //Give the user notification that the next game will start soon
-                lblCurrentStatus.Text = localization.strings.loading_next;
-
-                //Make a short but random amount of time pass
-                Random rand = new Random();
-                int wait = rand.Next(3, 9);
-                wait = wait * 1000;
-
-                tmrStartNext.Interval = wait;
-                tmrStartNext.Enabled = true;
-                return;
-            }
-
-            IdleComplete();
         }
 
         private void StartSoloIdle(Badge badge)
@@ -776,15 +746,43 @@ namespace IdleMaster
                 Height = Convert.ToInt32(scale);
 
                 //Kill the idling process
-                foreach (Badge badge in Badges.Where(x => x.IsIdling))
-                {
-                    badge.StopIdle();
-                }
+                Badges.ForEach(x => x.StopIdle());
             }
             catch (Exception ex)
             {
                 Logger.Exception(ex, "frmMain -> StopIdle");
             }
+        }
+
+        private void NextIdle()
+        {
+            //Stop idling the current game
+            StopIdle();
+
+            //Check if user is authenticated and if any badge left to idle
+            //There should be check for IsCookieReady, but property is set in timer tick, so it could take some time to be set.
+            if (string.IsNullOrWhiteSpace(Settings.Default.sessionid) || !IsSteamReady)
+            {
+                ResetClientStatus();
+                return;
+            }
+
+            if (Badges.Any())
+            {
+                //Give the user notification that the next game will start soon
+                lblCurrentStatus.Text = localization.strings.loading_next;
+
+                //Make a short but random amount of time pass
+                Random rand = new Random();
+                int wait = rand.Next(3, 9);
+                wait = wait * 1000;
+
+                tmrStartNext.Interval = wait;
+                tmrStartNext.Enabled = true;
+                return;
+            }
+
+            IdleComplete();
         }
 
         private void IdleComplete()
@@ -916,8 +914,8 @@ namespace IdleMaster
 
         private void tmrStatistics_Tick(object sender, EventArgs e)
         {
-            statistics.increaseMinutesIdled();
-            statistics.checkCardRemaining((uint)CardsRemaining);
+            statistics.IncreaseMinutesIdled();
+            statistics.CheckCardRemaining(CardsRemaining);
         }
 
         ////////////////////////////////////////CLICKS////////////////////////////////////////
