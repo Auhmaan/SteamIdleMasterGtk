@@ -26,48 +26,12 @@ namespace IdleMaster.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string sessionid {
-            get {
-                return ((string)(this["sessionid"]));
-            }
-            set {
-                this["sessionid"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string steamLogin {
-            get {
-                return ((string)(this["steamLogin"]));
-            }
-            set {
-                this["steamLogin"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string myProfileURL {
             get {
                 return ((string)(this["myProfileURL"]));
             }
             set {
                 this["myProfileURL"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string steamparental {
-            get {
-                return ((string)(this["steamparental"]));
-            }
-            set {
-                this["steamparental"] = value;
             }
         }
         
@@ -159,30 +123,6 @@ namespace IdleMaster.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string steamRememberLogin {
-            get {
-                return ((string)(this["steamRememberLogin"]));
-            }
-            set {
-                this["steamRememberLogin"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string steamMachineAuth {
-            get {
-                return ((string)(this["steamMachineAuth"]));
-            }
-            set {
-                this["steamMachineAuth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int totalCardIdled {
             get {
@@ -262,6 +202,66 @@ namespace IdleMaster.Properties {
             }
             set {
                 this["IdleStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CookieSessionId {
+            get {
+                return ((string)(this["CookieSessionId"]));
+            }
+            set {
+                this["CookieSessionId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CookieLoginSecure {
+            get {
+                return ((string)(this["CookieLoginSecure"]));
+            }
+            set {
+                this["CookieLoginSecure"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CookieMachineAuth {
+            get {
+                return ((string)(this["CookieMachineAuth"]));
+            }
+            set {
+                this["CookieMachineAuth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CookieRememberLogin {
+            get {
+                return ((string)(this["CookieRememberLogin"]));
+            }
+            set {
+                this["CookieRememberLogin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CookieParental {
+            get {
+                return ((string)(this["CookieParental"]));
+            }
+            set {
+                this["CookieParental"] = value;
             }
         }
     }

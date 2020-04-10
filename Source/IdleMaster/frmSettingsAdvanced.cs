@@ -33,9 +33,9 @@ namespace IdleMaster
             ttHelp.SetToolTip(btnView, localization.strings.cookie_warning);
 
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.sessionid))
+            if (!string.IsNullOrWhiteSpace(Settings.Default.CookieSessionId))
             {
-                txtSessionID.Text = Settings.Default.sessionid;
+                txtSessionID.Text = Settings.Default.CookieSessionId;
                 txtSessionID.Enabled = false;
             }
             else
@@ -43,9 +43,9 @@ namespace IdleMaster
                 txtSessionID.PasswordChar = '\0';
             }
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.steamLogin))
+            if (!string.IsNullOrWhiteSpace(Settings.Default.CookieLoginSecure))
             {
-                txtSteamLogin.Text = Settings.Default.steamLogin;
+                txtSteamLogin.Text = Settings.Default.CookieLoginSecure;
                 txtSteamLogin.Enabled = false;
             }
             else
@@ -53,9 +53,9 @@ namespace IdleMaster
                 txtSteamLogin.PasswordChar = '\0';
             }
 
-            if (!string.IsNullOrWhiteSpace(Settings.Default.steamparental))
+            if (!string.IsNullOrWhiteSpace(Settings.Default.CookieParental))
             {
-                txtSteamParental.Text = Settings.Default.steamparental;
+                txtSteamParental.Text = Settings.Default.CookieParental;
                 txtSteamParental.Enabled = false;
             }
             else
@@ -90,10 +90,10 @@ namespace IdleMaster
         {
             try
             {
-                Settings.Default.sessionid = txtSessionID.Text.Trim();
-                Settings.Default.steamLogin = txtSteamLogin.Text.Trim();
+                Settings.Default.CookieSessionId = txtSessionID.Text.Trim();
+                Settings.Default.CookieLoginSecure = txtSteamLogin.Text.Trim();
                 Settings.Default.myProfileURL = SteamProfile.GetSteamUrl();
-                Settings.Default.steamparental = txtSteamParental.Text.Trim();
+                Settings.Default.CookieParental = txtSteamParental.Text.Trim();
 
                 if (await CookieClient.IsLogined())
                 {

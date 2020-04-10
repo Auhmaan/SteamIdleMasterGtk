@@ -11,7 +11,7 @@ namespace IdleMaster
     {
         internal static string GetSteamId()
         {
-            string steamid = WebUtility.UrlDecode(Settings.Default.steamLogin);
+            string steamid = WebUtility.UrlDecode(Settings.Default.CookieLoginSecure);
             return steamid?.Split('|').First();
         }
 

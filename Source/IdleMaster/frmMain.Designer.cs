@@ -1,594 +1,142 @@
-﻿using System.ComponentModel;
-using System.Windows.Forms;
-
-namespace IdleMaster
+﻿namespace IdleMaster
 {
     partial class frmMain
     {
-        ///<summary>
-        ///Required designer variable.
-        ///</summary>
-        private IContainer components = null;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-        ///<summary>
-        ///Clean up any resources being used.
-        ///</summary>
-        ///<param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
             {
                 components.Dispose();
             }
-
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        ///<summary>
-        ///Required method for Designer support - do not modify
-        ///the contents of this method with the code editor.
-        ///</summary>
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            this.lblCookieStatus = new System.Windows.Forms.Label();
-            this.tmrCheckCookieData = new System.Windows.Forms.Timer(this.components);
-            this.lblSteamStatus = new System.Windows.Forms.Label();
-            this.tmrCheckSteam = new System.Windows.Forms.Timer(this.components);
-            this.lnkResetCookies = new System.Windows.Forms.LinkLabel();
-            this.lnkSignIn = new System.Windows.Forms.LinkLabel();
-            this.lblDrops = new System.Windows.Forms.Label();
-            this.lblIdle = new System.Windows.Forms.Label();
-            this.lblCurrentStatus = new System.Windows.Forms.Label();
-            this.lblCurrentRemaining = new System.Windows.Forms.Label();
-            this.lblGameName = new System.Windows.Forms.LinkLabel();
-            this.mnsTop = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.blacklistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pauseIdlingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resumeIdlingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.skipGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.blacklistCurrentGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statisticsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.officialGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmrReadyToGo = new System.Windows.Forms.Timer(this.components);
-            this.tmrCardDropCheck = new System.Windows.Forms.Timer(this.components);
-            this.ssFooter = new System.Windows.Forms.StatusStrip();
-            this.pbIdle = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblTimer = new System.Windows.Forms.ToolStripStatusLabel();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.ptbReadingPage = new System.Windows.Forms.PictureBox();
-            this.btnSkip = new System.Windows.Forms.Button();
-            this.ptbIdleStatus = new System.Windows.Forms.PictureBox();
-            this.ptbCookieStatus = new System.Windows.Forms.PictureBox();
-            this.ptbSteamStatus = new System.Windows.Forms.PictureBox();
-            this.picApp = new System.Windows.Forms.PictureBox();
+            this.tmrSteamStatus = new System.Windows.Forms.Timer(this.components);
+            this.tmrCookieStatus = new System.Windows.Forms.Timer(this.components);
+            this.tmrLoadBadges = new System.Windows.Forms.Timer(this.components);
+            this.tmrIdle = new System.Windows.Forms.Timer(this.components);
+            this.lnkLogin = new System.Windows.Forms.LinkLabel();
+            this.btnStart = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
-            this.btnResume = new System.Windows.Forms.Button();
-            this.tmrStartNext = new System.Windows.Forms.Timer(this.components);
-            this.tmrBadgeReload = new System.Windows.Forms.Timer(this.components);
-            this.lblSteamUsername = new System.Windows.Forms.Label();
-            this.lsvGamesState = new System.Windows.Forms.ListView();
-            this.GameName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Hours = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblHoursPlayed = new System.Windows.Forms.Label();
-            this.tmrStatistics = new System.Windows.Forms.Timer(this.components);
-            this.mnsTop.SuspendLayout();
-            this.ssFooter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbReadingPage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbIdleStatus)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCookieStatus)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbSteamStatus)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picApp)).BeginInit();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.lblSteam = new System.Windows.Forms.Label();
+            this.lblLogin = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // lblCookieStatus
+            // tmrSteamStatus
             // 
-            this.lblCookieStatus.AutoSize = true;
-            this.lblCookieStatus.Location = new System.Drawing.Point(31, 58);
-            this.lblCookieStatus.Name = "lblCookieStatus";
-            this.lblCookieStatus.Size = new System.Drawing.Size(186, 13);
-            this.lblCookieStatus.TabIndex = 0;
-            this.lblCookieStatus.Text = "Idle Master is not connected to Steam";
+            this.tmrSteamStatus.Interval = 500;
+            this.tmrSteamStatus.Tick += new System.EventHandler(this.tmrSteamStatus_Tick);
             // 
-            // tmrCheckCookieData
+            // tmrCookieStatus
             // 
-            this.tmrCheckCookieData.Enabled = true;
-            this.tmrCheckCookieData.Interval = 500;
-            this.tmrCheckCookieData.Tick += new System.EventHandler(this.tmrCheckCookieData_Tick);
+            this.tmrCookieStatus.Interval = 500;
+            this.tmrCookieStatus.Tick += new System.EventHandler(this.tmrCookieStatus_Tick);
             // 
-            // lblSteamStatus
+            // tmrLoadBadges
             // 
-            this.lblSteamStatus.AutoSize = true;
-            this.lblSteamStatus.Location = new System.Drawing.Point(30, 36);
-            this.lblSteamStatus.Name = "lblSteamStatus";
-            this.lblSteamStatus.Size = new System.Drawing.Size(103, 13);
-            this.lblSteamStatus.TabIndex = 3;
-            this.lblSteamStatus.Text = "Steam is not running";
+            this.tmrLoadBadges.Interval = 500;
+            this.tmrLoadBadges.Tick += new System.EventHandler(this.tmrLoadBadges_Tick);
             // 
-            // tmrCheckSteam
+            // tmrIdle
             // 
-            this.tmrCheckSteam.Enabled = true;
-            this.tmrCheckSteam.Interval = 500;
-            this.tmrCheckSteam.Tick += new System.EventHandler(this.tmrCheckSteam_Tick);
+            this.tmrIdle.Interval = 5000;
+            this.tmrIdle.Tick += new System.EventHandler(this.tmrIdle_Tick);
             // 
-            // lnkResetCookies
+            // lnkLogin
             // 
-            this.lnkResetCookies.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkResetCookies.AutoSize = true;
-            this.lnkResetCookies.Location = new System.Drawing.Point(194, 58);
-            this.lnkResetCookies.Name = "lnkResetCookies";
-            this.lnkResetCookies.Size = new System.Drawing.Size(52, 13);
-            this.lnkResetCookies.TabIndex = 4;
-            this.lnkResetCookies.TabStop = true;
-            this.lnkResetCookies.Text = "(Sign out)";
-            this.lnkResetCookies.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkResetCookies_LinkClicked);
+            this.lnkLogin.AutoSize = true;
+            this.lnkLogin.Location = new System.Drawing.Point(12, 9);
+            this.lnkLogin.Name = "lnkLogin";
+            this.lnkLogin.Size = new System.Drawing.Size(33, 13);
+            this.lnkLogin.TabIndex = 0;
+            this.lnkLogin.TabStop = true;
+            this.lnkLogin.Text = "Login";
+            this.lnkLogin.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkLogin_LinkClicked);
             // 
-            // lnkSignIn
+            // btnStart
             // 
-            this.lnkSignIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lnkSignIn.AutoSize = true;
-            this.lnkSignIn.Location = new System.Drawing.Point(204, 58);
-            this.lnkSignIn.Name = "lnkSignIn";
-            this.lnkSignIn.Size = new System.Drawing.Size(45, 13);
-            this.lnkSignIn.TabIndex = 5;
-            this.lnkSignIn.TabStop = true;
-            this.lnkSignIn.Text = "(Sign in)";
-            this.lnkSignIn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSignIn_LinkClicked);
-            // 
-            // lblDrops
-            // 
-            this.lblDrops.AutoSize = true;
-            this.lblDrops.Location = new System.Drawing.Point(31, 92);
-            this.lblDrops.Name = "lblDrops";
-            this.lblDrops.Size = new System.Drawing.Size(105, 13);
-            this.lblDrops.TabIndex = 9;
-            this.lblDrops.Text = "card drops remaining";
-            this.lblDrops.Visible = false;
-            // 
-            // lblIdle
-            // 
-            this.lblIdle.AutoSize = true;
-            this.lblIdle.Location = new System.Drawing.Point(31, 108);
-            this.lblIdle.Name = "lblIdle";
-            this.lblIdle.Size = new System.Drawing.Size(86, 13);
-            this.lblIdle.TabIndex = 10;
-            this.lblIdle.Text = "games left to idle";
-            this.lblIdle.Visible = false;
-            // 
-            // lblCurrentStatus
-            // 
-            this.lblCurrentStatus.Location = new System.Drawing.Point(15, 135);
-            this.lblCurrentStatus.Name = "lblCurrentStatus";
-            this.lblCurrentStatus.Size = new System.Drawing.Size(88, 13);
-            this.lblCurrentStatus.TabIndex = 11;
-            this.lblCurrentStatus.Text = "Currently in-game";
-            // 
-            // lblCurrentRemaining
-            // 
-            this.lblCurrentRemaining.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblCurrentRemaining.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrentRemaining.ForeColor = System.Drawing.Color.Blue;
-            this.lblCurrentRemaining.Location = new System.Drawing.Point(15, 292);
-            this.lblCurrentRemaining.Name = "lblCurrentRemaining";
-            this.lblCurrentRemaining.Size = new System.Drawing.Size(279, 19);
-            this.lblCurrentRemaining.TabIndex = 12;
-            this.lblCurrentRemaining.Text = "3 card drops remaining";
-            this.lblCurrentRemaining.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblCurrentRemaining.Click += new System.EventHandler(this.lblCurrentRemaining_Click);
-            // 
-            // lblGameName
-            // 
-            this.lblGameName.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.lblGameName.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lblGameName.Location = new System.Drawing.Point(96, 135);
-            this.lblGameName.Name = "lblGameName";
-            this.lblGameName.Size = new System.Drawing.Size(159, 16);
-            this.lblGameName.TabIndex = 16;
-            this.lblGameName.TabStop = true;
-            this.lblGameName.Text = "Game Name";
-            this.lblGameName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblGameName_LinkClicked);
-            // 
-            // mnsTop
-            // 
-            this.mnsTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.gameToolStripMenuItem,
-            this.helpToolStripMenuItem});
-            this.mnsTop.Location = new System.Drawing.Point(0, 0);
-            this.mnsTop.Name = "mnsTop";
-            this.mnsTop.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.mnsTop.Size = new System.Drawing.Size(304, 24);
-            this.mnsTop.TabIndex = 19;
-            this.mnsTop.Text = "mnsMenuBar";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.settingsToolStripMenuItem,
-            this.blacklistToolStripMenuItem,
-            this.toolStripMenuItem1,
-            this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "&File";
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgSettings;
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
-            this.settingsToolStripMenuItem.Text = "&Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // blacklistToolStripMenuItem
-            // 
-            this.blacklistToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgBlacklist;
-            this.blacklistToolStripMenuItem.Name = "blacklistToolStripMenuItem";
-            this.blacklistToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
-            this.blacklistToolStripMenuItem.Text = "&Blacklist";
-            this.blacklistToolStripMenuItem.Click += new System.EventHandler(this.blacklistToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(114, 6);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgExit;
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // gameToolStripMenuItem
-            // 
-            this.gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pauseIdlingToolStripMenuItem,
-            this.resumeIdlingToolStripMenuItem,
-            this.skipGameToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.blacklistCurrentGameToolStripMenuItem});
-            this.gameToolStripMenuItem.Name = "gameToolStripMenuItem";
-            this.gameToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
-            this.gameToolStripMenuItem.Text = "&Game";
-            // 
-            // pauseIdlingToolStripMenuItem
-            // 
-            this.pauseIdlingToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pauseIdlingToolStripMenuItem.Image")));
-            this.pauseIdlingToolStripMenuItem.Name = "pauseIdlingToolStripMenuItem";
-            this.pauseIdlingToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.pauseIdlingToolStripMenuItem.Text = "&Pause Idling";
-            this.pauseIdlingToolStripMenuItem.Click += new System.EventHandler(this.pauseIdlingToolStripMenuItem_Click);
-            // 
-            // resumeIdlingToolStripMenuItem
-            // 
-            this.resumeIdlingToolStripMenuItem.Enabled = false;
-            this.resumeIdlingToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("resumeIdlingToolStripMenuItem.Image")));
-            this.resumeIdlingToolStripMenuItem.Name = "resumeIdlingToolStripMenuItem";
-            this.resumeIdlingToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.resumeIdlingToolStripMenuItem.Text = "Resume Idling";
-            this.resumeIdlingToolStripMenuItem.Click += new System.EventHandler(this.resumeIdlingToolStripMenuItem_Click);
-            // 
-            // skipGameToolStripMenuItem
-            // 
-            this.skipGameToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("skipGameToolStripMenuItem.Image")));
-            this.skipGameToolStripMenuItem.Name = "skipGameToolStripMenuItem";
-            this.skipGameToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.skipGameToolStripMenuItem.Text = "&Skip Current Game";
-            this.skipGameToolStripMenuItem.Click += new System.EventHandler(this.skipGameToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(191, 6);
-            // 
-            // blacklistCurrentGameToolStripMenuItem
-            // 
-            this.blacklistCurrentGameToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgBlacklist;
-            this.blacklistCurrentGameToolStripMenuItem.Name = "blacklistCurrentGameToolStripMenuItem";
-            this.blacklistCurrentGameToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.blacklistCurrentGameToolStripMenuItem.Text = "&Blacklist Current Game";
-            this.blacklistCurrentGameToolStripMenuItem.Click += new System.EventHandler(this.blacklistCurrentGameToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.statisticsToolStripMenuItem,
-            this.changelogToolStripMenuItem,
-            this.officialGroupToolStripMenuItem,
-            this.toolStripMenuItem3,
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "&Help";
-            // 
-            // statisticsToolStripMenuItem
-            // 
-            this.statisticsToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgStatistics;
-            this.statisticsToolStripMenuItem.Name = "statisticsToolStripMenuItem";
-            this.statisticsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.statisticsToolStripMenuItem.Text = "&Statistics";
-            this.statisticsToolStripMenuItem.Click += new System.EventHandler(this.statisticsToolStripMenuItem_Click);
-            // 
-            // changelogToolStripMenuItem
-            // 
-            this.changelogToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgDocument;
-            this.changelogToolStripMenuItem.Name = "changelogToolStripMenuItem";
-            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.changelogToolStripMenuItem.Text = "&Release Notes";
-            this.changelogToolStripMenuItem.Click += new System.EventHandler(this.changelogToolStripMenuItem_Click);
-            // 
-            // officialGroupToolStripMenuItem
-            // 
-            this.officialGroupToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgGlobe;
-            this.officialGroupToolStripMenuItem.Name = "officialGroupToolStripMenuItem";
-            this.officialGroupToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.officialGroupToolStripMenuItem.Text = "&Official Group";
-            this.officialGroupToolStripMenuItem.Click += new System.EventHandler(this.officialGroupToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(145, 6);
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Image = global::IdleMaster.Properties.Resources.imgInfo;
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.aboutToolStripMenuItem.Text = "&About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // tmrReadyToGo
-            // 
-            this.tmrReadyToGo.Enabled = true;
-            this.tmrReadyToGo.Tick += new System.EventHandler(this.tmrReadyToGo_Tick);
-            // 
-            // tmrCardDropCheck
-            // 
-            this.tmrCardDropCheck.Interval = 1000;
-            this.tmrCardDropCheck.Tick += new System.EventHandler(this.tmrCardDropCheck_Tick);
-            // 
-            // ssFooter
-            // 
-            this.ssFooter.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.ssFooter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pbIdle,
-            this.toolStripStatusLabel1,
-            this.lblTimer});
-            this.ssFooter.Location = new System.Drawing.Point(0, 317);
-            this.ssFooter.Name = "ssFooter";
-            this.ssFooter.ShowItemToolTips = true;
-            this.ssFooter.Size = new System.Drawing.Size(304, 22);
-            this.ssFooter.SizingGrip = false;
-            this.ssFooter.TabIndex = 20;
-            this.ssFooter.Text = "statusStrip1";
-            this.ssFooter.Visible = false;
-            // 
-            // pbIdle
-            // 
-            this.pbIdle.Name = "pbIdle";
-            this.pbIdle.Size = new System.Drawing.Size(130, 16);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.AutoSize = false;
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(115, 17);
-            this.toolStripStatusLabel1.Text = "Next check";
-            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblTimer
-            // 
-            this.lblTimer.Name = "lblTimer";
-            this.lblTimer.Size = new System.Drawing.Size(34, 17);
-            this.lblTimer.Text = "15:00";
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "Idle Master";
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
-            // 
-            // ptbReadingPage
-            // 
-            this.ptbReadingPage.Image = global::IdleMaster.Properties.Resources.imgSpin;
-            this.ptbReadingPage.Location = new System.Drawing.Point(15, 90);
-            this.ptbReadingPage.Name = "ptbReadingPage";
-            this.ptbReadingPage.Size = new System.Drawing.Size(15, 16);
-            this.ptbReadingPage.TabIndex = 26;
-            this.ptbReadingPage.TabStop = false;
-            this.ptbReadingPage.Visible = false;
-            // 
-            // btnSkip
-            // 
-            this.btnSkip.Image = global::IdleMaster.Properties.Resources.imgSkipSmall;
-            this.btnSkip.Location = new System.Drawing.Point(274, 135);
-            this.btnSkip.Name = "btnSkip";
-            this.btnSkip.Size = new System.Drawing.Size(15, 16);
-            this.btnSkip.TabIndex = 23;
-            this.btnSkip.UseVisualStyleBackColor = true;
-            this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
-            // 
-            // ptbIdleStatus
-            // 
-            this.ptbIdleStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ptbIdleStatus.Location = new System.Drawing.Point(286, 319);
-            this.ptbIdleStatus.Name = "ptbIdleStatus";
-            this.ptbIdleStatus.Size = new System.Drawing.Size(15, 16);
-            this.ptbIdleStatus.TabIndex = 15;
-            this.ptbIdleStatus.TabStop = false;
-            // 
-            // ptbCookieStatus
-            // 
-            this.ptbCookieStatus.Location = new System.Drawing.Point(15, 57);
-            this.ptbCookieStatus.Name = "ptbCookieStatus";
-            this.ptbCookieStatus.Size = new System.Drawing.Size(15, 16);
-            this.ptbCookieStatus.TabIndex = 8;
-            this.ptbCookieStatus.TabStop = false;
-            // 
-            // ptbSteamStatus
-            // 
-            this.ptbSteamStatus.Location = new System.Drawing.Point(15, 34);
-            this.ptbSteamStatus.Name = "ptbSteamStatus";
-            this.ptbSteamStatus.Size = new System.Drawing.Size(15, 16);
-            this.ptbSteamStatus.TabIndex = 7;
-            this.ptbSteamStatus.TabStop = false;
-            // 
-            // picApp
-            // 
-            this.picApp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picApp.Location = new System.Drawing.Point(15, 154);
-            this.picApp.Name = "picApp";
-            this.picApp.Size = new System.Drawing.Size(274, 138);
-            this.picApp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picApp.TabIndex = 6;
-            this.picApp.TabStop = false;
-            this.picApp.Visible = false;
+            this.btnStart.Location = new System.Drawing.Point(15, 304);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.TabIndex = 1;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // btnPause
             // 
-            this.btnPause.Image = global::IdleMaster.Properties.Resources.imgPauseSmall;
-            this.btnPause.Location = new System.Drawing.Point(259, 135);
+            this.btnPause.Location = new System.Drawing.Point(96, 304);
             this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(15, 16);
-            this.btnPause.TabIndex = 22;
+            this.btnPause.Size = new System.Drawing.Size(75, 23);
+            this.btnPause.TabIndex = 1;
+            this.btnPause.Text = "Pause";
             this.btnPause.UseVisualStyleBackColor = true;
             this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
-            // btnResume
+            // btnStop
             // 
-            this.btnResume.Image = global::IdleMaster.Properties.Resources.imgPlaySmall;
-            this.btnResume.Location = new System.Drawing.Point(259, 135);
-            this.btnResume.Name = "btnResume";
-            this.btnResume.Size = new System.Drawing.Size(15, 16);
-            this.btnResume.TabIndex = 24;
-            this.btnResume.UseVisualStyleBackColor = true;
-            this.btnResume.Visible = false;
-            this.btnResume.Click += new System.EventHandler(this.btnResume_Click);
+            this.btnStop.Location = new System.Drawing.Point(177, 304);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(75, 23);
+            this.btnStop.TabIndex = 1;
+            this.btnStop.Text = "Stop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // tmrStartNext
+            // lblSteam
             // 
-            this.tmrStartNext.Tick += new System.EventHandler(this.tmrStartNext_Tick);
+            this.lblSteam.AutoSize = true;
+            this.lblSteam.Location = new System.Drawing.Point(12, 48);
+            this.lblSteam.Name = "lblSteam";
+            this.lblSteam.Size = new System.Drawing.Size(37, 13);
+            this.lblSteam.TabIndex = 2;
+            this.lblSteam.Text = "Steam";
             // 
-            // tmrBadgeReload
+            // lblLogin
             // 
-            this.tmrBadgeReload.Interval = 1000;
-            this.tmrBadgeReload.Tick += new System.EventHandler(this.tmrBadgeReload_Tick);
-            // 
-            // lblSteamUsername
-            // 
-            this.lblSteamUsername.AutoSize = true;
-            this.lblSteamUsername.Location = new System.Drawing.Point(30, 71);
-            this.lblSteamUsername.Name = "lblSteamUsername";
-            this.lblSteamUsername.Size = new System.Drawing.Size(65, 13);
-            this.lblSteamUsername.TabIndex = 27;
-            this.lblSteamUsername.Text = "Signed in as";
-            this.lblSteamUsername.Visible = false;
-            // 
-            // lsvGamesState
-            // 
-            this.lsvGamesState.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.GameName,
-            this.Hours});
-            this.lsvGamesState.HideSelection = false;
-            this.lsvGamesState.Location = new System.Drawing.Point(15, 154);
-            this.lsvGamesState.Margin = new System.Windows.Forms.Padding(2);
-            this.lsvGamesState.Name = "lsvGamesState";
-            this.lsvGamesState.Size = new System.Drawing.Size(275, 139);
-            this.lsvGamesState.TabIndex = 28;
-            this.lsvGamesState.UseCompatibleStateImageBehavior = false;
-            this.lsvGamesState.View = System.Windows.Forms.View.Details;
-            this.lsvGamesState.Visible = false;
-            // 
-            // GameName
-            // 
-            this.GameName.Tag = "";
-            this.GameName.Text = "Name";
-            this.GameName.Width = 200;
-            // 
-            // Hours
-            // 
-            this.Hours.Text = "Hours";
-            this.Hours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Hours.Width = 45;
-            // 
-            // lblHoursPlayed
-            // 
-            this.lblHoursPlayed.AutoSize = true;
-            this.lblHoursPlayed.Location = new System.Drawing.Point(15, 295);
-            this.lblHoursPlayed.Name = "lblHoursPlayed";
-            this.lblHoursPlayed.Size = new System.Drawing.Size(0, 13);
-            this.lblHoursPlayed.TabIndex = 29;
-            this.lblHoursPlayed.Visible = false;
-            // 
-            // tmrStatistics
-            // 
-            this.tmrStatistics.Interval = 60000;
-            this.tmrStatistics.Tick += new System.EventHandler(this.tmrStatistics_Tick);
+            this.lblLogin.AutoSize = true;
+            this.lblLogin.Location = new System.Drawing.Point(12, 70);
+            this.lblLogin.Name = "lblLogin";
+            this.lblLogin.Size = new System.Drawing.Size(33, 13);
+            this.lblLogin.TabIndex = 2;
+            this.lblLogin.Text = "Login";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(304, 339);
-            this.Controls.Add(this.lblHoursPlayed);
-            this.Controls.Add(this.lsvGamesState);
-            this.Controls.Add(this.lblSteamUsername);
-            this.Controls.Add(this.ptbReadingPage);
-            this.Controls.Add(this.btnSkip);
-            this.Controls.Add(this.ptbIdleStatus);
-            this.Controls.Add(this.lblCurrentRemaining);
-            this.Controls.Add(this.lblCurrentStatus);
-            this.Controls.Add(this.lblIdle);
-            this.Controls.Add(this.lblDrops);
-            this.Controls.Add(this.ptbCookieStatus);
-            this.Controls.Add(this.ptbSteamStatus);
-            this.Controls.Add(this.lnkSignIn);
-            this.Controls.Add(this.lnkResetCookies);
-            this.Controls.Add(this.lblSteamStatus);
-            this.Controls.Add(this.lblCookieStatus);
-            this.Controls.Add(this.mnsTop);
-            this.Controls.Add(this.ssFooter);
+            this.Controls.Add(this.lblLogin);
+            this.Controls.Add(this.lblSteam);
+            this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnPause);
-            this.Controls.Add(this.btnResume);
-            this.Controls.Add(this.lblGameName);
-            this.Controls.Add(this.picApp);
+            this.Controls.Add(this.btnStart);
+            this.Controls.Add(this.lnkLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.mnsTop;
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Idle Master";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClose);
             this.Load += new System.EventHandler(this.frmMain_Load);
-            this.Resize += new System.EventHandler(this.frmMain_Resize);
-            this.mnsTop.ResumeLayout(false);
-            this.mnsTop.PerformLayout();
-            this.ssFooter.ResumeLayout(false);
-            this.ssFooter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbReadingPage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbIdleStatus)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCookieStatus)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbSteamStatus)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picApp)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -596,57 +144,15 @@ namespace IdleMaster
 
         #endregion
 
-        private Label lblCookieStatus;
-        private Timer tmrCheckCookieData;
-        private Label lblSteamStatus;
-        private Timer tmrCheckSteam;
-        private LinkLabel lnkResetCookies;
-        private LinkLabel lnkSignIn;
-        private PictureBox picApp;
-        private PictureBox ptbSteamStatus;
-        private PictureBox ptbCookieStatus;
-        private Label lblDrops;
-        private Label lblIdle;
-        private Label lblCurrentStatus;
-        private Label lblCurrentRemaining;
-        private PictureBox ptbIdleStatus;
-        private LinkLabel lblGameName;
-        private MenuStrip mnsTop;
-        private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem settingsToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem1;
-        private ToolStripMenuItem exitToolStripMenuItem;
-        private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem aboutToolStripMenuItem;
-        private Timer tmrReadyToGo;
-        private Timer tmrCardDropCheck;
-        private StatusStrip ssFooter;
-        private ToolStripProgressBar pbIdle;
-        private ToolStripStatusLabel lblTimer;
-        private ToolStripStatusLabel toolStripStatusLabel1;
-        private Button btnPause;
-        private Button btnSkip;
-        private Button btnResume;
-        private ToolStripMenuItem gameToolStripMenuItem;
-        private ToolStripMenuItem pauseIdlingToolStripMenuItem;
-        private ToolStripMenuItem resumeIdlingToolStripMenuItem;
-        private ToolStripMenuItem skipGameToolStripMenuItem;
-        private NotifyIcon notifyIcon1;
-        private PictureBox ptbReadingPage;
-        private ToolStripMenuItem blacklistToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem2;
-        private ToolStripMenuItem blacklistCurrentGameToolStripMenuItem;
-        private Timer tmrStartNext;
-        private ToolStripMenuItem changelogToolStripMenuItem;
-        private ToolStripMenuItem officialGroupToolStripMenuItem;
-        private ToolStripSeparator toolStripMenuItem3;
-        private Timer tmrBadgeReload;
-        private Label lblSteamUsername;
-        private ListView lsvGamesState;
-        private ColumnHeader GameName;
-        private ColumnHeader Hours;
-        private Label lblHoursPlayed;
-        private Timer tmrStatistics;
-        private ToolStripMenuItem statisticsToolStripMenuItem;
+        private System.Windows.Forms.Timer tmrSteamStatus;
+        private System.Windows.Forms.Timer tmrCookieStatus;
+        private System.Windows.Forms.Timer tmrLoadBadges;
+        private System.Windows.Forms.Timer tmrIdle;
+        private System.Windows.Forms.LinkLabel lnkLogin;
+        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Button btnPause;
+        private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.Label lblSteam;
+        private System.Windows.Forms.Label lblLogin;
     }
 }

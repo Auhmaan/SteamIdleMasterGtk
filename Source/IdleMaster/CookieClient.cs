@@ -45,11 +45,11 @@ namespace IdleMaster
                 {
                     if (cookies["steamLoginSecure"] != null && cookies["steamLoginSecure"].Value == "deleted")
                     {
-                        Settings.Default.sessionid = string.Empty;
-                        Settings.Default.steamLogin = string.Empty;
-                        Settings.Default.steamparental = string.Empty;
-                        Settings.Default.steamMachineAuth = string.Empty;
-                        Settings.Default.steamRememberLogin = string.Empty;
+                        Settings.Default.CookieSessionId = string.Empty;
+                        Settings.Default.CookieLoginSecure = string.Empty;
+                        Settings.Default.CookieParental = string.Empty;
+                        Settings.Default.CookieMachineAuth = string.Empty;
+                        Settings.Default.CookieRememberLogin = string.Empty;
                         Settings.Default.Save();
                     }
                 }
@@ -69,20 +69,20 @@ namespace IdleMaster
         {
             CookieContainer cookies = new CookieContainer();
             Uri target = new Uri("http://steamcommunity.com");
-            cookies.Add(new Cookie("sessionid", Settings.Default.sessionid) { Domain = target.Host });
-            cookies.Add(new Cookie("steamLoginSecure", Settings.Default.steamLogin) { Domain = target.Host });
-            cookies.Add(new Cookie("steamparental", Settings.Default.steamparental) { Domain = target.Host });
-            cookies.Add(new Cookie("steamRememberLogin", Settings.Default.steamRememberLogin) { Domain = target.Host });
-            cookies.Add(new Cookie(GetSteamMachineAuthCookieName(), Settings.Default.steamMachineAuth) { Domain = target.Host });
+            cookies.Add(new Cookie("sessionid", Settings.Default.CookieSessionId) { Domain = target.Host });
+            cookies.Add(new Cookie("steamLoginSecure", Settings.Default.CookieLoginSecure) { Domain = target.Host });
+            cookies.Add(new Cookie("steamparental", Settings.Default.CookieParental) { Domain = target.Host });
+            cookies.Add(new Cookie("steamRememberLogin", Settings.Default.CookieRememberLogin) { Domain = target.Host });
+            cookies.Add(new Cookie(GetSteamMachineAuthCookieName(), Settings.Default.CookieMachineAuth) { Domain = target.Host });
 
             return cookies;
         }
 
         public static string GetSteamMachineAuthCookieName()
         {
-            if (Settings.Default.steamLogin != null && Settings.Default.steamLogin.Length > 17)
+            if (Settings.Default.CookieLoginSecure != null && Settings.Default.CookieLoginSecure.Length > 17)
             {
-                return string.Format("steamMachineAuth{0}", Settings.Default.steamLogin.Substring(0, 17));
+                return string.Format("steamMachineAuth{0}", Settings.Default.CookieLoginSecure.Substring(0, 17));
             }
 
             return "steamMachineAuth";
@@ -98,7 +98,7 @@ namespace IdleMaster
                 try
                 {
                     //If user is NOT authenticated (cookie got deleted in GetWebResponse()), return empty result
-                    if (string.IsNullOrWhiteSpace(Settings.Default.sessionid))
+                    if (string.IsNullOrWhiteSpace(Settings.Default.CookieSessionId))
                     {
                         return string.Empty;
                     }

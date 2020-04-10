@@ -75,40 +75,20 @@ namespace IdleMaster
 
         public async Task<bool> CanDropCards()
         {
-            try
-            {
-                HtmlDocument document = new HtmlDocument();
-                string response = await CookieClient.GetHttpAsync($"{Settings.Default.myProfileURL}/gamecards/{AppId}");
+            HtmlDocument document = new HtmlDocument();
+            string response = await CookieClient.GetHttpAsync($"{Settings.Default.myProfileURL}/gamecards/{AppId}");
 
-                //Response should be empty. User should be unauthorised.
-                if (string.IsNullOrWhiteSpace(response))
-                {
-                    return false;
-                }
+            document.LoadHtml(response);
 
-                document.LoadHtml(response);
+            HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
+            string cards = cardsNode?.InnerText.Split(' ').First();
 
-                HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
-                string cards = cardsNode?.InnerText.Split(' ').First();
+            HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
+            string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
 
-                HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-                string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
+            UpdateStats(cards, playtime);
 
-                UpdateStats(cards, playtime);
-
-                return RemainingCards != 0;
-            }
-            catch (Exception ex)
-            {
-                Logger.Exception(ex, "Badge -> CanDropCards, for id = " + AppId);
-            }
-
-            return false;
-        }
-
-        public override string ToString()
-        {
-            return string.IsNullOrWhiteSpace(Name) ? AppId : Name;
+            return RemainingCards != 0;
         }
     }
 }

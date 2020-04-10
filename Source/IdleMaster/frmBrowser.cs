@@ -56,7 +56,7 @@ namespace IdleMaster
                 }
             }
 
-            if(wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
+            if (wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
             {
                 Height = 370;
             }
@@ -76,21 +76,21 @@ namespace IdleMaster
             {
                 switch (cookie.Name)
                 {
-                    case "steamMachineAuth":
-                        Settings.Default.steamMachineAuth = cookie.Value;
-                        break;
                     case "sessionid":
-                        Settings.Default.sessionid = cookie.Value;
+                        Settings.Default.CookieSessionId = cookie.Value;
                         break;
                     case "steamLoginSecure":
-                        Settings.Default.steamLogin = cookie.Value;
+                        Settings.Default.CookieLoginSecure = cookie.Value;
                         Settings.Default.myProfileURL = SteamProfile.GetSteamUrl();
                         break;
-                    case "steamparental":
-                        Settings.Default.steamparental = cookie.Value;
+                    case "steamMachineAuth":
+                        Settings.Default.CookieMachineAuth = cookie.Value;
                         break;
                     case "steamRememberLogin":
-                        Settings.Default.steamRememberLogin = cookie.Value;
+                        Settings.Default.CookieRememberLogin = cookie.Value;
+                        break;
+                    case "steamparental":
+                        Settings.Default.CookieParental = cookie.Value;
                         break;
                 }
             }
