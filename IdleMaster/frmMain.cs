@@ -179,7 +179,7 @@ namespace IdleMaster
             if (_currentBadge == null)
             {
                 _currentBadge = _badges.First();
-                _currentBadge.Idle();
+                _currentBadge.StartIdle();
 
                 tmrIdle.Enabled = true;
                 return;
@@ -211,7 +211,7 @@ namespace IdleMaster
                 _badges.Remove(_currentBadge);
 
                 _currentBadge = _badges.First();
-                _currentBadge.Idle();
+                _currentBadge.StartIdle();
             }
 
             tmrIdle.Enabled = true;
@@ -264,7 +264,7 @@ namespace IdleMaster
 
                 foreach (ManagementObject managementObject in processList)
                 {
-                    string[] argList = new string[] { string.Empty, string.Empty };
+                    string[] argList = new string[] { null, null };
 
                     int.TryParse(managementObject.InvokeMethod("GetOwner", argList).ToString(), out int returnValue);
 

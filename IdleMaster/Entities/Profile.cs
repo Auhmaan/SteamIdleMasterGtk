@@ -6,20 +6,21 @@ using System.Xml;
 
 namespace IdleMaster
 {
-    internal class SteamProfile
+    public class Profile
     {
-        internal static string GetSteamId()
+        //Methods
+        public static string GetSteamId()
         {
             string steamid = WebUtility.UrlDecode(Settings.Default.CookieLoginSecure);
             return steamid?.Split('|').First();
         }
 
-        internal static string GetSteamUrl()
+        public static string GetSteamUrl()
         {
             return $"https://steamcommunity.com/profiles/{GetSteamId()}";
         }
 
-        internal static string GetSignedAs()
+        public static string GetUsername()
         {
             string steamUrl = GetSteamUrl();
             string userName = $"User {GetSteamId()}";

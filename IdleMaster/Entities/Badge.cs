@@ -1,17 +1,19 @@
 ﻿using HtmlAgilityPack;
 using IdleMaster.Properties;
-using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace IdleMaster
 {
     public class Badge
     {
+        //Fields
+        private Process idleProcess;
+
+        //Properties
         public string AppId { get; set; }
 
         public string Name { get; set; }
@@ -22,16 +24,15 @@ namespace IdleMaster
 
         public double AveragePrice { get; set; }
 
-        private Process idleProcess;
-
         public bool IsIdling
         {
             get
             {
-                return idleProcess != null && !idleProcess.HasExited;
+                return idleProcess != null;
             }
         }
 
+        //Constructors
         public Badge(string appId, string name, string remaining, string hours)
         {
             AppId = appId;
@@ -39,16 +40,8 @@ namespace IdleMaster
             UpdateStats(remaining, hours);
         }
 
-        public void UpdateStats(string remaining, string hours)
-        {
-            int.TryParse(remaining, out int remainingCards);
-            double.TryParse(hours, NumberStyles.Any, new NumberFormatInfo(), out double hoursPlayed);
-
-            RemainingCards = remainingCards;
-            HoursPlayed = hoursPlayed;
-        }
-
-        public Process Idle()
+        //Methods
+        public Process StartIdle()
         {
             if (IsIdling)
             {
@@ -71,6 +64,15 @@ namespace IdleMaster
             }
 
             idleProcess.Kill();
+        }
+
+        public void UpdateStats(string remaining, string hours)
+        {
+            int.TryParse(remaining, out int remainingCards);
+            double.TryParse(hours, NumberStyles.Any, new NumberFormatInfo(), out double hoursPlayed);
+
+            RemainingCards = remainingCards;
+            HoursPlayed = hoursPlayed;
         }
 
         public async Task<bool> CanDropCards()

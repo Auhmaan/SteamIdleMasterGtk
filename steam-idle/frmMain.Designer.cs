@@ -28,7 +28,6 @@
         ///</summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.ptbSteamApp = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSteamApp)).BeginInit();
             this.SuspendLayout();
@@ -51,11 +50,12 @@
             this.ClientSize = new System.Drawing.Size(291, 136);
             this.Controls.Add(this.ptbSteamApp);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmMain";
-            this.Text = "You\'re Now In-Game";
-            this.Load += new System.EventHandler(this.frmMain_Load);
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.ptbSteamApp)).EndInit();
             this.ResumeLayout(false);
 

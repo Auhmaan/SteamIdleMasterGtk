@@ -9,16 +9,19 @@ namespace IdleMaster
 {
     public class CookieClient : WebClient
     {
-        internal CookieContainer Cookie = new CookieContainer();
+        //Properties
+        public CookieContainer Cookie { get; set; }
 
-        internal Uri ResponseUri;
+        public Uri ResponseUri { get; set; }
 
+        //Constructors
         public CookieClient()
         {
             Cookie = GenerateCookies();
             Encoding = Encoding.UTF8;
         }
 
+        //Methods
         protected override WebRequest GetWebRequest(Uri address)
         {
             WebRequest request = base.GetWebRequest(address);
@@ -31,23 +34,21 @@ namespace IdleMaster
             return request;
         }
 
-        protected override WebResponse GetWebResponse(WebRequest request, System.IAsyncResult result)
+        protected override WebResponse GetWebResponse(WebRequest request, IAsyncResult result)
         {
             WebResponse baseResponse = base.GetWebResponse(request);
 
             CookieCollection cookies = (baseResponse as HttpWebResponse).Cookies;
 
-            //Check, if cookie should be deleted. This means that sessionID is now invalid and user has to log in again.
-            //Maybe this shoud be done other way (authenticate exception), but because of shared settings and timers in frmMain...
             if (cookies.Count > 0)
             {
                 if (cookies["steamLoginSecure"] != null && cookies["steamLoginSecure"].Value == "deleted")
                 {
-                    Settings.Default.CookieSessionId = string.Empty;
-                    Settings.Default.CookieLoginSecure = string.Empty;
-                    Settings.Default.CookieParental = string.Empty;
-                    Settings.Default.CookieMachineAuth = string.Empty;
-                    Settings.Default.CookieRememberLogin = string.Empty;
+                    Settings.Default.CookieSessionId = null;
+                    Settings.Default.CookieLoginSecure = null;
+                    Settings.Default.CookieParental = null;
+                    Settings.Default.CookieMachineAuth = null;
+                    Settings.Default.CookieRememberLogin = null;
                     Settings.Default.Save();
                 }
             }
@@ -85,7 +86,7 @@ namespace IdleMaster
             while (true)
             {
                 CookieClient client = new CookieClient();
-                string content = string.Empty;
+                string content = null;
 
                 content = await client.DownloadStringTaskAsync(url);
 

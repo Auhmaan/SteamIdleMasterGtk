@@ -26,188 +26,6 @@ namespace IdleMaster.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string myProfileURL {
-            get {
-                return ((string)(this["myProfileURL"]));
-            }
-            set {
-                this["myProfileURL"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string sort {
-            get {
-                return ((string)(this["sort"]));
-            }
-            set {
-                this["sort"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool minToTray {
-            get {
-                return ((bool)(this["minToTray"]));
-            }
-            set {
-                this["minToTray"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool updateNeeded {
-            get {
-                return ((bool)(this["updateNeeded"]));
-            }
-            set {
-                this["updateNeeded"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ignoreclient {
-            get {
-                return ((bool)(this["ignoreclient"]));
-            }
-            set {
-                this["ignoreclient"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool showUsername {
-            get {
-                return ((bool)(this["showUsername"]));
-            }
-            set {
-                this["showUsername"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring />\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection blacklist {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["blacklist"]));
-            }
-            set {
-                this["blacklist"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool OnlyOneGameIdle {
-            get {
-                return ((bool)(this["OnlyOneGameIdle"]));
-            }
-            set {
-                this["OnlyOneGameIdle"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int totalCardIdled {
-            get {
-                return ((int)(this["totalCardIdled"]));
-            }
-            set {
-                this["totalCardIdled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public uint totalMinutesIdled {
-            get {
-                return ((uint)(this["totalMinutesIdled"]));
-            }
-            set {
-                this["totalMinutesIdled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string language {
-            get {
-                return ((string)(this["language"]));
-            }
-            set {
-                this["language"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool OneThenMany {
-            get {
-                return ((bool)(this["OneThenMany"]));
-            }
-            set {
-                this["OneThenMany"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string steamLoginSecure {
-            get {
-                return ((string)(this["steamLoginSecure"]));
-            }
-            set {
-                this["steamLoginSecure"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
-            get {
-                return ((string)(this["Setting"]));
-            }
-            set {
-                this["Setting"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Both")]
-        public global::IdleMaster.IdleType IdleStyle {
-            get {
-                return ((global::IdleMaster.IdleType)(this["IdleStyle"]));
-            }
-            set {
-                this["IdleStyle"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string CookieSessionId {
             get {
                 return ((string)(this["CookieSessionId"]));
@@ -262,6 +80,30 @@ namespace IdleMaster.Properties {
             }
             set {
                 this["CookieParental"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IdleStyle {
+            get {
+                return ((string)(this["IdleStyle"]));
+            }
+            set {
+                this["IdleStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string myProfileURL {
+            get {
+                return ((string)(this["myProfileURL"]));
+            }
+            set {
+                this["myProfileURL"] = value;
             }
         }
     }
