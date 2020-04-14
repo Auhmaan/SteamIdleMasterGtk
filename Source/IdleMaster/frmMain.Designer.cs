@@ -39,6 +39,8 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.lblSteam = new System.Windows.Forms.Label();
             this.lblLogin = new System.Windows.Forms.Label();
+            this.lsbGames = new System.Windows.Forms.ListBox();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tmrSteamStatus
@@ -105,7 +107,7 @@
             // lblSteam
             // 
             this.lblSteam.AutoSize = true;
-            this.lblSteam.Location = new System.Drawing.Point(12, 48);
+            this.lblSteam.Location = new System.Drawing.Point(12, 31);
             this.lblSteam.Name = "lblSteam";
             this.lblSteam.Size = new System.Drawing.Size(37, 13);
             this.lblSteam.TabIndex = 2;
@@ -114,17 +116,37 @@
             // lblLogin
             // 
             this.lblLogin.AutoSize = true;
-            this.lblLogin.Location = new System.Drawing.Point(12, 70);
+            this.lblLogin.Location = new System.Drawing.Point(12, 53);
             this.lblLogin.Name = "lblLogin";
             this.lblLogin.Size = new System.Drawing.Size(33, 13);
             this.lblLogin.TabIndex = 2;
             this.lblLogin.Text = "Login";
+            // 
+            // lsbGames
+            // 
+            this.lsbGames.FormattingEnabled = true;
+            this.lsbGames.Location = new System.Drawing.Point(15, 73);
+            this.lsbGames.Name = "lsbGames";
+            this.lsbGames.Size = new System.Drawing.Size(237, 225);
+            this.lsbGames.TabIndex = 3;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(177, 44);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 4;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(304, 339);
+            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.lsbGames);
             this.Controls.Add(this.lblLogin);
             this.Controls.Add(this.lblSteam);
             this.Controls.Add(this.btnStop);
@@ -154,5 +176,7 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblSteam;
         private System.Windows.Forms.Label lblLogin;
+        private System.Windows.Forms.ListBox lsbGames;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }

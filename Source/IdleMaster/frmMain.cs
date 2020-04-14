@@ -104,6 +104,9 @@ namespace IdleMaster
                 int.TryParse(maxPages, out totalPages);
             }
             while (currentPage < totalPages);
+
+            lsbGames.Items.Clear();
+            lsbGames.Items.AddRange(_badges.Select(x => x.Name).ToArray());
         }
 
         private bool ProcessBadgesOnPage(HtmlDocument document)
@@ -170,7 +173,6 @@ namespace IdleMaster
             }
 
             CheckIdleStatus();
-
         }
 
         private void PauseIdle()
@@ -294,6 +296,11 @@ namespace IdleMaster
         private void tmrIdle_Tick(object sender, EventArgs e)
         {
             CheckIdleStatus();
+        }
+
+        private async void btnRefresh_Click(object sender, EventArgs e)
+        {
+            await LoadBadgesAsync();
         }
     }
 }
