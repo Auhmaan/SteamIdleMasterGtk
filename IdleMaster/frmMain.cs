@@ -230,11 +230,6 @@ namespace IdleMaster
         {
             _profile.StartIdlingBadges();
 
-            if (!_profile.IsIdling)
-            {
-                return;
-            }
-
             CheckIdleStatus();
         }
 
@@ -253,6 +248,7 @@ namespace IdleMaster
         private void StopIdle()
         {
             _profile.StopIdlingBadges();
+            tmrIdleStatus.Stop();
         }
 
         private void CheckIdleStatus()
@@ -296,21 +292,25 @@ namespace IdleMaster
         private void btnStart_Click(object sender, EventArgs e)
         {
             StartIdle();
+            UpdateUserInterface("idle");
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
             PauseIdle();
+            UpdateUserInterface("idle");
         }
 
         private void btnResume_Click(object sender, EventArgs e)
         {
             ResumeIdle();
+            UpdateUserInterface("idle");
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
             StopIdle();
+            UpdateUserInterface("idle");
         }
     }
 }

@@ -26,7 +26,7 @@ namespace IdleMaster.Entities
         {
             get
             {
-                return Badges.Any();
+                return Badges != null && Badges.Any();
             }
         }
 
