@@ -1,27 +1,29 @@
-﻿using HtmlAgilityPack;
+﻿using IdleMaster.Entities;
 using IdleMaster.Properties;
 using Steamworks;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Management;
-using System.Net;
 using System.Security.Principal;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace IdleMaster
 {
     public partial class frmMain : Form
     {
-        private bool _isSteamReady;
-        private bool _isCookieReady;
+        private bool? _isSteamRunning = null;
 
-        private List<Badge> _badges;
-        private Badge _currentBadge;
+        private Profile _profile;
+
+        private bool IsLoggedIn
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(Settings.Default.CookieSessionId) && !string.IsNullOrWhiteSpace(Settings.Default.CookieLoginSecure);
+            }
+        }
 
         public frmMain()
         {
@@ -30,191 +32,15 @@ namespace IdleMaster
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            _badges = new List<Badge>();
-
             CopyResources();
             KillPendingProcesses();
 
-            CheckSteamStatus();
-            CheckCookieStatus();
+            UpdateUserInterface("reset");
 
+            CheckSteamStatus();
             tmrSteamStatus.Start();
-            tmrCookieStatus.Start();
-            tmrLoadBadges.Start();
-        }
 
-        ////////////////////////////////////////TIMERS////////////////////////////////////////
-
-        private void tmrSteamStatus_Tick(object sender, EventArgs e)
-        {
-            CheckSteamStatus();
-        }
-
-        private void CheckSteamStatus()
-        {
-            _isSteamReady = SteamAPI.IsSteamRunning();
-            lblSteam.Text = $"Steam is {(_isSteamReady ? "on" : "off")}";
-        }
-
-        private void tmrCookieStatus_Tick(object sender, EventArgs e)
-        {
-            CheckCookieStatus();
-        }
-
-        private void CheckCookieStatus()
-        {
-            _isCookieReady = !string.IsNullOrWhiteSpace(Settings.Default.CookieSessionId) &&
-                             !string.IsNullOrWhiteSpace(Settings.Default.CookieLoginSecure);
-
-            lblLogin.Text = $"Login is {(_isCookieReady ? "on" : "off")}";
-        }
-
-        private async void tmrLoadBadges_Tick(object sender, EventArgs e)
-        {
-            if (!_isSteamReady || !_isCookieReady)
-            {
-                return;
-            }
-
-            tmrSteamStatus.Stop();
-            tmrCookieStatus.Stop();
-            tmrLoadBadges.Stop();
-
-            await LoadBadgesAsync();
-        }
-
-        ////////////////////////////////////////BADGES////////////////////////////////////////
-
-        private async Task LoadBadgesAsync()
-        {
-            string profileLink = $"{Settings.Default.myProfileURL}/badges";
-            int totalPages = 1;
-            int currentPage = 0;
-
-            do
-            {
-                currentPage++;
-
-                string response = await CookieClient.GetHttpAsync($"{profileLink}?p={currentPage}");
-
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(response);
-
-                if (!ProcessBadgesOnPage(document))
-                {
-                    break;
-                }
-
-                if (currentPage != 1)
-                {
-                    continue;
-                }
-
-                HtmlNodeCollection pages = document.DocumentNode.SelectNodes("//a[@class=\"pagelink\"]");
-
-                string href = pages?.Last().Attributes["href"]?.Value;
-                string maxPages = href?.Split('=').Last();
-                int.TryParse(maxPages, out totalPages);
-            }
-            while (currentPage < totalPages);
-
-            lsbGames.Items.Clear();
-            lsbGames.Items.AddRange(_badges.Select(x => x.Name).ToArray());
-        }
-
-        private bool ProcessBadgesOnPage(HtmlDocument document)
-        {
-            HtmlNodeCollection droppableBadges = document.DocumentNode.SelectNodes("//span[text()='PLAY']/ancestor::div[contains(@class,'is_link')]");
-
-            if (droppableBadges == null)
-            {
-                return false;
-            }
-
-            foreach (HtmlNode badge in droppableBadges)
-            {
-                HtmlNode urlNode = badge.SelectSingleNode(".//a[@class='badge_row_overlay']");
-                string appId = urlNode?.Attributes["href"]?.Value.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
-
-                HtmlNode nameNode = badge.SelectSingleNode(".//div[@class='badge_title']");
-                string name = WebUtility.HtmlDecode(nameNode?.FirstChild.InnerText).Trim();
-
-                HtmlNode cardsNode = badge.SelectSingleNode(".//span[@class='progress_info_bold']");
-                string cards = cardsNode?.InnerText.Split(' ').First();
-
-                HtmlNode playtimeNode = badge.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-                string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
-
-                Badge existingBadge = _badges.FirstOrDefault(x => x.AppId == appId);
-
-                if (existingBadge != null)
-                {
-                    existingBadge.UpdateStats(cards, playtime);
-                    continue;
-                }
-
-                Badge newBadge = new Badge(appId, name, cards, playtime);
-                _badges.Add(newBadge);
-            }
-
-            HtmlNodeCollection allBadges = document.DocumentNode.SelectNodes("//div[contains(@class,'is_link')]");
-
-            if (allBadges.Count > droppableBadges.Count)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        ////////////////////////////////////////IDLE////////////////////////////////////////
-
-        private void StartIdle()
-        {
-            if (!_badges.Any())
-            {
-                return;
-            }
-
-            if (_currentBadge == null)
-            {
-                _currentBadge = _badges.First();
-                _currentBadge.StartIdle();
-
-                tmrIdle.Enabled = true;
-                return;
-            }
-
-            CheckIdleStatus();
-        }
-
-        private void PauseIdle()
-        {
-            tmrIdle.Stop();
-        }
-
-        private void StopIdle()
-        {
-            _currentBadge.StopIdle();
-            _currentBadge = null;
-        }
-
-        private async void CheckIdleStatus()
-        {
-            tmrIdle.Enabled = false;
-
-            bool canDropCards = await _currentBadge.CanDropCards();
-
-            if (!canDropCards)
-            {
-                _currentBadge.StopIdle();
-                _badges.Remove(_currentBadge);
-
-                _currentBadge = _badges.First();
-                _currentBadge.StartIdle();
-            }
-
-            tmrIdle.Enabled = true;
+            LoadProfile();
         }
 
         ////////////////////////////////////////METHODS////////////////////////////////////////
@@ -283,12 +109,188 @@ namespace IdleMaster
             }
         }
 
+        private void LoadProfile()
+        {
+            if (!IsLoggedIn)
+            {
+                UpdateUserInterface("login");
+                return;
+            }
+
+            _profile = new Profile();
+            _profile.LoadProfile();
+
+            UpdateUserInterface("login");
+            UpdateUserInterface("profile");
+            UpdateUserInterface("list");
+            UpdateUserInterface("idle");
+        }
+
+        private void UpdateUserInterface(string pattern = "all")
+        {
+            if (pattern == "reset")
+            {
+                lnkLogin.Enabled = false;
+                lnkLogout.Enabled = false;
+
+                lblSteam.Text = null;
+
+                ptbAvatar.Image = null;
+                lblUsername.Text = null;
+
+                btnRefresh.Enabled = false;
+                lsvBadges.Enabled = false;
+                lsvBadges.Items.Clear();
+
+                btnStart.Enabled = false;
+                btnPause.Enabled = false;
+                btnResume.Enabled = false;
+                btnStop.Enabled = false;
+            }
+
+            if (pattern == "all" ||
+               pattern == "login")
+            {
+                lnkLogin.Enabled = !IsLoggedIn;
+                lnkLogout.Enabled = IsLoggedIn;
+            }
+
+            if (pattern == "all" ||
+                pattern == "steam")
+            {
+                lblSteam.Text = $"Steam is {(!_isSteamRunning.Value ? "not " : "")}running";
+                lblSteam.ForeColor = _isSteamRunning.Value ? Color.Green : Color.Red;
+            }
+
+            if (IsLoggedIn)
+            {
+                if (pattern == "all" ||
+                   pattern == "profile")
+                {
+                    ptbAvatar.ImageLocation = _profile.Avatar;
+                    lblUsername.Text = _profile.Username;
+                    btnRefresh.Enabled = true;
+                }
+
+                if (pattern == "all" ||
+                    pattern == "list")
+                {
+                    lsvBadges.Enabled = true;
+                    lsvBadges.Items.Clear();
+
+                    foreach (Badge badge in _profile.Badges)
+                    {
+                        ListViewItem item = new ListViewItem
+                        {
+                            Text = badge.Name
+                        };
+
+                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = $"{badge.HoursPlayed}h" });
+                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = badge.RemainingCards.ToString() });
+
+                        lsvBadges.Items.Add(item);
+                    }
+                }
+
+                if (pattern == "all" ||
+                    pattern == "idle")
+                {
+                    if (_profile.HasBadges)
+                    {
+                        btnStart.Enabled = !_profile.IsIdling;
+                        btnPause.Enabled = _profile.IsIdling && !_profile.IsPaused;
+                        btnResume.Enabled = _profile.IsIdling && _profile.IsPaused;
+                        btnStop.Enabled = _profile.IsIdling;
+                    }
+                }
+            }
+        }
+
+        ////////////////////////////////////////STATUS////////////////////////////////////////
+
+        private void tmrSteamStatus_Tick(object sender, EventArgs e)
+        {
+            CheckSteamStatus();
+        }
+
+        private void CheckSteamStatus()
+        {
+            _isSteamRunning = SteamAPI.IsSteamRunning();
+            UpdateUserInterface("steam");
+        }
+
+        ////////////////////////////////////////IDLE////////////////////////////////////////
+
+        private void tmrIdleStatus_Tick(object sender, EventArgs e)
+        {
+            CheckIdleStatus();
+        }
+
+        private void StartIdle()
+        {
+            _profile.StartIdlingBadges();
+
+            if (!_profile.IsIdling)
+            {
+                return;
+            }
+
+            CheckIdleStatus();
+        }
+
+        private void PauseIdle()
+        {
+            _profile.PauseIdlingBadges();
+            tmrIdleStatus.Stop();
+        }
+
+        private void ResumeIdle()
+        {
+            _profile.ResumeIdlingBadges();
+            CheckIdleStatus();
+        }
+
+        private void StopIdle()
+        {
+            _profile.StopIdlingBadges();
+        }
+
+        private void CheckIdleStatus()
+        {
+            tmrIdleStatus.Stop();
+            _profile.CheckIdlingStatus(true);
+            tmrIdleStatus.Start();
+        }
+
         ////////////////////////////////////////CONTROLS////////////////////////////////////////
 
         private void lnkLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             frmBrowser form = new frmBrowser();
             form.ShowDialog();
+
+            LoadProfile();
+        }
+
+        private void lnkLogout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            StopIdle();
+            _profile = null;
+            KillPendingProcesses();
+
+            Settings.Default.CookieSessionId = string.Empty;
+            Settings.Default.CookieLoginSecure = string.Empty;
+            Settings.Default.CookieParental = string.Empty;
+            Settings.Default.Save();
+
+            UpdateUserInterface("reset");
+            UpdateUserInterface("login");
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            _profile.LoadBadges();
+            UpdateUserInterface("list");
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -301,19 +303,14 @@ namespace IdleMaster
             PauseIdle();
         }
 
+        private void btnResume_Click(object sender, EventArgs e)
+        {
+            ResumeIdle();
+        }
+
         private void btnStop_Click(object sender, EventArgs e)
         {
             StopIdle();
-        }
-
-        private void tmrIdle_Tick(object sender, EventArgs e)
-        {
-            CheckIdleStatus();
-        }
-
-        private async void btnRefresh_Click(object sender, EventArgs e)
-        {
-            await LoadBadgesAsync();
         }
     }
 }

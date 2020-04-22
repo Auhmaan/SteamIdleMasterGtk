@@ -94,17 +94,5 @@ namespace IdleMaster.Properties {
                 this["IdleStyle"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string myProfileURL {
-            get {
-                return ((string)(this["myProfileURL"]));
-            }
-            set {
-                this["myProfileURL"] = value;
-            }
-        }
     }
 }

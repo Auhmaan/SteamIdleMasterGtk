@@ -77,7 +77,6 @@ namespace IdleMaster
                         break;
                     case "steamLoginSecure":
                         Settings.Default.CookieLoginSecure = cookie.Value;
-                        Settings.Default.myProfileURL = Profile.GetSteamUrl();
                         break;
                     case "steamMachineAuth":
                         Settings.Default.CookieMachineAuth = cookie.Value;

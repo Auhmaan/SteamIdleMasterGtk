@@ -1,12 +1,7 @@
-﻿using HtmlAgilityPack;
-using IdleMaster.Properties;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
-namespace IdleMaster
+namespace IdleMaster.Entities
 {
     public class Badge
     {
@@ -14,21 +9,27 @@ namespace IdleMaster
         private Process idleProcess;
 
         //Properties
-        public string AppId { get; set; }
+        public string AppId { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public int RemainingCards { get; set; }
+        public int RemainingCards { get; private set; }
 
-        public double HoursPlayed { get; set; }
+        public double HoursPlayed { get; private set; }
 
-        public double AveragePrice { get; set; }
+        public bool HasDrops
+        {
+            get
+            {
+                return RemainingCards > 0;
+            }
+        }
 
         public bool IsIdling
         {
             get
             {
-                return idleProcess != null;
+                return idleProcess != null && !idleProcess.HasExited;
             }
         }
 
@@ -50,7 +51,7 @@ namespace IdleMaster
 
             idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId)
             {
-                WindowStyle = ProcessWindowStyle.Hidden
+                WindowStyle = ProcessWindowStyle.Normal
             });
 
             return idleProcess;
@@ -73,24 +74,6 @@ namespace IdleMaster
 
             RemainingCards = remainingCards;
             HoursPlayed = hoursPlayed;
-        }
-
-        public async Task<bool> CanDropCards()
-        {
-            HtmlDocument document = new HtmlDocument();
-            string response = await CookieClient.GetHttpAsync($"{Settings.Default.myProfileURL}/gamecards/{AppId}");
-
-            document.LoadHtml(response);
-
-            HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
-            string cards = cardsNode?.InnerText.Split(' ').First();
-
-            HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-            string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
-
-            UpdateStats(cards, playtime);
-
-            return RemainingCards != 0;
         }
     }
 }
