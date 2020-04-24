@@ -167,6 +167,16 @@ namespace IdleMaster.Entities
 			CurrentBadge.StartIdle();
 		}
 
+		public void SkipIdlingBadge()
+		{
+			if (!IsIdling)
+			{
+				return;
+			}
+
+			IdleNextBadge(false);
+		}
+
 		public void PauseIdlingBadges()
 		{
 			if (!IsIdling)

@@ -143,6 +143,7 @@ namespace IdleMaster
 				lsvBadges.Items.Clear();
 
 				btnStart.Enabled = false;
+				btnSkip.Enabled = false;
 				btnPause.Enabled = false;
 				btnResume.Enabled = false;
 				btnStop.Enabled = false;
@@ -188,6 +189,11 @@ namespace IdleMaster
 						item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = $"{badge.HoursPlayed}h" });
 						item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = badge.RemainingCards.ToString() });
 
+						if (badge.IsIdling)
+						{
+							item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = "Idling" });
+						}
+
 						lsvBadges.Items.Add(item);
 					}
 				}
@@ -198,6 +204,7 @@ namespace IdleMaster
 					if (_profile.HasBadges && _isSteamRunning)
 					{
 						btnStart.Enabled = !_profile.IsIdling;
+						btnSkip.Enabled = _profile.IsIdling && !_profile.IsPaused;
 						btnPause.Enabled = _profile.IsIdling && !_profile.IsPaused;
 						btnResume.Enabled = _profile.IsIdling && _profile.IsPaused;
 						btnStop.Enabled = _profile.IsIdling;
@@ -228,25 +235,55 @@ namespace IdleMaster
 
 		private void StartIdle()
 		{
-			_profile.StartIdlingBadges();
+			if (!_isSteamRunning)
+			{
+				return;
+			}
 
+			_profile.StartIdlingBadges();
+			CheckIdleStatus();
+		}
+
+		private void SkipIdle()
+		{
+			if (!_isSteamRunning)
+			{
+				return;
+			}
+
+			_profile.SkipIdlingBadge();
 			CheckIdleStatus();
 		}
 
 		private void PauseIdle()
 		{
+			if (!_isSteamRunning)
+			{
+				return;
+			}
+
 			_profile.PauseIdlingBadges();
 			tmrIdleStatus.Stop();
 		}
 
 		private void ResumeIdle()
 		{
+			if (!_isSteamRunning)
+			{
+				return;
+			}
+
 			_profile.ResumeIdlingBadges();
 			CheckIdleStatus();
 		}
 
 		private void StopIdle()
 		{
+			if (!_isSteamRunning)
+			{
+				return;
+			}
+
 			_profile.StopIdlingBadges();
 			tmrIdleStatus.Stop();
 		}
@@ -254,7 +291,14 @@ namespace IdleMaster
 		private void CheckIdleStatus()
 		{
 			tmrIdleStatus.Stop();
+
+			if (!_isSteamRunning)
+			{
+				return;
+			}
+
 			_profile.CheckIdlingStatus(true);
+			UpdateUserInterface("list");
 			tmrIdleStatus.Start();
 		}
 
@@ -293,6 +337,11 @@ namespace IdleMaster
 		{
 			StartIdle();
 			UpdateUserInterface("idle");
+		}
+
+		private void btnSkip_Click(object sender, EventArgs e)
+		{
+			SkipIdle();
 		}
 
 		private void btnPause_Click(object sender, EventArgs e)
