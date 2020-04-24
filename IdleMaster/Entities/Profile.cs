@@ -108,42 +108,47 @@ namespace IdleMaster.Entities
 
         private bool ProcessBadgesOnPage(HtmlDocument document)
         {
-            HtmlNodeCollection droppableBadges = document.DocumentNode.SelectNodes("//span[text()='PLAY']/ancestor::div[contains(@class,'is_link')]");
-
-            if (droppableBadges == null)
+            HtmlNodeCollection recentBadges = document.DocumentNode.SelectNodes("//span[@class='progress_info_bold']");
+            
+            if (recentBadges == null)
             {
                 return false;
             }
+            
+            HtmlNodeCollection droppableBadges = document.DocumentNode.SelectNodes("//span[text()='PLAY']/ancestor::div[@class='badge_row is_link']");
 
-            foreach (HtmlNode badge in droppableBadges)
+            if (droppableBadges != null)
             {
-                HtmlNode urlNode = badge.SelectSingleNode(".//a[@class='badge_row_overlay']");
-                string appId = urlNode?.Attributes["href"]?.Value.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
-
-                HtmlNode nameNode = badge.SelectSingleNode(".//div[@class='badge_title']");
-                string name = WebUtility.HtmlDecode(nameNode?.FirstChild.InnerText).Trim();
-
-                HtmlNode cardsNode = badge.SelectSingleNode(".//span[@class='progress_info_bold']");
-                string cards = cardsNode?.InnerText.Split(' ').First();
-
-                HtmlNode playtimeNode = badge.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-                string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
-
-                Badge existingBadge = Badges.FirstOrDefault(x => x.AppId == appId);
-
-                if (existingBadge != null)
+                foreach (HtmlNode badge in droppableBadges)
                 {
-                    existingBadge.UpdateStats(cards, playtime);
-                    continue;
-                }
+                    HtmlNode urlNode = badge.SelectSingleNode(".//a[@class='badge_row_overlay']");
+                    string appId = urlNode?.Attributes["href"]?.Value.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
 
-                Badge newBadge = new Badge(appId, name, cards, playtime);
-                Badges.Add(newBadge);
+                    HtmlNode nameNode = badge.SelectSingleNode(".//div[@class='badge_title']");
+                    string name = WebUtility.HtmlDecode(nameNode?.FirstChild.InnerText).Trim();
+
+                    HtmlNode cardsNode = badge.SelectSingleNode(".//span[@class='progress_info_bold']");
+                    string cards = cardsNode?.InnerText.Split(' ').First();
+
+                    HtmlNode playtimeNode = badge.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
+                    string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
+
+                    Badge existingBadge = Badges.FirstOrDefault(x => x.AppId == appId);
+
+                    if (existingBadge != null)
+                    {
+                        existingBadge.UpdateStats(cards, playtime);
+                        continue;
+                    }
+
+                    Badge newBadge = new Badge(appId, name, cards, playtime);
+                    Badges.Add(newBadge);
+                }
             }
 
-            HtmlNodeCollection allBadges = document.DocumentNode.SelectNodes("//div[contains(@class,'is_link')]");
+            HtmlNodeCollection allBadges = document.DocumentNode.SelectNodes("//div[@class='badge_row is_link']");
 
-            if (allBadges.Count > droppableBadges.Count)
+            if (allBadges.Count > recentBadges.Count)
             {
                 return false;
             }
