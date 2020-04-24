@@ -126,8 +126,7 @@ namespace IdleMaster
         {
             if (uiProfile == "logout")
             {
-                lnkLogin.Enabled = true;
-                lnkLogout.Enabled = false;
+                lnkSession.Text = "Login";
 
                 ptbAvatar.Image = null;
                 lblUsername.Text = null;
@@ -148,8 +147,7 @@ namespace IdleMaster
 
             if (uiProfile == "login")
             {
-                lnkLogin.Enabled = false;
-                lnkLogout.Enabled = true;
+                lnkSession.Text = "Logout";
 
                 ptbAvatar.ImageLocation = _profile.Avatar;
                 lblUsername.Text = _profile.Username;
@@ -187,9 +185,6 @@ namespace IdleMaster
 
             if (uiProfile == "start")
             {
-                lnkLogin.Enabled = false;
-                lnkLogout.Enabled = true;
-
                 ptbAvatar.ImageLocation = _profile.Avatar;
                 lblUsername.Text = _profile.Username;
 
@@ -200,14 +195,11 @@ namespace IdleMaster
                 btnPause.Enabled = true;
                 btnStop.Enabled = true;
 
-                btnPause.BackgroundImage = Resources.pause;
+                btnPause.BackgroundImage = Resources.Pause;
             }
 
             if (uiProfile == "pause")
             {
-                lnkLogin.Enabled = false;
-                lnkLogout.Enabled = true;
-
                 ptbAvatar.ImageLocation = _profile.Avatar;
                 lblUsername.Text = _profile.Username;
 
@@ -218,14 +210,11 @@ namespace IdleMaster
                 btnPause.Enabled = true;
                 btnStop.Enabled = true;
 
-                btnPause.BackgroundImage = Resources.resume;
+                btnPause.BackgroundImage = Resources.Resume;
             }
 
             if (uiProfile == "stop")
             {
-                lnkLogin.Enabled = false;
-                lnkLogout.Enabled = true;
-
                 ptbAvatar.ImageLocation = _profile.Avatar;
                 lblUsername.Text = _profile.Username;
 
@@ -236,7 +225,7 @@ namespace IdleMaster
                 btnPause.Enabled = false;
                 btnStop.Enabled = false;
 
-                btnPause.BackgroundImage = Resources.pause;
+                btnPause.BackgroundImage = Resources.Pause;
             }
         }
 
@@ -361,14 +350,16 @@ namespace IdleMaster
 
         ////////////////////////////////////////CONTROLS////////////////////////////////////////
 
-        private void lnkLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lnkSession_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Login();
-        }
-
-        private void lnkLogout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Logout();
+            if (!IsLoggedIn)
+            {
+                Login();
+            }
+            else
+            {
+                Logout();
+            }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)

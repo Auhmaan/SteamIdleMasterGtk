@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.tmrSteamStatus = new System.Windows.Forms.Timer(this.components);
-            this.lnkLogin = new System.Windows.Forms.LinkLabel();
+            this.lnkSession = new System.Windows.Forms.LinkLabel();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
@@ -43,7 +43,6 @@
             this.colHoursPlayed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colRemainingCards = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lnkLogout = new System.Windows.Forms.LinkLabel();
             this.tmrIdleStatus = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.SuspendLayout();
@@ -53,20 +52,20 @@
             this.tmrSteamStatus.Interval = 500;
             this.tmrSteamStatus.Tick += new System.EventHandler(this.tmrSteamStatus_Tick);
             // 
-            // lnkLogin
+            // lnkSession
             // 
-            this.lnkLogin.AutoSize = true;
-            this.lnkLogin.Location = new System.Drawing.Point(364, 9);
-            this.lnkLogin.Name = "lnkLogin";
-            this.lnkLogin.Size = new System.Drawing.Size(33, 13);
-            this.lnkLogin.TabIndex = 0;
-            this.lnkLogin.TabStop = true;
-            this.lnkLogin.Text = "Login";
-            this.lnkLogin.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkLogin_LinkClicked);
+            this.lnkSession.AutoSize = true;
+            this.lnkSession.Location = new System.Drawing.Point(403, 9);
+            this.lnkSession.Name = "lnkSession";
+            this.lnkSession.Size = new System.Drawing.Size(33, 13);
+            this.lnkSession.TabIndex = 0;
+            this.lnkSession.TabStop = true;
+            this.lnkSession.Text = "Login";
+            this.lnkSession.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSession_LinkClicked);
             // 
             // btnStart
             // 
-            this.btnStart.BackgroundImage = global::IdleMaster.Properties.Resources.play;
+            this.btnStart.BackgroundImage = global::IdleMaster.Properties.Resources.Play;
             this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnStart.Location = new System.Drawing.Point(334, 79);
             this.btnStart.Name = "btnStart";
@@ -77,7 +76,7 @@
             // 
             // btnPause
             // 
-            this.btnPause.BackgroundImage = global::IdleMaster.Properties.Resources.pause;
+            this.btnPause.BackgroundImage = global::IdleMaster.Properties.Resources.Pause;
             this.btnPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnPause.Location = new System.Drawing.Point(372, 79);
             this.btnPause.Name = "btnPause";
@@ -88,7 +87,7 @@
             // 
             // btnStop
             // 
-            this.btnStop.BackgroundImage = global::IdleMaster.Properties.Resources.stop;
+            this.btnStop.BackgroundImage = global::IdleMaster.Properties.Resources.Stop;
             this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnStop.Location = new System.Drawing.Point(410, 79);
             this.btnStop.Name = "btnStop";
@@ -108,7 +107,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.BackgroundImage = global::IdleMaster.Properties.Resources.refresh;
+            this.btnRefresh.BackgroundImage = global::IdleMaster.Properties.Resources.Refresh;
             this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnRefresh.Location = new System.Drawing.Point(82, 79);
             this.btnRefresh.Name = "btnRefresh";
@@ -170,17 +169,6 @@
             // 
             this.colStatus.Text = "Status";
             // 
-            // lnkLogout
-            // 
-            this.lnkLogout.AutoSize = true;
-            this.lnkLogout.Location = new System.Drawing.Point(403, 9);
-            this.lnkLogout.Name = "lnkLogout";
-            this.lnkLogout.Size = new System.Drawing.Size(40, 13);
-            this.lnkLogout.TabIndex = 0;
-            this.lnkLogout.TabStop = true;
-            this.lnkLogout.Text = "Logout";
-            this.lnkLogout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkLogout_LinkClicked);
-            // 
             // tmrIdleStatus
             // 
             this.tmrIdleStatus.Interval = 5000;
@@ -199,8 +187,7 @@
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStart);
-            this.Controls.Add(this.lnkLogout);
-            this.Controls.Add(this.lnkLogin);
+            this.Controls.Add(this.lnkSession);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "frmMain";
@@ -216,7 +203,7 @@
         #endregion
 
         private System.Windows.Forms.Timer tmrSteamStatus;
-        private System.Windows.Forms.LinkLabel lnkLogin;
+        private System.Windows.Forms.LinkLabel lnkSession;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Button btnStop;
@@ -228,7 +215,6 @@
         private System.Windows.Forms.ColumnHeader colGame;
         private System.Windows.Forms.ColumnHeader colHoursPlayed;
         private System.Windows.Forms.ColumnHeader colRemainingCards;
-        private System.Windows.Forms.LinkLabel lnkLogout;
         private System.Windows.Forms.Timer tmrIdleStatus;
 		private System.Windows.Forms.ColumnHeader colStatus;
 	}
