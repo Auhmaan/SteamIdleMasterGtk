@@ -43,9 +43,9 @@
 			this.colGame = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colHoursPlayed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colRemainingCards = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.lnkLogout = new System.Windows.Forms.LinkLabel();
 			this.tmrIdleStatus = new System.Windows.Forms.Timer(this.components);
-			this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.btnSkip = new System.Windows.Forms.Button();
 			((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
 			this.SuspendLayout();
@@ -68,7 +68,7 @@
 			// 
 			// btnStart
 			// 
-			this.btnStart.Location = new System.Drawing.Point(12, 348);
+			this.btnStart.Location = new System.Drawing.Point(12, 320);
 			this.btnStart.Name = "btnStart";
 			this.btnStart.Size = new System.Drawing.Size(75, 23);
 			this.btnStart.TabIndex = 1;
@@ -78,7 +78,7 @@
 			// 
 			// btnPause
 			// 
-			this.btnPause.Location = new System.Drawing.Point(174, 348);
+			this.btnPause.Location = new System.Drawing.Point(174, 320);
 			this.btnPause.Name = "btnPause";
 			this.btnPause.Size = new System.Drawing.Size(75, 23);
 			this.btnPause.TabIndex = 1;
@@ -88,7 +88,7 @@
 			// 
 			// btnStop
 			// 
-			this.btnStop.Location = new System.Drawing.Point(336, 348);
+			this.btnStop.Location = new System.Drawing.Point(336, 320);
 			this.btnStop.Name = "btnStop";
 			this.btnStop.Size = new System.Drawing.Size(75, 23);
 			this.btnStop.TabIndex = 1;
@@ -107,7 +107,7 @@
 			// 
 			// btnRefresh
 			// 
-			this.btnRefresh.Location = new System.Drawing.Point(255, 88);
+			this.btnRefresh.Location = new System.Drawing.Point(82, 88);
 			this.btnRefresh.Name = "btnRefresh";
 			this.btnRefresh.Size = new System.Drawing.Size(75, 23);
 			this.btnRefresh.TabIndex = 4;
@@ -117,7 +117,7 @@
 			// 
 			// btnResume
 			// 
-			this.btnResume.Location = new System.Drawing.Point(255, 348);
+			this.btnResume.Location = new System.Drawing.Point(255, 320);
 			this.btnResume.Name = "btnResume";
 			this.btnResume.Size = new System.Drawing.Size(75, 23);
 			this.btnResume.TabIndex = 1;
@@ -149,10 +149,12 @@
             this.colHoursPlayed,
             this.colRemainingCards,
             this.colStatus});
+			this.lsvBadges.FullRowSelect = true;
+			this.lsvBadges.GridLines = true;
 			this.lsvBadges.HideSelection = false;
 			this.lsvBadges.Location = new System.Drawing.Point(12, 117);
 			this.lsvBadges.Name = "lsvBadges";
-			this.lsvBadges.Size = new System.Drawing.Size(430, 225);
+			this.lsvBadges.Size = new System.Drawing.Size(431, 197);
 			this.lsvBadges.TabIndex = 8;
 			this.lsvBadges.UseCompatibleStateImageBehavior = false;
 			this.lsvBadges.View = System.Windows.Forms.View.Details;
@@ -172,6 +174,10 @@
 			this.colRemainingCards.Text = "Remaining Cards";
 			this.colRemainingCards.Width = 100;
 			// 
+			// colStatus
+			// 
+			this.colStatus.Text = "Status";
+			// 
 			// lnkLogout
 			// 
 			this.lnkLogout.AutoSize = true;
@@ -188,13 +194,9 @@
 			this.tmrIdleStatus.Interval = 5000;
 			this.tmrIdleStatus.Tick += new System.EventHandler(this.tmrIdleStatus_Tick);
 			// 
-			// colStatus
-			// 
-			this.colStatus.Text = "Status";
-			// 
 			// btnSkip
 			// 
-			this.btnSkip.Location = new System.Drawing.Point(93, 348);
+			this.btnSkip.Location = new System.Drawing.Point(93, 320);
 			this.btnSkip.Name = "btnSkip";
 			this.btnSkip.Size = new System.Drawing.Size(75, 23);
 			this.btnSkip.TabIndex = 1;
@@ -206,7 +208,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(454, 383);
+			this.ClientSize = new System.Drawing.Size(454, 355);
 			this.Controls.Add(this.lsvBadges);
 			this.Controls.Add(this.lblUsername);
 			this.Controls.Add(this.ptbAvatar);

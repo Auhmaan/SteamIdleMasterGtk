@@ -54,12 +54,13 @@ namespace IdleMaster.Entities
 			Url = $"https://steamcommunity.com/profiles/{steamId64}";
 
 			string xmlUrl = $"{Url}/?xml=1";
-
-			WebClient webClient = new WebClient();
-			string xml = webClient.DownloadString(xmlUrl);
-
 			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.LoadXml(xml);
+
+			using (WebClient webClient = new WebClient())
+			{
+				string xml = webClient.DownloadString(xmlUrl);
+				xmlDocument.LoadXml(xml);
+			}
 
 			XmlNode steamId = xmlDocument.SelectSingleNode("//steamID");
 			Username = WebUtility.HtmlDecode(steamId?.InnerText);

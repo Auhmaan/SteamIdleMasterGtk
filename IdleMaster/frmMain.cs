@@ -49,12 +49,12 @@ namespace IdleMaster
 		{
 			if (File.Exists("steam_api.dll") == false)
 			{
-				CopyResource("IdleMaster.Resources.steam_api.dll", $@"{Environment.CurrentDirectory}\steam_api.dll");
+				CopyResource("IdleMaster.Resources.steam_api64.dll", $@"{Environment.CurrentDirectory}\steam_api.dll");
 			}
 
 			if (File.Exists("CSteamworks.dll") == false)
 			{
-				CopyResource("IdleMaster.Resources.CSteamworks.dll", $@"{Environment.CurrentDirectory}\CSteamworks.dll");
+				CopyResource("IdleMaster.Resources.Steamworks.NET.dll", $@"{Environment.CurrentDirectory}\CSteamworks.dll");
 			}
 
 			if (File.Exists("steam-idle.exe") == false)
@@ -360,6 +360,14 @@ namespace IdleMaster
 		{
 			StopIdle();
 			UpdateUserInterface("idle");
+		}
+
+		////////////////////////////////////////DESIGN////////////////////////////////////////
+
+		private void lsvBadges_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+		{
+			e.NewWidth = lsvBadges.Columns[e.ColumnIndex].Width;
+			e.Cancel = true;
 		}
 	}
 }
