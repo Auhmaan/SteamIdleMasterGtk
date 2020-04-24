@@ -174,11 +174,6 @@ namespace IdleMaster
                     item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = $"{badge.HoursPlayed}h" });
                     item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = badge.RemainingCards.ToString() });
 
-                    if (badge.IsIdling)
-                    {
-                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = "Idling" });
-                    }
-
                     lsvBadges.Items.Add(item);
                 }
             }
@@ -388,6 +383,15 @@ namespace IdleMaster
         {
             e.NewWidth = lsvBadges.Columns[e.ColumnIndex].Width;
             e.Cancel = true;
+        }
+
+        private void lsvBadges_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Add ||
+                e.KeyCode == Keys.Subtract)
+            {
+                e.SuppressKeyPress = true;
+            }
         }
     }
 }

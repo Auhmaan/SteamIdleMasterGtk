@@ -42,7 +42,6 @@
             this.colGame = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHoursPlayed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colRemainingCards = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tmrIdleStatus = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.SuspendLayout();
@@ -55,10 +54,10 @@
             // lnkSession
             // 
             this.lnkSession.AutoSize = true;
-            this.lnkSession.Location = new System.Drawing.Point(403, 9);
+            this.lnkSession.Location = new System.Drawing.Point(343, 9);
             this.lnkSession.Name = "lnkSession";
             this.lnkSession.Size = new System.Drawing.Size(33, 13);
-            this.lnkSession.TabIndex = 0;
+            this.lnkSession.TabIndex = 1;
             this.lnkSession.TabStop = true;
             this.lnkSession.Text = "Login";
             this.lnkSession.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSession_LinkClicked);
@@ -67,10 +66,10 @@
             // 
             this.btnStart.BackgroundImage = global::IdleMaster.Properties.Resources.Play;
             this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStart.Location = new System.Drawing.Point(334, 79);
+            this.btnStart.Location = new System.Drawing.Point(274, 79);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(32, 32);
-            this.btnStart.TabIndex = 1;
+            this.btnStart.TabIndex = 4;
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
@@ -78,10 +77,10 @@
             // 
             this.btnPause.BackgroundImage = global::IdleMaster.Properties.Resources.Pause;
             this.btnPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnPause.Location = new System.Drawing.Point(372, 79);
+            this.btnPause.Location = new System.Drawing.Point(312, 79);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(32, 32);
-            this.btnPause.TabIndex = 1;
+            this.btnPause.TabIndex = 5;
             this.btnPause.UseVisualStyleBackColor = true;
             this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
             // 
@@ -89,10 +88,10 @@
             // 
             this.btnStop.BackgroundImage = global::IdleMaster.Properties.Resources.Stop;
             this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStop.Location = new System.Drawing.Point(410, 79);
+            this.btnStop.Location = new System.Drawing.Point(350, 79);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(33, 32);
-            this.btnStop.TabIndex = 1;
+            this.btnStop.TabIndex = 6;
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
@@ -102,7 +101,7 @@
             this.lblSteam.Location = new System.Drawing.Point(9, 9);
             this.lblSteam.Name = "lblSteam";
             this.lblSteam.Size = new System.Drawing.Size(37, 13);
-            this.lblSteam.TabIndex = 2;
+            this.lblSteam.TabIndex = 0;
             this.lblSteam.Text = "Steam";
             // 
             // btnRefresh
@@ -112,7 +111,7 @@
             this.btnRefresh.Location = new System.Drawing.Point(82, 79);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(32, 32);
-            this.btnRefresh.TabIndex = 4;
+            this.btnRefresh.TabIndex = 3;
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
@@ -130,7 +129,7 @@
             this.lblUsername.Location = new System.Drawing.Point(79, 47);
             this.lblUsername.Name = "lblUsername";
             this.lblUsername.Size = new System.Drawing.Size(55, 13);
-            this.lblUsername.TabIndex = 6;
+            this.lblUsername.TabIndex = 2;
             this.lblUsername.Text = "Username";
             // 
             // lsvBadges
@@ -138,17 +137,18 @@
             this.lsvBadges.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colGame,
             this.colHoursPlayed,
-            this.colRemainingCards,
-            this.colStatus});
+            this.colRemainingCards});
             this.lsvBadges.FullRowSelect = true;
             this.lsvBadges.GridLines = true;
             this.lsvBadges.HideSelection = false;
             this.lsvBadges.Location = new System.Drawing.Point(12, 117);
             this.lsvBadges.Name = "lsvBadges";
-            this.lsvBadges.Size = new System.Drawing.Size(431, 197);
-            this.lsvBadges.TabIndex = 8;
+            this.lsvBadges.Size = new System.Drawing.Size(371, 197);
+            this.lsvBadges.TabIndex = 7;
             this.lsvBadges.UseCompatibleStateImageBehavior = false;
             this.lsvBadges.View = System.Windows.Forms.View.Details;
+            this.lsvBadges.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lsvBadges_ColumnWidthChanging);
+            this.lsvBadges.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lsvBadges_KeyDown);
             // 
             // colGame
             // 
@@ -165,10 +165,6 @@
             this.colRemainingCards.Text = "Remaining Cards";
             this.colRemainingCards.Width = 100;
             // 
-            // colStatus
-            // 
-            this.colStatus.Text = "Status";
-            // 
             // tmrIdleStatus
             // 
             this.tmrIdleStatus.Interval = 5000;
@@ -178,7 +174,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(455, 326);
+            this.ClientSize = new System.Drawing.Size(395, 326);
             this.Controls.Add(this.lsvBadges);
             this.Controls.Add(this.lblUsername);
             this.Controls.Add(this.ptbAvatar);
@@ -216,6 +212,5 @@
         private System.Windows.Forms.ColumnHeader colHoursPlayed;
         private System.Windows.Forms.ColumnHeader colRemainingCards;
         private System.Windows.Forms.Timer tmrIdleStatus;
-		private System.Windows.Forms.ColumnHeader colStatus;
 	}
 }
