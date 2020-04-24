@@ -9,240 +9,240 @@ using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace IdleMaster.Entities
 {
-    public class Profile
-    {
-        //Properties
-        public string Url { get; private set; }
+	public class Profile
+	{
+		//Properties
+		public string Url { get; private set; }
 
-        public string Username { get; private set; }
+		public string Username { get; private set; }
 
-        public string Avatar { get; private set; }
+		public string Avatar { get; private set; }
 
-        public List<Badge> Badges { get; private set; }
+		public List<Badge> Badges { get; private set; }
 
-        public Badge CurrentBadge { get; private set; }
+		public Badge CurrentBadge { get; private set; }
 
-        public bool HasBadges
-        {
-            get
-            {
-                return Badges != null && Badges.Any();
-            }
-        }
+		public bool HasBadges
+		{
+			get
+			{
+				return Badges != null && Badges.Any();
+			}
+		}
 
-        public bool IsIdling
-        {
-            get
-            {
-                return CurrentBadge != null;
-            }
-        }
+		public bool IsIdling
+		{
+			get
+			{
+				return CurrentBadge != null;
+			}
+		}
 
-        public bool IsPaused
-        {
-            get
-            {
-                return CurrentBadge != null && !CurrentBadge.IsIdling;
-            }
-        }
+		public bool IsPaused
+		{
+			get
+			{
+				return CurrentBadge != null && !CurrentBadge.IsIdling;
+			}
+		}
 
-        //Methods
-        public void LoadProfile()
-        {
-            string steamId64 = WebUtility.UrlDecode(Settings.Default.CookieLoginSecure)?.Split('|').First();
+		//Methods
+		public void LoadProfile()
+		{
+			string steamId64 = WebUtility.UrlDecode(Settings.Default.CookieLoginSecure)?.Split('|').First();
 
-            Url = $"https://steamcommunity.com/profiles/{steamId64}";
+			Url = $"https://steamcommunity.com/profiles/{steamId64}";
 
-            string xmlUrl = $"{Url}/?xml=1";
+			string xmlUrl = $"{Url}/?xml=1";
 
-            WebClient webClient = new WebClient();
-            string xml = webClient.DownloadString(xmlUrl);
+			WebClient webClient = new WebClient();
+			string xml = webClient.DownloadString(xmlUrl);
 
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(xml);
+			XmlDocument xmlDocument = new XmlDocument();
+			xmlDocument.LoadXml(xml);
 
-            XmlNode steamId = xmlDocument.SelectSingleNode("//steamID");
-            Username = WebUtility.HtmlDecode(steamId?.InnerText);
+			XmlNode steamId = xmlDocument.SelectSingleNode("//steamID");
+			Username = WebUtility.HtmlDecode(steamId?.InnerText);
 
-            XmlNode avatarMedium = xmlDocument.SelectSingleNode("//avatarMedium");
-            Avatar = avatarMedium?.InnerText;
+			XmlNode avatarMedium = xmlDocument.SelectSingleNode("//avatarMedium");
+			Avatar = avatarMedium?.InnerText;
 
-            LoadBadges();
-        }
+			LoadBadges();
+		}
 
-        public void LoadBadges()
-        {
-            Badges = new List<Badge>();
+		public void LoadBadges()
+		{
+			Badges = new List<Badge>();
 
-            string profileLink = $"{Url}/badges";
-            int totalPages = 1;
-            int currentPage = 0;
+			string profileLink = $"{Url}/badges";
+			int totalPages = 1;
+			int currentPage = 0;
 
-            do
-            {
-                currentPage++;
+			do
+			{
+				currentPage++;
 
-                string response = CookieClient.GetHttp($"{profileLink}?p={currentPage}");
+				string response = CookieClient.GetHttp($"{profileLink}?p={currentPage}");
 
-                HtmlDocument document = new HtmlDocument();
-                document.LoadHtml(response);
+				HtmlDocument document = new HtmlDocument();
+				document.LoadHtml(response);
 
-                if (!ProcessBadgesOnPage(document))
-                {
-                    break;
-                }
+				if (!ProcessBadgesOnPage(document))
+				{
+					break;
+				}
 
-                if (currentPage != 1)
-                {
-                    continue;
-                }
+				if (currentPage != 1)
+				{
+					continue;
+				}
 
-                HtmlNodeCollection pages = document.DocumentNode.SelectNodes("//a[@class='pagelink']");
+				HtmlNodeCollection pages = document.DocumentNode.SelectNodes("//a[@class='pagelink']");
 
-                string href = pages?.Last().Attributes["href"]?.Value;
-                string maxPages = href?.Split('=').Last();
-                int.TryParse(maxPages, out totalPages);
-            }
-            while (currentPage < totalPages);
-        }
+				string href = pages?.Last().Attributes["href"]?.Value;
+				string maxPages = href?.Split('=').Last();
+				int.TryParse(maxPages, out totalPages);
+			}
+			while (currentPage < totalPages);
+		}
 
-        private bool ProcessBadgesOnPage(HtmlDocument document)
-        {
-            HtmlNodeCollection recentBadges = document.DocumentNode.SelectNodes("//span[@class='progress_info_bold']");
-            
-            if (recentBadges == null)
-            {
-                return false;
-            }
-            
-            HtmlNodeCollection droppableBadges = document.DocumentNode.SelectNodes("//span[text()='PLAY']/ancestor::div[@class='badge_row is_link']");
+		private bool ProcessBadgesOnPage(HtmlDocument document)
+		{
+			HtmlNodeCollection openBadges = document.DocumentNode.SelectNodes("//span[@class='progress_info_bold']");
 
-            if (droppableBadges != null)
-            {
-                foreach (HtmlNode badge in droppableBadges)
-                {
-                    HtmlNode urlNode = badge.SelectSingleNode(".//a[@class='badge_row_overlay']");
-                    string appId = urlNode?.Attributes["href"]?.Value.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
+			if (openBadges == null)
+			{
+				return false;
+			}
 
-                    HtmlNode nameNode = badge.SelectSingleNode(".//div[@class='badge_title']");
-                    string name = WebUtility.HtmlDecode(nameNode?.FirstChild.InnerText).Trim();
+			HtmlNodeCollection droppableBadges = document.DocumentNode.SelectNodes("//span[text()='PLAY']/ancestor::div[@class='badge_row is_link']");
 
-                    HtmlNode cardsNode = badge.SelectSingleNode(".//span[@class='progress_info_bold']");
-                    string cards = cardsNode?.InnerText.Split(' ').First();
+			if (droppableBadges != null)
+			{
+				foreach (HtmlNode badge in droppableBadges)
+				{
+					HtmlNode urlNode = badge.SelectSingleNode(".//a[@class='badge_row_overlay']");
+					string appId = urlNode?.Attributes["href"]?.Value.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries).Last();
 
-                    HtmlNode playtimeNode = badge.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-                    string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
+					HtmlNode nameNode = badge.SelectSingleNode(".//div[@class='badge_title']");
+					string name = WebUtility.HtmlDecode(nameNode?.FirstChild.InnerText).Trim();
 
-                    Badge existingBadge = Badges.FirstOrDefault(x => x.AppId == appId);
+					HtmlNode cardsNode = badge.SelectSingleNode(".//span[@class='progress_info_bold']");
+					string cards = cardsNode?.InnerText.Split(' ').First();
 
-                    if (existingBadge != null)
-                    {
-                        existingBadge.UpdateStats(cards, playtime);
-                        continue;
-                    }
+					HtmlNode playtimeNode = badge.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
+					string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
 
-                    Badge newBadge = new Badge(appId, name, cards, playtime);
-                    Badges.Add(newBadge);
-                }
-            }
+					Badge existingBadge = Badges.FirstOrDefault(x => x.AppId == appId);
 
-            HtmlNodeCollection allBadges = document.DocumentNode.SelectNodes("//div[@class='badge_row is_link']");
+					if (existingBadge != null)
+					{
+						existingBadge.UpdateStats(cards, playtime);
+						continue;
+					}
 
-            if (allBadges.Count > recentBadges.Count)
-            {
-                return false;
-            }
+					Badge newBadge = new Badge(appId, name, cards, playtime);
+					Badges.Add(newBadge);
+				}
+			}
 
-            return true;
-        }
+			HtmlNodeCollection allBadges = document.DocumentNode.SelectNodes("//div[@class='badge_row is_link']");
 
-        public void StartIdlingBadges()
-        {
-            if (!HasBadges)
-            {
-                return;
-            }
+			if (allBadges.Count > openBadges.Count)
+			{
+				return false;
+			}
 
-            CurrentBadge = Badges.First();
-            CurrentBadge.StartIdle();
-        }
+			return true;
+		}
 
-        public void PauseIdlingBadges()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
+		public void StartIdlingBadges()
+		{
+			if (!HasBadges)
+			{
+				return;
+			}
 
-            CurrentBadge.StopIdle();
-        }
+			CurrentBadge = Badges.First();
+			CurrentBadge.StartIdle();
+		}
 
-        public void ResumeIdlingBadges()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
+		public void PauseIdlingBadges()
+		{
+			if (!IsIdling)
+			{
+				return;
+			}
 
-            CurrentBadge.StartIdle();
-        }
+			CurrentBadge.StopIdle();
+		}
 
-        public void StopIdlingBadges()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
+		public void ResumeIdlingBadges()
+		{
+			if (!IsIdling)
+			{
+				return;
+			}
 
-            CurrentBadge.StopIdle();
-            CurrentBadge = null;
-        }
+			CurrentBadge.StartIdle();
+		}
 
-        public void CheckIdlingStatus(bool removeCurrentBadgeIfFinished = false)
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
+		public void StopIdlingBadges()
+		{
+			if (!IsIdling)
+			{
+				return;
+			}
 
-            HtmlDocument document = new HtmlDocument();
-            string response = CookieClient.GetHttp($"{Url}/gamecards/{CurrentBadge.AppId}");
+			CurrentBadge.StopIdle();
+			CurrentBadge = null;
+		}
 
-            document.LoadHtml(response);
+		public void CheckIdlingStatus(bool removeCurrentBadgeIfFinished = false)
+		{
+			if (!IsIdling)
+			{
+				return;
+			}
 
-            HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
-            string cards = cardsNode?.InnerText.Split(' ').First();
+			HtmlDocument document = new HtmlDocument();
+			string response = CookieClient.GetHttp($"{Url}/gamecards/{CurrentBadge.AppId}");
 
-            HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-            string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
+			document.LoadHtml(response);
 
-            CurrentBadge.UpdateStats(cards, playtime);
+			HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
+			string cards = cardsNode?.InnerText.Split(' ').First();
 
-            if (!CurrentBadge.HasDrops)
-            {
-                IdleNextBadge(removeCurrentBadgeIfFinished);
-            }
-        }
+			HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
+			string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
 
-        private void IdleNextBadge(bool removeCurrentBadge = false)
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
+			CurrentBadge.UpdateStats(cards, playtime);
 
-            CurrentBadge.StopIdle();
+			if (!CurrentBadge.HasDrops)
+			{
+				IdleNextBadge(removeCurrentBadgeIfFinished);
+			}
+		}
 
-            int nextBadgeIndex = Badges.IndexOf(CurrentBadge) + 1;
+		private void IdleNextBadge(bool removeCurrentBadge = false)
+		{
+			if (!IsIdling)
+			{
+				return;
+			}
 
-            if (removeCurrentBadge)
-            {
-                Badges.Remove(CurrentBadge);
-                nextBadgeIndex--;
-            }
+			CurrentBadge.StopIdle();
 
-            CurrentBadge = Badges[nextBadgeIndex];
-            CurrentBadge.StartIdle();
-        }
-    }
+			int nextBadgeIndex = Badges.IndexOf(CurrentBadge) + 1;
+
+			if (removeCurrentBadge)
+			{
+				Badges.Remove(CurrentBadge);
+				nextBadgeIndex--;
+			}
+
+			CurrentBadge = Badges[nextBadgeIndex];
+			CurrentBadge.StartIdle();
+		}
+	}
 }
