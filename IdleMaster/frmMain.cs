@@ -195,7 +195,7 @@ namespace IdleMaster
                 if (pattern == "all" ||
                     pattern == "idle")
                 {
-                    if (_profile.HasBadges)
+                    if (_profile.HasBadges && _isSteamRunning)
                     {
                         btnStart.Enabled = !_profile.IsIdling;
                         btnPause.Enabled = _profile.IsIdling && !_profile.IsPaused;
