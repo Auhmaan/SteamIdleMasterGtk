@@ -63,16 +63,6 @@ namespace IdleMaster.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Pause {
-            get {
-                object obj = ResourceManager.GetObject("Pause", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Play {
             get {
                 object obj = ResourceManager.GetObject("Play", resourceCulture);
@@ -86,16 +76,6 @@ namespace IdleMaster.Properties {
         internal static System.Drawing.Bitmap Refresh {
             get {
                 object obj = ResourceManager.GetObject("Refresh", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Resume {
-            get {
-                object obj = ResourceManager.GetObject("Resume", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

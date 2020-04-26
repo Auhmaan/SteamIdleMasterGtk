@@ -32,7 +32,6 @@
 			this.tmrSteamStatus = new System.Windows.Forms.Timer(this.components);
 			this.lnkSession = new System.Windows.Forms.LinkLabel();
 			this.btnStart = new System.Windows.Forms.Button();
-			this.btnPause = new System.Windows.Forms.Button();
 			this.btnStop = new System.Windows.Forms.Button();
 			this.lblSteam = new System.Windows.Forms.Label();
 			this.btnRefresh = new System.Windows.Forms.Button();
@@ -66,23 +65,12 @@
 			// 
 			this.btnStart.BackgroundImage = global::IdleMaster.Properties.Resources.Play;
 			this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.btnStart.Location = new System.Drawing.Point(274, 79);
+			this.btnStart.Location = new System.Drawing.Point(312, 79);
 			this.btnStart.Name = "btnStart";
 			this.btnStart.Size = new System.Drawing.Size(32, 32);
 			this.btnStart.TabIndex = 4;
 			this.btnStart.UseVisualStyleBackColor = true;
 			this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
-			// 
-			// btnPause
-			// 
-			this.btnPause.BackgroundImage = global::IdleMaster.Properties.Resources.Pause;
-			this.btnPause.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-			this.btnPause.Location = new System.Drawing.Point(312, 79);
-			this.btnPause.Name = "btnPause";
-			this.btnPause.Size = new System.Drawing.Size(32, 32);
-			this.btnPause.TabIndex = 5;
-			this.btnPause.UseVisualStyleBackColor = true;
-			this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
 			// 
 			// btnStop
 			// 
@@ -184,7 +172,6 @@
 			this.Controls.Add(this.btnRefresh);
 			this.Controls.Add(this.lblSteam);
 			this.Controls.Add(this.btnStop);
-			this.Controls.Add(this.btnPause);
 			this.Controls.Add(this.btnStart);
 			this.Controls.Add(this.lnkSession);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -204,7 +191,6 @@
         private System.Windows.Forms.Timer tmrSteamStatus;
         private System.Windows.Forms.LinkLabel lnkSession;
         private System.Windows.Forms.Button btnStart;
-		private System.Windows.Forms.Button btnPause;
 		private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblSteam;
         private System.Windows.Forms.Button btnRefresh;

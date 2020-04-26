@@ -136,7 +136,6 @@ namespace IdleMaster
 				lsvBadges.Items.Clear();
 
 				btnStart.Enabled = false;
-				btnPause.Enabled = false;
 				btnStop.Enabled = false;
 			}
 
@@ -155,7 +154,6 @@ namespace IdleMaster
 				btnRefresh.Enabled = true;
 
 				btnStart.Enabled = _profile.HasBadges && _isSteamRunning;
-				btnPause.Enabled = false;
 				btnStop.Enabled = false;
 			}
 
@@ -187,25 +185,7 @@ namespace IdleMaster
 				lsvBadges.Enabled = true;
 
 				btnStart.Enabled = false;
-				btnPause.Enabled = true;
 				btnStop.Enabled = true;
-
-				btnPause.BackgroundImage = Resources.Pause;
-			}
-
-			if (uiProfile == "pause")
-			{
-				ptbAvatar.ImageLocation = _profile.Avatar;
-				lblUsername.Text = _profile.Username;
-
-				btnRefresh.Enabled = false;
-				lsvBadges.Enabled = true;
-
-				btnStart.Enabled = false;
-				btnPause.Enabled = true;
-				btnStop.Enabled = true;
-
-				btnPause.BackgroundImage = Resources.Resume;
 			}
 
 			if (uiProfile == "stop")
@@ -217,10 +197,7 @@ namespace IdleMaster
 				lsvBadges.Enabled = true;
 
 				btnStart.Enabled = _profile.HasBadges && _isSteamRunning;
-				btnPause.Enabled = false;
 				btnStop.Enabled = false;
-
-				btnPause.BackgroundImage = Resources.Pause;
 			}
 		}
 
@@ -291,30 +268,6 @@ namespace IdleMaster
 			UpdateUserInterface("start");
 		}
 
-		private void PauseIdle()
-		{
-			if (!_isSteamRunning)
-			{
-				return;
-			}
-
-			if (_profile.CurrentBadge.IsIdling)
-			{
-				_profile.PauseIdlingBadges();
-				tmrIdleStatus.Stop();
-
-				UpdateUserInterface("pause");
-				UpdateUserInterface("list");
-			}
-			else
-			{
-				_profile.ResumeIdlingBadges();
-				CheckIdleStatus();
-
-				UpdateUserInterface("start");
-			}
-		}
-
 		private void StopIdle()
 		{
 			if (!_isSteamRunning)
@@ -365,11 +318,6 @@ namespace IdleMaster
 		private void btnStart_Click(object sender, EventArgs e)
 		{
 			StartIdle();
-		}
-
-		private void btnPause_Click(object sender, EventArgs e)
-		{
-			PauseIdle();
 		}
 
 		private void btnStop_Click(object sender, EventArgs e)
