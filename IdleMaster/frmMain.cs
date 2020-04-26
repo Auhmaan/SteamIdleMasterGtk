@@ -122,7 +122,7 @@ namespace IdleMaster
 			UpdateUserInterface("list");
 		}
 
-		private void UpdateUserInterface(string uiProfile = "logout")
+		private void UpdateUserInterface(string uiProfile)
 		{
 			if (uiProfile == "logout")
 			{
@@ -291,7 +291,7 @@ namespace IdleMaster
 				return;
 			}
 
-			_profile.CheckIdlingStatus(true);
+			_profile.CheckIdlingStatus();
 			UpdateUserInterface("list");
 			tmrIdleStatus.Start();
 		}
