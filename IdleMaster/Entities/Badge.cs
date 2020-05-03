@@ -51,7 +51,7 @@ namespace IdleMaster.Entities
 
             idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId)
             {
-                WindowStyle = ProcessWindowStyle.Normal
+                WindowStyle = ProcessWindowStyle.Hidden
             });
 
             return idleProcess;
