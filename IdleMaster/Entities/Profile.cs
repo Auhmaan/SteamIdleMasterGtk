@@ -205,7 +205,7 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            foreach (Badge badge in Badges.Where(x => !x.IsFastIdling).ToList())
+            foreach (Badge badge in Badges.Where(x => x.IsFastIdling).ToList())
             {
                 badge.StartIdling();
             }

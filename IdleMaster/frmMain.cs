@@ -4,7 +4,6 @@ using Steamworks;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IdleMaster
@@ -233,14 +232,19 @@ namespace IdleMaster
 
         ////////////////////////////////////////IDLE////////////////////////////////////////
 
-        private void tmrFastIdleStatus_Tick(object sender, EventArgs e)
+        private void tmrNormalIdleStatus_Tick(object sender, EventArgs e)
         {
-            CheckFastIdleStatus();
+            CheckNormalIdleStatus();
         }
 
-        private void tmrIdleStatus_Tick(object sender, EventArgs e)
+        private void tmrFastIdleStart_Tick(object sender, EventArgs e)
         {
-            CheckIdleStatus();
+            FastIdleStart();
+        }
+
+        private void tmrFastIdleStop_Tick(object sender, EventArgs e)
+        {
+            FastIdleStop();
         }
 
         private void StartIdle()
@@ -255,8 +259,8 @@ namespace IdleMaster
             UpdateUserInterface("start");
             UpdateUserInterface("list");
 
-            tmrFastIdleStatus.Start();
-            tmrIdleStatus.Start();
+            tmrNormalIdleStatus.Start();
+            tmrFastIdleStop.Start();
         }
 
         private void StopIdle()
@@ -267,38 +271,18 @@ namespace IdleMaster
             }
 
             _profile.StopIdlingBadges();
-            tmrFastIdleStatus.Stop();
-            tmrIdleStatus.Stop();
+
+            tmrNormalIdleStatus.Stop();
+            tmrFastIdleStart.Stop();
+            tmrFastIdleStop.Stop();
 
             UpdateUserInterface("stop");
             UpdateUserInterface("list");
         }
 
-        private async void CheckFastIdleStatus()
+        private void CheckNormalIdleStatus()
         {
-            tmrFastIdleStatus.Stop();
-
-            if (!_isSteamRunning)
-            {
-                return;
-            }
-
-            _profile.StopFastIdlingBadges();
-            _profile.CheckFastIdlingStatus();
-            UpdateUserInterface("list");
-
-            await Task.Delay(5000);
-
-            _profile.StartFastIdlingBadges();
-            _profile.CheckFastIdlingStatus();
-            UpdateUserInterface("list");
-
-            tmrFastIdleStatus.Start();
-        }
-
-        private void CheckIdleStatus()
-        {
-            tmrIdleStatus.Stop();
+            tmrNormalIdleStatus.Stop();
 
             if (!_isSteamRunning)
             {
@@ -308,7 +292,38 @@ namespace IdleMaster
             _profile.CheckNormalIdlingStatus();
             UpdateUserInterface("list");
 
-            tmrIdleStatus.Start();
+            tmrNormalIdleStatus.Start();
+        }
+
+        private void FastIdleStart()
+        {
+            tmrFastIdleStart.Stop();
+
+            if (!_isSteamRunning)
+            {
+                return;
+            }
+
+            _profile.StartFastIdlingBadges();
+            _profile.CheckFastIdlingStatus();
+            UpdateUserInterface("list");
+
+            tmrFastIdleStop.Start();
+        }
+
+        private void FastIdleStop()
+        {
+            tmrFastIdleStop.Stop();
+
+            if (!_isSteamRunning)
+            {
+                return;
+            }
+
+            _profile.StopFastIdlingBadges();
+            UpdateUserInterface("list");
+
+            tmrFastIdleStart.Start();
         }
 
         ////////////////////////////////////////CONTROLS////////////////////////////////////////

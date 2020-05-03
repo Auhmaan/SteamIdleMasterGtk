@@ -41,9 +41,10 @@
             this.colGame = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colHoursPlayed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colRemainingCards = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tmrFastIdleStatus = new System.Windows.Forms.Timer(this.components);
-            this.tmrIdleStatus = new System.Windows.Forms.Timer(this.components);
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tmrNormalIdleStatus = new System.Windows.Forms.Timer(this.components);
+            this.tmrFastIdleStart = new System.Windows.Forms.Timer(this.components);
+            this.tmrFastIdleStop = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -159,19 +160,24 @@
             this.colRemainingCards.Text = "Remaining Cards";
             this.colRemainingCards.Width = 100;
             // 
-            // tmrFastIdleStatus
-            // 
-            this.tmrFastIdleStatus.Interval = 10000;
-            this.tmrFastIdleStatus.Tick += new System.EventHandler(this.tmrFastIdleStatus_Tick);
-            // 
-            // tmrIdleStatus
-            // 
-            this.tmrIdleStatus.Interval = 60000;
-            this.tmrIdleStatus.Tick += new System.EventHandler(this.tmrIdleStatus_Tick);
-            // 
             // colStatus
             // 
             this.colStatus.Text = "Status";
+            // 
+            // tmrNormalIdleStatus
+            // 
+            this.tmrNormalIdleStatus.Interval = 60000;
+            this.tmrNormalIdleStatus.Tick += new System.EventHandler(this.tmrNormalIdleStatus_Tick);
+            // 
+            // tmrFastIdleStart
+            // 
+            this.tmrFastIdleStart.Interval = 5000;
+            this.tmrFastIdleStart.Tick += new System.EventHandler(this.tmrFastIdleStart_Tick);
+            // 
+            // tmrFastIdleStop
+            // 
+            this.tmrFastIdleStop.Interval = 10000;
+            this.tmrFastIdleStop.Tick += new System.EventHandler(this.tmrFastIdleStop_Tick);
             // 
             // frmMain
             // 
@@ -212,8 +218,9 @@
         private System.Windows.Forms.ColumnHeader colGame;
         private System.Windows.Forms.ColumnHeader colHoursPlayed;
         private System.Windows.Forms.ColumnHeader colRemainingCards;
-        private System.Windows.Forms.Timer tmrFastIdleStatus;
-        private System.Windows.Forms.Timer tmrIdleStatus;
+        private System.Windows.Forms.Timer tmrNormalIdleStatus;
+        private System.Windows.Forms.Timer tmrFastIdleStart;
         private System.Windows.Forms.ColumnHeader colStatus;
+        private System.Windows.Forms.Timer tmrFastIdleStop;
     }
 }

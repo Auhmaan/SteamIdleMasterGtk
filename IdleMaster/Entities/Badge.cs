@@ -46,11 +46,11 @@ namespace IdleMaster.Entities
         {
             AppId = appId;
             Name = name;
+
             int.TryParse(remaining, out originalRemainingCards);
+            UpdateStats(remaining, hours);
 
             SetToFastIdling();
-
-            UpdateStats(remaining, hours);
         }
 
         //Methods
@@ -91,7 +91,7 @@ namespace IdleMaster.Entities
             {
                 fastIdleTries--;
 
-                if (fastIdleTries == 2 && RemainingCards == originalRemainingCards)
+                if (fastIdleTries == 0 && RemainingCards == originalRemainingCards)
                 {
                     SetToNormalIdling();
                 }
