@@ -1,6 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Management;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace IdleMaster
@@ -13,6 +16,8 @@ namespace IdleMaster
         [STAThread]
         static void Main()
         {
+            KillPendingProcesses();
+
             //Set the browser emulation version for embedded browser control
             try
             {
@@ -30,6 +35,38 @@ namespace IdleMaster
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain());
+
+            KillPendingProcesses();
+        }
+
+        static void KillPendingProcesses()
+        {
+            string windowsUser = WindowsIdentity.GetCurrent().Name;
+
+            foreach (Process process in Process.GetProcessesByName("steam-idle"))
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher($"SELECT * FROM Win32_Process WHERE PROCESSID = {process.Id}");
+                ManagementObjectCollection processList = searcher.Get();
+
+                foreach (ManagementObject managementObject in processList)
+                {
+                    string[] argList = new string[] { null, null };
+
+                    int.TryParse(managementObject.InvokeMethod("GetOwner", argList).ToString(), out int returnValue);
+
+                    if (returnValue != 0)
+                    {
+                        continue;
+                    }
+
+                    if ($"{argList[1]}\\{argList[0]}" != windowsUser)
+                    {
+                        continue;
+                    }
+
+                    process.Kill();
+                }
+            }
         }
     }
 }

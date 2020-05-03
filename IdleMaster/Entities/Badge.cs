@@ -8,6 +8,10 @@ namespace IdleMaster.Entities
         //Fields
         private Process idleProcess;
 
+        private readonly int originalRemainingCards;
+
+        private int fastIdleTries;
+
         //Properties
         public string AppId { get; }
 
@@ -33,16 +37,24 @@ namespace IdleMaster.Entities
             }
         }
 
+        public bool IsNormalIdling { get; private set; }
+
+        public bool IsFastIdling { get; private set; }
+
         //Constructors
         public Badge(string appId, string name, string remaining, string hours)
         {
             AppId = appId;
             Name = name;
+            int.TryParse(remaining, out originalRemainingCards);
+
+            SetToFastIdling();
+
             UpdateStats(remaining, hours);
         }
 
         //Methods
-        public Process StartIdle()
+        public Process StartIdling()
         {
             if (IsIdling)
             {
@@ -51,13 +63,13 @@ namespace IdleMaster.Entities
 
             idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId)
             {
-                WindowStyle = ProcessWindowStyle.Normal
+                WindowStyle = ProcessWindowStyle.Hidden
             });
 
             return idleProcess;
         }
 
-        public void StopIdle()
+        public void StopIdling()
         {
             if (!IsIdling)
             {
@@ -74,6 +86,30 @@ namespace IdleMaster.Entities
 
             RemainingCards = remainingCards;
             HoursPlayed = hoursPlayed;
+
+            if (IsFastIdling)
+            {
+                fastIdleTries--;
+
+                if (fastIdleTries == 2 && RemainingCards == originalRemainingCards)
+                {
+                    SetToNormalIdling();
+                }
+            }
+        }
+
+        private void SetToNormalIdling()
+        {
+            IsNormalIdling = true;
+            IsFastIdling = false;
+            fastIdleTries = 0;
+        }
+
+        private void SetToFastIdling()
+        {
+            IsNormalIdling = false;
+            IsFastIdling = true;
+            fastIdleTries = 2;
         }
     }
 }
