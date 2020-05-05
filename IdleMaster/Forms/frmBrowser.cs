@@ -1,11 +1,11 @@
-﻿using IdleMaster.Properties;
+﻿using IdleMaster.ControlEntities;
 using System;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace IdleMaster
+namespace IdleMaster.Forms
 {
     public partial class frmBrowser : Form
     {
@@ -73,25 +73,22 @@ namespace IdleMaster
                 switch (cookie.Name)
                 {
                     case "sessionid":
-                        Settings.Default.CookieSessionId = cookie.Value;
+                        UserSettings.CookieSessionId = cookie.Value;
                         break;
                     case "steamLoginSecure":
-                        Settings.Default.CookieLoginSecure = cookie.Value;
+                        UserSettings.CookieLoginSecure = cookie.Value;
                         break;
                     case "steamMachineAuth":
-                        Settings.Default.CookieMachineAuth = cookie.Value;
+                        UserSettings.CookieMachineAuth = cookie.Value;
                         break;
                     case "steamRememberLogin":
-                        Settings.Default.CookieRememberLogin = cookie.Value;
+                        UserSettings.CookieRememberLogin = cookie.Value;
                         break;
                     case "steamparental":
-                        Settings.Default.CookieParental = cookie.Value;
+                        UserSettings.CookieParental = cookie.Value;
                         break;
                 }
             }
-
-            //Save all of the data to the program settings file
-            Settings.Default.Save();
 
             Close();
         }

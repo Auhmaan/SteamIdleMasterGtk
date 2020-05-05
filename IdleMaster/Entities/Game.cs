@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace IdleMaster.Entities
 {
-    public class Badge
+    public class Game
     {
         //Fields
         private Process idleProcess;
@@ -42,7 +42,7 @@ namespace IdleMaster.Entities
         public bool IsFastIdling { get; private set; }
 
         //Constructors
-        public Badge(string appId, string name, string remaining, string hours)
+        public Game(string appId, string name, string remaining, string hours)
         {
             AppId = appId;
             Name = name;
@@ -50,7 +50,7 @@ namespace IdleMaster.Entities
             int.TryParse(remaining, out originalRemainingCards);
             UpdateStats(remaining, hours);
 
-            SetToFastIdling();
+            SetToNormalIdling();
         }
 
         //Methods
