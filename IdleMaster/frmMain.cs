@@ -1,5 +1,6 @@
-﻿using IdleMaster.Entities;
-using IdleMaster.Properties;
+﻿using IdleMaster.ControlEntities;
+using IdleMaster.Entities;
+using IdleMaster.Forms;
 using Steamworks;
 using System;
 using System.Drawing;
@@ -18,7 +19,7 @@ namespace IdleMaster
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(Settings.Default.CookieSessionId) && !string.IsNullOrWhiteSpace(Settings.Default.CookieLoginSecure);
+                return !string.IsNullOrWhiteSpace(UserSettings.CookieSessionId) && !string.IsNullOrWhiteSpace(UserSettings.CookieLoginSecure);
             }
         }
 
@@ -41,14 +42,14 @@ namespace IdleMaster
 
         private void CopyResources()
         {
-            if (File.Exists("steam_api.dll") == false)
+            if (File.Exists("steam_api64.dll") == false)
             {
-                CopyResource("IdleMaster.Resources.steam_api64.dll", $@"{Environment.CurrentDirectory}\steam_api.dll");
+                CopyResource("IdleMaster.Resources.steam_api64.dll", $@"{Environment.CurrentDirectory}\steam_api64.dll");
             }
 
-            if (File.Exists("CSteamworks.dll") == false)
+            if (File.Exists("Steamworks.NET.dll") == false)
             {
-                CopyResource("IdleMaster.Resources.Steamworks.NET.dll", $@"{Environment.CurrentDirectory}\CSteamworks.dll");
+                CopyResource("IdleMaster.Resources.Steamworks.NET.dll", $@"{Environment.CurrentDirectory}\Steamworks.NET.dll");
             }
 
             if (File.Exists("steam-idle.exe") == false)
@@ -73,21 +74,6 @@ namespace IdleMaster
             }
         }
 
-        private void LoadProfile()
-        {
-            if (!IsLoggedIn)
-            {
-                UpdateUserInterface("logout");
-                return;
-            }
-
-            _profile = new Profile();
-            _profile.LoadProfile();
-
-            UpdateUserInterface("login");
-            UpdateUserInterface("list");
-        }
-
         private void UpdateUserInterface(string uiProfile)
         {
             if (uiProfile == "logout")
@@ -98,11 +84,12 @@ namespace IdleMaster
                 lblUsername.Text = null;
 
                 btnRefresh.Enabled = false;
-                lsvBadges.Enabled = false;
-                lsvBadges.Items.Clear();
+                lsvGames.Enabled = false;
+                lsvGames.Items.Clear();
 
                 btnStart.Enabled = false;
-                btnPause.Enabled = false;
+                btnPauseResume.Enabled = false;
+                btnSkip.Enabled = false;
                 btnStop.Enabled = false;
             }
 
@@ -119,33 +106,50 @@ namespace IdleMaster
                 lblUsername.Text = _profile.Username;
 
                 btnRefresh.Enabled = true;
+                lsvGames.Enabled = _profile.Library.HasGames;
 
-                btnStart.Enabled = _profile.HasBadges && _isSteamRunning;
-                btnPause.Enabled = false;
+                btnStart.Enabled = _profile.Library.HasGames && _isSteamRunning;
+                btnPauseResume.Enabled = false;
+                btnSkip.Enabled = false;
                 btnStop.Enabled = false;
             }
 
             if (uiProfile == "list")
             {
-                lsvBadges.Enabled = _profile.HasBadges;
-                lsvBadges.Items.Clear();
+                lsvGames.Enabled = _profile.Library.HasGames;
+                lsvGames.Items.Clear();
 
-                foreach (Badge badge in _profile.Badges)
+                if (_profile.Library.HasGames)
                 {
-                    ListViewItem item = new ListViewItem
+                    foreach (Game game in _profile.Library.Games)
                     {
-                        Text = badge.Name
-                    };
+                        ListViewItem item = new ListViewItem
+                        {
+                            Text = game.Name
+                        };
 
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = $"{badge.HoursPlayed}h" });
-                    item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = badge.RemainingCards.ToString() });
+                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = $"{game.HoursPlayed}h" });
+                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = game.RemainingCards.ToString() });
 
-                    if (badge.IsIdling)
-                    {
-                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = "Idling" });
+                        string idleStatus = null;
+
+                        if (game.IsIdling)
+                        {
+                            if (game.IsNormalIdling)
+                            {
+                                idleStatus = "Idling";
+                            }
+
+                            if (game.IsFastIdling)
+                            {
+                                idleStatus = "Fast Idling";
+                            }
+                        }
+
+                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = idleStatus });
+
+                        lsvGames.Items.Add(item);
                     }
-
-                    lsvBadges.Items.Add(item);
                 }
             }
 
@@ -155,28 +159,12 @@ namespace IdleMaster
                 lblUsername.Text = _profile.Username;
 
                 btnRefresh.Enabled = false;
-                lsvBadges.Enabled = true;
+                lsvGames.Enabled = _profile.Library.HasGames;
 
                 btnStart.Enabled = false;
-                btnPause.Enabled = true;
+                btnPauseResume.Enabled = true;
+                btnSkip.Enabled = true;
                 btnStop.Enabled = true;
-
-                btnPause.BackgroundImage = Resources.Pause;
-            }
-
-            if (uiProfile == "pause")
-            {
-                ptbAvatar.ImageLocation = _profile.Avatar;
-                lblUsername.Text = _profile.Username;
-
-                btnRefresh.Enabled = false;
-                lsvBadges.Enabled = true;
-
-                btnStart.Enabled = false;
-                btnPause.Enabled = true;
-                btnStop.Enabled = true;
-
-                btnPause.BackgroundImage = Resources.Resume;
             }
 
             if (uiProfile == "stop")
@@ -185,13 +173,12 @@ namespace IdleMaster
                 lblUsername.Text = _profile.Username;
 
                 btnRefresh.Enabled = true;
-                lsvBadges.Enabled = true;
+                lsvGames.Enabled = _profile.Library.HasGames;
 
-                btnStart.Enabled = _profile.HasBadges && _isSteamRunning;
-                btnPause.Enabled = false;
+                btnStart.Enabled = _profile.Library.HasGames && _isSteamRunning;
+                btnPauseResume.Enabled = false;
+                btnSkip.Enabled = false;
                 btnStop.Enabled = false;
-
-                btnPause.BackgroundImage = Resources.Pause;
             }
         }
 
@@ -225,28 +212,41 @@ namespace IdleMaster
             StopIdle();
             _profile = null;
 
-            Settings.Default.CookieSessionId = string.Empty;
-            Settings.Default.CookieLoginSecure = string.Empty;
-            Settings.Default.CookieParental = string.Empty;
-            Settings.Default.Save();
+            UserSettings.ClearCookies();
 
             UpdateUserInterface("logout");
         }
 
         ////////////////////////////////////////PROFILE////////////////////////////////////////
 
+        private void LoadProfile()
+        {
+            if (!IsLoggedIn)
+            {
+                UpdateUserInterface("logout");
+                return;
+            }
+
+            _profile = new Profile();
+            _profile.LoadProfile();
+
+            UpdateUserInterface("login");
+            UpdateUserInterface("list");
+        }
+
         private void RefreshList()
         {
-            _profile.LoadBadges();
+            if (!IsLoggedIn)
+            {
+                UpdateUserInterface("logout");
+                return;
+            }
+
+            _profile.LoadGames();
             UpdateUserInterface("list");
         }
 
         ////////////////////////////////////////IDLE////////////////////////////////////////
-
-        private void tmrIdleStatus_Tick(object sender, EventArgs e)
-        {
-            CheckIdleStatus();
-        }
 
         private void StartIdle()
         {
@@ -255,34 +255,28 @@ namespace IdleMaster
                 return;
             }
 
-            _profile.StartIdlingBadges();
-            CheckIdleStatus();
+            _profile.Library.StartIdling();
 
             UpdateUserInterface("start");
+            UpdateUserInterface("list");
+
+            tmrNormalIdleStatus.Start();
+            //tmrFastIdleStop.Start();
         }
 
         private void PauseIdle()
         {
-            if (!_isSteamRunning)
-            {
-                return;
-            }
 
-            if (_profile.CurrentBadge.IsIdling)
-            {
-                _profile.PauseIdlingBadges();
-                tmrIdleStatus.Stop();
+        }
 
-                UpdateUserInterface("pause");
-                UpdateUserInterface("list");
-            }
-            else
-            {
-                _profile.ResumeIdlingBadges();
-                CheckIdleStatus();
+        private void ResumeIdle()
+        {
 
-                UpdateUserInterface("start");
-            }
+        }
+
+        private void SkipIdle()
+        {
+
         }
 
         private void StopIdle()
@@ -292,25 +286,77 @@ namespace IdleMaster
                 return;
             }
 
-            _profile.StopIdlingBadges();
-            tmrIdleStatus.Stop();
+            _profile.Library.StopIdling();
+
+            tmrNormalIdleStatus.Stop();
+            tmrFastIdleStart.Stop();
+            tmrFastIdleStop.Stop();
 
             UpdateUserInterface("stop");
             UpdateUserInterface("list");
         }
 
-        private void CheckIdleStatus()
+        private void CheckNormalIdleStatus()
         {
-            tmrIdleStatus.Stop();
+            tmrNormalIdleStatus.Stop();
 
             if (!_isSteamRunning)
             {
                 return;
             }
 
-            _profile.CheckIdlingStatus(true);
+            _profile.Library.CheckNormalIdlingStatus();
             UpdateUserInterface("list");
-            tmrIdleStatus.Start();
+
+            tmrNormalIdleStatus.Start();
+        }
+
+        private void FastIdleStart()
+        {
+            tmrFastIdleStart.Stop();
+
+            if (!_isSteamRunning)
+            {
+                return;
+            }
+
+            _profile.Library.StartFastIdling();
+            _profile.Library.CheckFastIdlingStatus();
+            UpdateUserInterface("list");
+
+            tmrFastIdleStop.Start();
+        }
+
+        private void FastIdleStop()
+        {
+            tmrFastIdleStop.Stop();
+
+            if (!_isSteamRunning)
+            {
+                return;
+            }
+
+            _profile.Library.StopFastIdling();
+            UpdateUserInterface("list");
+
+            tmrFastIdleStart.Start();
+        }
+
+        ////////////////////////////////////////TIMERS////////////////////////////////////////
+
+        private void tmrNormalIdleStatus_Tick(object sender, EventArgs e)
+        {
+            CheckNormalIdleStatus();
+        }
+
+        private void tmrFastIdleStart_Tick(object sender, EventArgs e)
+        {
+            FastIdleStart();
+        }
+
+        private void tmrFastIdleStop_Tick(object sender, EventArgs e)
+        {
+            FastIdleStop();
         }
 
         ////////////////////////////////////////CONTROLS////////////////////////////////////////
@@ -337,9 +383,21 @@ namespace IdleMaster
             StartIdle();
         }
 
-        private void btnPause_Click(object sender, EventArgs e)
+        private void btnPauseResume_Click(object sender, EventArgs e)
         {
-            PauseIdle();
+            if (_profile.Library.IsIdling)
+            {
+                PauseIdle();
+            }
+            else
+            {
+                ResumeIdle();
+            }
+        }
+
+        private void btnSkip_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -349,13 +407,13 @@ namespace IdleMaster
 
         ////////////////////////////////////////DESIGN////////////////////////////////////////
 
-        private void lsvBadges_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
+        private void lsvGames_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
         {
-            e.NewWidth = lsvBadges.Columns[e.ColumnIndex].Width;
+            e.NewWidth = lsvGames.Columns[e.ColumnIndex].Width;
             e.Cancel = true;
         }
 
-        private void lsvBadges_KeyDown(object sender, KeyEventArgs e)
+        private void lsvGames_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Add ||
                 e.KeyCode == Keys.Subtract)
@@ -364,12 +422,18 @@ namespace IdleMaster
             }
         }
 
-        private void lsvBadges_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        private void lsvGames_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (e.IsSelected)
             {
                 e.Item.Selected = false;
             }
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmSettings form = new frmSettings();
+            form.ShowDialog();
         }
     }
 }

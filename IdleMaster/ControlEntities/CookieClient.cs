@@ -1,9 +1,8 @@
-﻿using IdleMaster.Properties;
-using System;
+﻿using System;
 using System.Net;
 using System.Text;
 
-namespace IdleMaster.Entities
+namespace IdleMaster.ControlEntities
 {
     public class CookieClient : WebClient
     {
@@ -17,19 +16,19 @@ namespace IdleMaster.Entities
 
             Uri uri = new Uri("http://steamcommunity.com");
 
-            cookieContainer.Add(new Cookie("sessionid", Settings.Default.CookieSessionId) { Domain = uri.Host });
-            cookieContainer.Add(new Cookie("steamLoginSecure", Settings.Default.CookieLoginSecure) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("sessionid", UserSettings.CookieSessionId) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("steamLoginSecure", UserSettings.CookieLoginSecure) { Domain = uri.Host });
 
             string cookieMachineAuth = "steamMachineAuth";
 
-            if (Settings.Default.CookieLoginSecure != null && Settings.Default.CookieLoginSecure.Length > 17)
+            if (UserSettings.CookieLoginSecure != null && UserSettings.CookieLoginSecure.Length > 17)
             {
-                cookieMachineAuth = $"steamMachineAuth{Settings.Default.CookieLoginSecure.Substring(0, 17)}";
+                cookieMachineAuth = $"steamMachineAuth{UserSettings.CookieLoginSecure.Substring(0, 17)}";
             }
 
-            cookieContainer.Add(new Cookie(cookieMachineAuth, Settings.Default.CookieMachineAuth) { Domain = uri.Host });
-            cookieContainer.Add(new Cookie("steamRememberLogin", Settings.Default.CookieRememberLogin) { Domain = uri.Host });
-            cookieContainer.Add(new Cookie("steamparental", Settings.Default.CookieParental) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie(cookieMachineAuth, UserSettings.CookieMachineAuth) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("steamRememberLogin", UserSettings.CookieRememberLogin) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("steamparental", UserSettings.CookieParental) { Domain = uri.Host });
 
             Cookie = cookieContainer;
             Encoding = Encoding.UTF8;
@@ -78,12 +77,7 @@ namespace IdleMaster.Entities
             {
                 if (cookieCollection["steamLoginSecure"] != null && cookieCollection["steamLoginSecure"].Value == "deleted")
                 {
-                    Settings.Default.CookieSessionId = null;
-                    Settings.Default.CookieLoginSecure = null;
-                    Settings.Default.CookieParental = null;
-                    Settings.Default.CookieMachineAuth = null;
-                    Settings.Default.CookieRememberLogin = null;
-                    Settings.Default.Save();
+                    UserSettings.ClearCookies();
                 }
             }
 

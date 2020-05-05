@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace IdleMaster
+namespace IdleMaster.Forms
 {
     partial class frmBrowser
     {

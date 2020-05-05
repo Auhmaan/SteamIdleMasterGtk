@@ -1,7 +1,6 @@
 ﻿using HtmlAgilityPack;
-using IdleMaster.Properties;
+using IdleMaster.ControlEntities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Xml;
@@ -18,40 +17,33 @@ namespace IdleMaster.Entities
 
         public string Avatar { get; private set; }
 
-        public List<Badge> Badges { get; private set; }
-
-        public Badge CurrentBadge { get; private set; }
-
-        public bool HasBadges
+        public string Status
         {
             get
             {
-                return Badges != null && Badges.Any();
+                string xmlUrl = $"{Url}/?xml=1";
+                XmlDocument xmlDocument = new XmlDocument();
+
+                using (WebClient webClient = new WebClient())
+                {
+                    string xml = webClient.DownloadString(xmlUrl);
+                    xmlDocument.LoadXml(xml);
+                }
+
+                XmlNode onlineState = xmlDocument.SelectSingleNode("//onlineState");
+                return WebUtility.HtmlDecode(onlineState?.InnerText);
             }
         }
 
-        public bool IsIdling
-        {
-            get
-            {
-                return CurrentBadge != null;
-            }
-        }
-
-        public bool IsPaused
-        {
-            get
-            {
-                return CurrentBadge != null && !CurrentBadge.IsIdling;
-            }
-        }
+        public Library Library { get; private set; }
 
         //Methods
         public void LoadProfile()
         {
-            string steamId64 = WebUtility.UrlDecode(Settings.Default.CookieLoginSecure)?.Split('|').First();
+            string steamId64 = WebUtility.UrlDecode(UserSettings.CookieLoginSecure)?.Split('|').First();
 
-            Url = $"https://steamcommunity.com/profiles/{steamId64}";
+            UserSettings.ProfileUrl = $"https://steamcommunity.com/profiles/{steamId64}";
+            Url = UserSettings.ProfileUrl;
 
             string xmlUrl = $"{Url}/?xml=1";
             XmlDocument xmlDocument = new XmlDocument();
@@ -68,12 +60,12 @@ namespace IdleMaster.Entities
             XmlNode avatarMedium = xmlDocument.SelectSingleNode("//avatarMedium");
             Avatar = avatarMedium?.InnerText;
 
-            LoadBadges();
+            LoadGames();
         }
 
-        public void LoadBadges()
+        public void LoadGames()
         {
-            Badges = new List<Badge>();
+            Library = new Library();
 
             string profileLink = $"{Url}/badges";
             int totalPages = 1;
@@ -134,7 +126,7 @@ namespace IdleMaster.Entities
                     HtmlNode playtimeNode = badge.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
                     string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
 
-                    Badge existingBadge = Badges.FirstOrDefault(x => x.AppId == appId);
+                    Game existingBadge = Library.Games.FirstOrDefault(x => x.AppId == appId);
 
                     if (existingBadge != null)
                     {
@@ -142,8 +134,7 @@ namespace IdleMaster.Entities
                         continue;
                     }
 
-                    Badge newBadge = new Badge(appId, name, cards, playtime);
-                    Badges.Add(newBadge);
+                    Library.Games.Add(new Game(appId, name, cards, playtime));
                 }
             }
 
@@ -155,95 +146,6 @@ namespace IdleMaster.Entities
             }
 
             return true;
-        }
-
-        public void StartIdlingBadges()
-        {
-            if (!HasBadges)
-            {
-                return;
-            }
-
-            CurrentBadge = Badges.First();
-            CurrentBadge.StartIdle();
-        }
-
-        public void PauseIdlingBadges()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            CurrentBadge.StopIdle();
-        }
-
-        public void ResumeIdlingBadges()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            CurrentBadge.StartIdle();
-        }
-
-        public void StopIdlingBadges()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            CurrentBadge.StopIdle();
-            CurrentBadge = null;
-        }
-
-        public void CheckIdlingStatus(bool removeCurrentBadgeIfFinished = false)
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            HtmlDocument document = new HtmlDocument();
-            string response = CookieClient.GetHttp($"{Url}/gamecards/{CurrentBadge.AppId}");
-
-            document.LoadHtml(response);
-
-            HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
-            string cards = cardsNode?.InnerText.Split(' ').First();
-
-            HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-            string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
-
-            CurrentBadge.UpdateStats(cards, playtime);
-
-            if (!CurrentBadge.HasDrops)
-            {
-                IdleNextBadge(removeCurrentBadgeIfFinished);
-            }
-        }
-
-        private void IdleNextBadge(bool removeCurrentBadge = false)
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            CurrentBadge.StopIdle();
-
-            int nextBadgeIndex = Badges.IndexOf(CurrentBadge) + 1;
-
-            if (removeCurrentBadge)
-            {
-                Badges.Remove(CurrentBadge);
-                nextBadgeIndex--;
-            }
-
-            CurrentBadge = Badges[nextBadgeIndex];
-            CurrentBadge.StartIdle();
         }
     }
 }
