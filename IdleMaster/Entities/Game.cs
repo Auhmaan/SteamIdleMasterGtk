@@ -33,13 +33,19 @@ namespace IdleMaster.Entities
         {
             get
             {
-                return idleProcess != null && !idleProcess.HasExited;
+                return idleProcess != null;
             }
         }
 
-        public bool IsNormalIdling { get; private set; }
+        public bool IsPaused
+        {
+            get
+            {
+                return idleProcess.HasExited;
+            }
+        }
 
-        public bool IsFastIdling { get; private set; }
+        public IdleStyle CurrentIdleStyle { get; private set; }
 
         //Constructors
         public Game(string appId, string name, string remaining, string hours)
@@ -54,19 +60,49 @@ namespace IdleMaster.Entities
         }
 
         //Methods
-        public Process StartIdling()
+        private void SetToNormalIdling()
+        {
+            CurrentIdleStyle = IdleStyle.Normal;
+            fastIdleTries = 0;
+        }
+
+        private void SetToFastIdling()
+        {
+            CurrentIdleStyle = IdleStyle.Fast;
+            fastIdleTries = 2;
+        }
+
+        public void StartIdling()
         {
             if (IsIdling)
             {
-                return idleProcess;
+                return;
             }
 
             idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId)
             {
                 WindowStyle = ProcessWindowStyle.Hidden
             });
+        }
 
-            return idleProcess;
+        public void PauseIdling()
+        {
+            if (!IsIdling)
+            {
+                return;
+            }
+
+            idleProcess.Kill();
+        }
+
+        public void ResumeIdling()
+        {
+            if (!IsIdling)
+            {
+                return;
+            }
+
+            idleProcess.Start();
         }
 
         public void StopIdling()
@@ -76,7 +112,13 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            idleProcess.Kill();
+            if (!IsPaused)
+            {
+                idleProcess.Kill();
+            }
+
+            idleProcess.Dispose();
+            idleProcess = null;
         }
 
         public void UpdateStats(string remaining, string hours)
@@ -87,7 +129,7 @@ namespace IdleMaster.Entities
             RemainingCards = remainingCards;
             HoursPlayed = hoursPlayed;
 
-            if (IsFastIdling)
+            if (CurrentIdleStyle == IdleStyle.Fast)
             {
                 fastIdleTries--;
 
@@ -96,20 +138,6 @@ namespace IdleMaster.Entities
                     SetToNormalIdling();
                 }
             }
-        }
-
-        private void SetToNormalIdling()
-        {
-            IsNormalIdling = true;
-            IsFastIdling = false;
-            fastIdleTries = 0;
-        }
-
-        private void SetToFastIdling()
-        {
-            IsNormalIdling = false;
-            IsFastIdling = true;
-            fastIdleTries = 2;
         }
     }
 }

@@ -8,12 +8,8 @@ namespace IdleMaster.Entities
 {
     public class Library
     {
+        //Properties
         public List<Game> Games { get; private set; }
-
-        public Library()
-        {
-            Games = new List<Game>();
-        }
 
         public bool HasGames
         {
@@ -27,10 +23,25 @@ namespace IdleMaster.Entities
         {
             get
             {
-                return Games != null && Games.Any(x => x.IsNormalIdling || x.IsFastIdling);
+                return Games != null && Games.Any(x => x.IsIdling);
             }
         }
 
+        public bool IsPaused
+        {
+            get
+            {
+                return Games != null && Games.Any(x => x.IsPaused);
+            }
+        }
+
+        //Constructors
+        public Library()
+        {
+            Games = new List<Game>();
+        }
+
+        //Methods
         public void StartIdling()
         {
             if (!HasGames)
@@ -41,6 +52,32 @@ namespace IdleMaster.Entities
             foreach (Game game in Games.Take(UserSettings.GamesToIdle))
             {
                 game.StartIdling();
+            }
+        }
+
+        public void PauseIdling()
+        {
+            if (!IsIdling)
+            {
+                return;
+            }
+
+            foreach (Game game in Games.Where(x => x.IsIdling))
+            {
+                game.PauseIdling();
+            }
+        }
+
+        public void ResumeIdling()
+        {
+            if (!IsIdling)
+            {
+                return;
+            }
+
+            foreach (Game game in Games.Where(x => x.IsIdling))
+            {
+                game.ResumeIdling();
             }
         }
 
@@ -64,7 +101,7 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.IsNormalIdling))
+            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Normal))
             {
                 HtmlDocument document = new HtmlDocument();
                 string response = CookieClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
@@ -85,7 +122,7 @@ namespace IdleMaster.Entities
                 }
             }
 
-            Games.RemoveAll(x => x.IsNormalIdling && !x.HasDrops);
+            Games.RemoveAll(x => x.CurrentIdleStyle == IdleStyle.Normal && !x.HasDrops);
         }
 
         public void StartFastIdling()
@@ -95,7 +132,7 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.IsFastIdling))
+            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast))
             {
                 game.StartIdling();
             }
@@ -108,7 +145,7 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.IsFastIdling).ToList())
+            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast).ToList())
             {
                 game.StopIdling();
             }
@@ -121,7 +158,7 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.IsFastIdling))
+            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast))
             {
                 HtmlDocument document = new HtmlDocument();
                 string response = CookieClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
@@ -142,7 +179,7 @@ namespace IdleMaster.Entities
                 }
             }
 
-            Games.RemoveAll(x => x.IsFastIdling && !x.HasDrops);
+            Games.RemoveAll(x => x.CurrentIdleStyle == IdleStyle.Fast && !x.HasDrops);
         }
     }
 }

@@ -139,7 +139,7 @@
     <Compile Include="Forms\frmBrowser.Designer.cs">
       <DependentUpon>frmBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="Enums\IdleType.cs" />
+    <Compile Include="Enums\IdleStyle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Entities\Profile.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

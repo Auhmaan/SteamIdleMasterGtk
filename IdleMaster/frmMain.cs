@@ -1,6 +1,7 @@
 ﻿using IdleMaster.ControlEntities;
 using IdleMaster.Entities;
 using IdleMaster.Forms;
+using IdleMaster.Properties;
 using Steamworks;
 using System;
 using System.Drawing;
@@ -91,6 +92,8 @@ namespace IdleMaster
                 btnPauseResume.Enabled = false;
                 btnSkip.Enabled = false;
                 btnStop.Enabled = false;
+
+                btnPauseResume.BackgroundImage = Resources.Pause;
             }
 
             if (!IsLoggedIn)
@@ -112,6 +115,8 @@ namespace IdleMaster
                 btnPauseResume.Enabled = false;
                 btnSkip.Enabled = false;
                 btnStop.Enabled = false;
+
+                btnPauseResume.BackgroundImage = Resources.Pause;
             }
 
             if (uiProfile == "list")
@@ -135,14 +140,21 @@ namespace IdleMaster
 
                         if (game.IsIdling)
                         {
-                            if (game.IsNormalIdling)
+                            if (!game.IsPaused)
                             {
-                                idleStatus = "Idling";
+                                switch (game.CurrentIdleStyle)
+                                {
+                                    case IdleStyle.Normal:
+                                        idleStatus = "Idling";
+                                        break;
+                                    case IdleStyle.Fast:
+                                        idleStatus = "Fast Idling";
+                                        break;
+                                }
                             }
-
-                            if (game.IsFastIdling)
+                            else
                             {
-                                idleStatus = "Fast Idling";
+                                idleStatus = "Paused";
                             }
                         }
 
@@ -165,6 +177,40 @@ namespace IdleMaster
                 btnPauseResume.Enabled = true;
                 btnSkip.Enabled = true;
                 btnStop.Enabled = true;
+
+                btnPauseResume.BackgroundImage = Resources.Pause;
+            }
+
+            if (uiProfile == "pause")
+            {
+                ptbAvatar.ImageLocation = _profile.Avatar;
+                lblUsername.Text = _profile.Username;
+
+                btnRefresh.Enabled = false;
+                lsvGames.Enabled = _profile.Library.HasGames;
+
+                btnStart.Enabled = false;
+                btnPauseResume.Enabled = true;
+                btnSkip.Enabled = true;
+                btnStop.Enabled = true;
+
+                btnPauseResume.BackgroundImage = Resources.Resume;
+            }
+
+            if (uiProfile == "resume")
+            {
+                ptbAvatar.ImageLocation = _profile.Avatar;
+                lblUsername.Text = _profile.Username;
+
+                btnRefresh.Enabled = false;
+                lsvGames.Enabled = _profile.Library.HasGames;
+
+                btnStart.Enabled = false;
+                btnPauseResume.Enabled = true;
+                btnSkip.Enabled = true;
+                btnStop.Enabled = true;
+
+                btnPauseResume.BackgroundImage = Resources.Pause;
             }
 
             if (uiProfile == "stop")
@@ -179,6 +225,8 @@ namespace IdleMaster
                 btnPauseResume.Enabled = false;
                 btnSkip.Enabled = false;
                 btnStop.Enabled = false;
+
+                btnPauseResume.BackgroundImage = Resources.Pause;
             }
         }
 
@@ -266,12 +314,28 @@ namespace IdleMaster
 
         private void PauseIdle()
         {
+            if (!_isSteamRunning)
+            {
+                return;
+            }
 
+            _profile.Library.PauseIdling();
+
+            UpdateUserInterface("pause");
+            UpdateUserInterface("list");
         }
 
         private void ResumeIdle()
         {
+            if (!_isSteamRunning)
+            {
+                return;
+            }
 
+            _profile.Library.ResumeIdling();
+
+            UpdateUserInterface("resume");
+            UpdateUserInterface("list");
         }
 
         private void SkipIdle()
@@ -385,7 +449,7 @@ namespace IdleMaster
 
         private void btnPauseResume_Click(object sender, EventArgs e)
         {
-            if (_profile.Library.IsIdling)
+            if (_profile.Library.IsIdling && !_profile.Library.IsPaused)
             {
                 PauseIdle();
             }
