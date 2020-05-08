@@ -33,15 +33,7 @@ namespace IdleMaster.Entities
         {
             get
             {
-                return idleProcess != null;
-            }
-        }
-
-        public bool IsPaused
-        {
-            get
-            {
-                return idleProcess.HasExited;
+                return idleProcess != null && !idleProcess.HasExited;
             }
         }
 
@@ -85,26 +77,6 @@ namespace IdleMaster.Entities
             });
         }
 
-        public void PauseIdling()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            idleProcess.Kill();
-        }
-
-        public void ResumeIdling()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            idleProcess.Start();
-        }
-
         public void StopIdling()
         {
             if (!IsIdling)
@@ -112,11 +84,7 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            if (!IsPaused)
-            {
-                idleProcess.Kill();
-            }
-
+            idleProcess.Kill();
             idleProcess.Dispose();
             idleProcess = null;
         }

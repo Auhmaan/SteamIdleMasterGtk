@@ -138,23 +138,23 @@ namespace IdleMaster
 
                         string idleStatus = null;
 
-                        if (game.IsIdling)
+                        if (_profile.Library.IsIdling)
                         {
-                            if (!game.IsPaused)
+                            if (_profile.Library.IsPaused)
                             {
-                                switch (game.CurrentIdleStyle)
+                                int index = _profile.Library.Games.IndexOf(game);
+                                int firstIndex = _profile.Library.FirstIdlingIndex;
+                                int lastIndex = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle;
+
+                                if (firstIndex <= index && index < lastIndex)
                                 {
-                                    case IdleStyle.Normal:
-                                        idleStatus = "Idling";
-                                        break;
-                                    case IdleStyle.Fast:
-                                        idleStatus = "Fast Idling";
-                                        break;
+                                    idleStatus = "Paused";
                                 }
                             }
-                            else
+
+                            if (game.IsIdling)
                             {
-                                idleStatus = "Paused";
+                                idleStatus = "Idling";
                             }
                         }
 
@@ -175,7 +175,7 @@ namespace IdleMaster
 
                 btnStart.Enabled = false;
                 btnPauseResume.Enabled = true;
-                btnSkip.Enabled = true;
+                btnSkip.Enabled = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle < _profile.Library.Games.Count;
                 btnStop.Enabled = true;
 
                 btnPauseResume.BackgroundImage = Resources.Pause;
@@ -191,7 +191,7 @@ namespace IdleMaster
 
                 btnStart.Enabled = false;
                 btnPauseResume.Enabled = true;
-                btnSkip.Enabled = true;
+                btnSkip.Enabled = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle < _profile.Library.Games.Count;
                 btnStop.Enabled = true;
 
                 btnPauseResume.BackgroundImage = Resources.Resume;
@@ -207,7 +207,7 @@ namespace IdleMaster
 
                 btnStart.Enabled = false;
                 btnPauseResume.Enabled = true;
-                btnSkip.Enabled = true;
+                btnSkip.Enabled = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle < _profile.Library.Games.Count;
                 btnStop.Enabled = true;
 
                 btnPauseResume.BackgroundImage = Resources.Pause;
@@ -340,7 +340,15 @@ namespace IdleMaster
 
         private void SkipIdle()
         {
+            if (!_isSteamRunning)
+            {
+                return;
+            }
 
+            _profile.Library.SkipIdling();
+
+            UpdateUserInterface("resume");
+            UpdateUserInterface("list");
         }
 
         private void StopIdle()
@@ -449,7 +457,7 @@ namespace IdleMaster
 
         private void btnPauseResume_Click(object sender, EventArgs e)
         {
-            if (_profile.Library.IsIdling && !_profile.Library.IsPaused)
+            if (!_profile.Library.IsPaused)
             {
                 PauseIdle();
             }
@@ -461,7 +469,7 @@ namespace IdleMaster
 
         private void btnSkip_Click(object sender, EventArgs e)
         {
-
+            SkipIdle();
         }
 
         private void btnStop_Click(object sender, EventArgs e)

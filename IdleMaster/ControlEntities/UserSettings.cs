@@ -100,11 +100,11 @@ namespace IdleMaster.ControlEntities
         //Methods
         public static void ClearCookies()
         {
-            Settings.Default.CookieSessionId = null;
-            Settings.Default.CookieLoginSecure = null;
-            Settings.Default.CookieParental = null;
-            Settings.Default.CookieMachineAuth = null;
-            Settings.Default.CookieRememberLogin = null;
+            Settings.Default.CookieSessionId = "";
+            Settings.Default.CookieLoginSecure = "";
+            Settings.Default.CookieParental = "";
+            Settings.Default.CookieMachineAuth = "";
+            Settings.Default.CookieRememberLogin = "";
             Settings.Default.Save();
         }
     }

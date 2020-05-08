@@ -37,6 +37,11 @@ namespace IdleMaster.ControlEntities
         //Methods
         public static string GetHttp(string url)
         {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return null;
+            }
+
             string content = null;
 
             using (CookieClient client = new CookieClient())

@@ -19,21 +19,11 @@ namespace IdleMaster.Entities
             }
         }
 
-        public bool IsIdling
-        {
-            get
-            {
-                return Games != null && Games.Any(x => x.IsIdling);
-            }
-        }
+        public bool IsIdling { get; private set; }
 
-        public bool IsPaused
-        {
-            get
-            {
-                return Games != null && Games.Any(x => x.IsPaused);
-            }
-        }
+        public bool IsPaused { get; private set; }
+
+        public int FirstIdlingIndex { get; private set; }
 
         //Constructors
         public Library()
@@ -44,41 +34,62 @@ namespace IdleMaster.Entities
         //Methods
         public void StartIdling()
         {
-            if (!HasGames)
+            if (!HasGames || IsIdling)
             {
                 return;
             }
 
-            foreach (Game game in Games.Take(UserSettings.GamesToIdle))
+            FirstIdlingIndex = 0;
+
+            foreach (Game game in Games.Skip(FirstIdlingIndex).Take(UserSettings.GamesToIdle))
             {
                 game.StartIdling();
             }
+
+            IsIdling = true;
         }
 
         public void PauseIdling()
         {
-            if (!IsIdling)
+            if (IsPaused)
             {
                 return;
             }
 
             foreach (Game game in Games.Where(x => x.IsIdling))
             {
-                game.PauseIdling();
+                game.StopIdling();
             }
+
+            IsPaused = true;
         }
 
         public void ResumeIdling()
+        {
+            if (!IsPaused)
+            {
+                return;
+            }
+
+            foreach (Game game in Games.Skip(FirstIdlingIndex).Take(UserSettings.GamesToIdle))
+            {
+                game.StartIdling();
+            }
+
+            IsPaused = false;
+        }
+
+        public void SkipIdling()
         {
             if (!IsIdling)
             {
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.IsIdling))
-            {
-                game.ResumeIdling();
-            }
+            Games[FirstIdlingIndex].StopIdling();
+            Games[FirstIdlingIndex + UserSettings.GamesToIdle].StartIdling();
+
+            FirstIdlingIndex++;
         }
 
         public void StopIdling()
@@ -92,6 +103,9 @@ namespace IdleMaster.Entities
             {
                 game.StopIdling();
             }
+
+            IsIdling = false;
+            IsPaused = false;
         }
 
         public void CheckNormalIdlingStatus()
@@ -127,11 +141,6 @@ namespace IdleMaster.Entities
 
         public void StartFastIdling()
         {
-            if (!HasGames)
-            {
-                return;
-            }
-
             foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast))
             {
                 game.StartIdling();
@@ -140,11 +149,6 @@ namespace IdleMaster.Entities
 
         public void StopFastIdling()
         {
-            if (!IsIdling)
-            {
-                return;
-            }
-
             foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast).ToList())
             {
                 game.StopIdling();
