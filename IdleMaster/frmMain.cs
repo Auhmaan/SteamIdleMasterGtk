@@ -191,7 +191,7 @@ namespace IdleMaster
 
                 btnStart.Enabled = false;
                 btnPauseResume.Enabled = true;
-                btnSkip.Enabled = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle < _profile.Library.Games.Count;
+                btnSkip.Enabled = false;
                 btnStop.Enabled = true;
 
                 btnPauseResume.BackgroundImage = Resources.Resume;

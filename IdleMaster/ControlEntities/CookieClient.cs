@@ -7,7 +7,7 @@ namespace IdleMaster.ControlEntities
     public class CookieClient : WebClient
     {
         //Properties
-        public CookieContainer Cookie { get; set; }
+        public CookieContainer CookieContainer { get; set; }
 
         //Constructors
         public CookieClient()
@@ -30,7 +30,7 @@ namespace IdleMaster.ControlEntities
             cookieContainer.Add(new Cookie("steamRememberLogin", UserSettings.CookieRememberLogin) { Domain = uri.Host });
             cookieContainer.Add(new Cookie("steamparental", UserSettings.CookieParental) { Domain = uri.Host });
 
-            Cookie = cookieContainer;
+            CookieContainer = cookieContainer;
             Encoding = Encoding.UTF8;
         }
 
@@ -42,19 +42,11 @@ namespace IdleMaster.ControlEntities
                 return null;
             }
 
-            string content = null;
+            string content;
 
             using (CookieClient client = new CookieClient())
             {
-                for (int count = 3; count > 0; count--)
-                {
-                    content = client.DownloadString(url);
-
-                    if (!string.IsNullOrWhiteSpace(content))
-                    {
-                        break;
-                    }
-                }
+                content = client.DownloadString(url);
             }
 
             return content;
@@ -66,7 +58,7 @@ namespace IdleMaster.ControlEntities
 
             if (webRequest is HttpWebRequest)
             {
-                (webRequest as HttpWebRequest).CookieContainer = Cookie;
+                (webRequest as HttpWebRequest).CookieContainer = CookieContainer;
             }
 
             return webRequest;
