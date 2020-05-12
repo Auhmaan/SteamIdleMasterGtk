@@ -6,6 +6,7 @@ using Steamworks;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace IdleMaster
@@ -81,7 +82,7 @@ namespace IdleMaster
             {
                 lnkSession.Text = "Login";
 
-                ptbAvatar.Image = null;
+                ptbAvatar.ImageLocation = null;
                 lblUsername.Text = null;
 
                 btnRefresh.Enabled = false;
@@ -130,38 +131,58 @@ namespace IdleMaster
                     {
                         ListViewItem item = new ListViewItem
                         {
+                            Tag = game.AppId,
                             Text = game.Name
                         };
 
                         item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = $"{game.HoursPlayed}h" });
                         item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = game.RemainingCards.ToString() });
-
-                        string idleStatus = null;
-
-                        if (_profile.Library.IsIdling)
-                        {
-                            if (_profile.Library.IsPaused)
-                            {
-                                int index = _profile.Library.Games.IndexOf(game);
-                                int firstIndex = _profile.Library.FirstIdlingIndex;
-                                int lastIndex = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle;
-
-                                if (firstIndex <= index && index < lastIndex)
-                                {
-                                    idleStatus = "Paused";
-                                }
-                            }
-
-                            if (game.IsIdling)
-                            {
-                                idleStatus = "Idling";
-                            }
-                        }
-
-                        item.SubItems.Add(new ListViewItem.ListViewSubItem() { Text = idleStatus });
+                        item.SubItems.Add(new ListViewItem.ListViewSubItem());
 
                         lsvGames.Items.Add(item);
                     }
+                }
+            }
+
+            if (uiProfile == "status")
+            {
+                foreach (ListViewItem item in lsvGames.Items)
+                {
+                    Game game = _profile.Library.Games.FirstOrDefault(x => item.Tag.ToString() == x.AppId);
+
+                    if (game == null)
+                    {
+                        continue;
+                    }
+
+                    string idleStatus = null;
+
+                    if (_profile.Library.IsIdling)
+                    {
+                        if (_profile.Library.IsPaused)
+                        {
+                            int index = _profile.Library.Games.IndexOf(game);
+                            int firstIndex = _profile.Library.FirstIdlingIndex;
+                            int lastIndex = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle;
+
+                            if (firstIndex <= index && index < lastIndex)
+                            {
+                                idleStatus = "Paused";
+                            }
+                        }
+
+                        if (game.IsIdling)
+                        {
+                            idleStatus = "Idling";
+                        }
+                    }
+
+                    if (!game.HasDrops)
+                    {
+                        idleStatus = "Finished";
+                    }
+
+                    item.SubItems[3].Text = idleStatus;
                 }
             }
 
@@ -306,7 +327,7 @@ namespace IdleMaster
             _profile.Library.StartIdling();
 
             UpdateUserInterface("start");
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
 
             tmrNormalIdleStatus.Start();
             //tmrFastIdleStop.Start();
@@ -322,7 +343,7 @@ namespace IdleMaster
             _profile.Library.PauseIdling();
 
             UpdateUserInterface("pause");
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
         }
 
         private void ResumeIdle()
@@ -335,7 +356,7 @@ namespace IdleMaster
             _profile.Library.ResumeIdling();
 
             UpdateUserInterface("resume");
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
         }
 
         private void SkipIdle()
@@ -348,7 +369,7 @@ namespace IdleMaster
             _profile.Library.SkipIdling();
 
             UpdateUserInterface("resume");
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
         }
 
         private void StopIdle()
@@ -365,7 +386,7 @@ namespace IdleMaster
             tmrFastIdleStop.Stop();
 
             UpdateUserInterface("stop");
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
         }
 
         private void CheckNormalIdleStatus()
@@ -378,7 +399,7 @@ namespace IdleMaster
             }
 
             _profile.Library.CheckNormalIdlingStatus();
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
 
             tmrNormalIdleStatus.Start();
         }
@@ -394,7 +415,7 @@ namespace IdleMaster
 
             _profile.Library.StartFastIdling();
             _profile.Library.CheckFastIdlingStatus();
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
 
             tmrFastIdleStop.Start();
         }
@@ -409,7 +430,7 @@ namespace IdleMaster
             }
 
             _profile.Library.StopFastIdling();
-            UpdateUserInterface("list");
+            UpdateUserInterface("status");
 
             tmrFastIdleStart.Start();
         }

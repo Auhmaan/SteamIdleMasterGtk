@@ -93,6 +93,7 @@ namespace IdleMaster.ControlEntities
                 if (value >= 1 || value <= 30)
                 {
                     Settings.Default.GamesToIdle = value;
+                    Settings.Default.Save();
                 }
             }
         }
