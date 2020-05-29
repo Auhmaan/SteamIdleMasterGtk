@@ -46,7 +46,7 @@ namespace IdleMaster.Entities
             foreach (Game game in Games.Skip(FirstIdlingIndex).Take(UserSettings.GamesToIdle))
             {
                 game.StartIdling();
-                game.Status = GameStatus.FastIdling;
+                game.Status = UserSettings.FastIdleEnabled ? GameStatus.FastIdling : GameStatus.NormalIdling;
             }
 
             IsIdling = true;

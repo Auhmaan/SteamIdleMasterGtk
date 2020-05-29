@@ -98,6 +98,19 @@ namespace IdleMaster.ControlEntities
             }
         }
 
+        public static bool FastIdleEnabled
+        {
+            get
+            {
+                return Settings.Default.FastIdleEnabled;
+            }
+            set
+            {
+                Settings.Default.FastIdleEnabled = value;
+                Settings.Default.Save();
+            }
+        }
+
         //Methods
         public static void ClearCookies()
         {

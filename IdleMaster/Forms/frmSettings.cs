@@ -13,9 +13,12 @@ namespace IdleMaster.Forms
 
         private void frmSettings_Load(object sender, EventArgs e)
         {
+            //Idle behavior
             rdbSingleIdle.Checked = UserSettings.GamesToIdle == 1;
             rdbMultiIdle.Checked = UserSettings.GamesToIdle > 1;
             nudGamesToIdle.Value = UserSettings.GamesToIdle > 1 ? UserSettings.GamesToIdle : nudGamesToIdle.Minimum;
+
+            chkFastIdle.Checked = UserSettings.FastIdleEnabled;
         }
 
         ////////////////////////////////////////METHODS////////////////////////////////////////
@@ -32,6 +35,8 @@ namespace IdleMaster.Forms
                 int.TryParse(nudGamesToIdle.Value.ToString(), out int gamesToIdle);
                 UserSettings.GamesToIdle = gamesToIdle;
             }
+
+            UserSettings.FastIdleEnabled = chkFastIdle.Checked;
         }
 
         ////////////////////////////////////////CONTROLS////////////////////////////////////////
@@ -57,11 +62,6 @@ namespace IdleMaster.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void btnApply_Click(object sender, EventArgs e)
-        {
-            ApplySettings();
         }
     }
 }

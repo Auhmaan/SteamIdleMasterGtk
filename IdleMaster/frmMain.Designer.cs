@@ -43,7 +43,7 @@
             this.tmrFastIdleStart = new System.Windows.Forms.Timer(this.components);
             this.tmrFastIdleStop = new System.Windows.Forms.Timer(this.components);
             this.mnsMainMenu = new System.Windows.Forms.MenuStrip();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSkip = new System.Windows.Forms.Button();
             this.btnPauseResume = new System.Windows.Forms.Button();
             this.ptbAvatar = new System.Windows.Forms.PictureBox();
@@ -147,19 +147,19 @@
             // mnsMainMenu
             // 
             this.mnsMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.settingsToolStripMenuItem});
+            this.tsiSettings});
             this.mnsMainMenu.Location = new System.Drawing.Point(0, 0);
             this.mnsMainMenu.Name = "mnsMainMenu";
             this.mnsMainMenu.Size = new System.Drawing.Size(455, 24);
             this.mnsMainMenu.TabIndex = 8;
             this.mnsMainMenu.Text = "menuStrip1";
             // 
-            // settingsToolStripMenuItem
+            // tsiSettings
             // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            this.tsiSettings.Name = "tsiSettings";
+            this.tsiSettings.Size = new System.Drawing.Size(61, 20);
+            this.tsiSettings.Text = "Settings";
+            this.tsiSettings.Click += new System.EventHandler(this.tsiSettings_Click);
             // 
             // btnSkip
             // 
@@ -275,6 +275,6 @@
         private System.Windows.Forms.MenuStrip mnsMainMenu;
         private System.Windows.Forms.Button btnPauseResume;
         private System.Windows.Forms.Button btnSkip;
-        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsiSettings;
     }
 }

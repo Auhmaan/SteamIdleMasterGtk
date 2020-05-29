@@ -270,11 +270,6 @@ namespace IdleMaster
 
             lblSteam.Text = $"Steam is {(!_isSteamRunning ? "not " : "")}running";
             lblSteam.ForeColor = _isSteamRunning ? Color.Green : Color.Red;
-
-            if (_isSteamRunning)
-            {
-                UpdateUserInterface("login");
-            }
         }
 
         ////////////////////////////////////////SESSION////////////////////////////////////////
@@ -541,7 +536,7 @@ namespace IdleMaster
             }
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsiSettings_Click(object sender, EventArgs e)
         {
             frmSettings form = new frmSettings();
             form.ShowDialog();

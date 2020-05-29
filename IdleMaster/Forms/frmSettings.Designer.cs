@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             this.nudGamesToIdle = new System.Windows.Forms.NumericUpDown();
-            this.btnApply = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblSimultaneous1 = new System.Windows.Forms.Label();
             this.rdbMultiIdle = new System.Windows.Forms.RadioButton();
-            this.grbIdleFormat = new System.Windows.Forms.GroupBox();
+            this.grbIdleBehavior = new System.Windows.Forms.GroupBox();
+            this.chkFastIdle = new System.Windows.Forms.CheckBox();
             this.lblSimultaneous2 = new System.Windows.Forms.Label();
             this.rdbSingleIdle = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.nudGamesToIdle)).BeginInit();
-            this.grbIdleFormat.SuspendLayout();
+            this.grbIdleBehavior.SuspendLayout();
             this.SuspendLayout();
             // 
             // nudGamesToIdle
@@ -65,19 +65,9 @@
             0,
             0});
             // 
-            // btnApply
-            // 
-            this.btnApply.Location = new System.Drawing.Point(174, 123);
-            this.btnApply.Name = "btnApply";
-            this.btnApply.Size = new System.Drawing.Size(75, 23);
-            this.btnApply.TabIndex = 1;
-            this.btnApply.Text = "Apply";
-            this.btnApply.UseVisualStyleBackColor = true;
-            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
-            // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(12, 123);
+            this.btnOk.Location = new System.Drawing.Point(93, 148);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 2;
@@ -87,7 +77,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(93, 123);
+            this.btnCancel.Location = new System.Drawing.Point(174, 148);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -110,26 +100,37 @@
             this.rdbMultiIdle.AutoSize = true;
             this.rdbMultiIdle.Location = new System.Drawing.Point(6, 51);
             this.rdbMultiIdle.Name = "rdbMultiIdle";
-            this.rdbMultiIdle.Size = new System.Drawing.Size(75, 17);
+            this.rdbMultiIdle.Size = new System.Drawing.Size(67, 17);
             this.rdbMultiIdle.TabIndex = 6;
             this.rdbMultiIdle.TabStop = true;
-            this.rdbMultiIdle.Text = "Multi Idling";
+            this.rdbMultiIdle.Text = "Multi Idle";
             this.rdbMultiIdle.UseVisualStyleBackColor = true;
             this.rdbMultiIdle.CheckedChanged += new System.EventHandler(this.rdbMultiIdle_CheckedChanged);
             // 
-            // grbIdleFormat
+            // grbIdleBehavior
             // 
-            this.grbIdleFormat.Controls.Add(this.lblSimultaneous2);
-            this.grbIdleFormat.Controls.Add(this.rdbSingleIdle);
-            this.grbIdleFormat.Controls.Add(this.lblSimultaneous1);
-            this.grbIdleFormat.Controls.Add(this.rdbMultiIdle);
-            this.grbIdleFormat.Controls.Add(this.nudGamesToIdle);
-            this.grbIdleFormat.Location = new System.Drawing.Point(12, 12);
-            this.grbIdleFormat.Name = "grbIdleFormat";
-            this.grbIdleFormat.Size = new System.Drawing.Size(237, 105);
-            this.grbIdleFormat.TabIndex = 7;
-            this.grbIdleFormat.TabStop = false;
-            this.grbIdleFormat.Text = "Idling format";
+            this.grbIdleBehavior.Controls.Add(this.chkFastIdle);
+            this.grbIdleBehavior.Controls.Add(this.lblSimultaneous2);
+            this.grbIdleBehavior.Controls.Add(this.rdbSingleIdle);
+            this.grbIdleBehavior.Controls.Add(this.lblSimultaneous1);
+            this.grbIdleBehavior.Controls.Add(this.rdbMultiIdle);
+            this.grbIdleBehavior.Controls.Add(this.nudGamesToIdle);
+            this.grbIdleBehavior.Location = new System.Drawing.Point(12, 12);
+            this.grbIdleBehavior.Name = "grbIdleBehavior";
+            this.grbIdleBehavior.Size = new System.Drawing.Size(237, 130);
+            this.grbIdleBehavior.TabIndex = 7;
+            this.grbIdleBehavior.TabStop = false;
+            this.grbIdleBehavior.Text = "Idle behavior";
+            // 
+            // chkFastIdle
+            // 
+            this.chkFastIdle.AutoSize = true;
+            this.chkFastIdle.Location = new System.Drawing.Point(6, 107);
+            this.chkFastIdle.Name = "chkFastIdle";
+            this.chkFastIdle.Size = new System.Drawing.Size(98, 17);
+            this.chkFastIdle.TabIndex = 8;
+            this.chkFastIdle.Text = "Enable fast idle";
+            this.chkFastIdle.UseVisualStyleBackColor = true;
             // 
             // lblSimultaneous2
             // 
@@ -146,21 +147,20 @@
             this.rdbSingleIdle.AutoSize = true;
             this.rdbSingleIdle.Location = new System.Drawing.Point(6, 28);
             this.rdbSingleIdle.Name = "rdbSingleIdle";
-            this.rdbSingleIdle.Size = new System.Drawing.Size(82, 17);
+            this.rdbSingleIdle.Size = new System.Drawing.Size(74, 17);
             this.rdbSingleIdle.TabIndex = 5;
             this.rdbSingleIdle.TabStop = true;
-            this.rdbSingleIdle.Text = "Single Idling";
+            this.rdbSingleIdle.Text = "Single Idle";
             this.rdbSingleIdle.UseVisualStyleBackColor = true;
             // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(261, 158);
-            this.Controls.Add(this.grbIdleFormat);
+            this.ClientSize = new System.Drawing.Size(261, 183);
+            this.Controls.Add(this.grbIdleBehavior);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
-            this.Controls.Add(this.btnApply);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -171,8 +171,8 @@
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.frmSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudGamesToIdle)).EndInit();
-            this.grbIdleFormat.ResumeLayout(false);
-            this.grbIdleFormat.PerformLayout();
+            this.grbIdleBehavior.ResumeLayout(false);
+            this.grbIdleBehavior.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -180,13 +180,13 @@
         #endregion
 
         private System.Windows.Forms.NumericUpDown nudGamesToIdle;
-        private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label lblSimultaneous1;
         private System.Windows.Forms.RadioButton rdbMultiIdle;
-        private System.Windows.Forms.GroupBox grbIdleFormat;
+        private System.Windows.Forms.GroupBox grbIdleBehavior;
         private System.Windows.Forms.Label lblSimultaneous2;
         private System.Windows.Forms.RadioButton rdbSingleIdle;
+        private System.Windows.Forms.CheckBox chkFastIdle;
     }
 }
