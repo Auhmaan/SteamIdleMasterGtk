@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="Entities\Library.cs" />
     <Compile Include="ControlEntities\UserSettings.cs" />
+    <Compile Include="Enums\GameStatus.cs" />
     <Compile Include="Forms\frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>

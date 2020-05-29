@@ -1,5 +1,6 @@
 ﻿using IdleMaster.ControlEntities;
 using IdleMaster.Entities;
+using IdleMaster.Enums;
 using IdleMaster.Forms;
 using IdleMaster.Properties;
 using Steamworks;
@@ -157,29 +158,34 @@ namespace IdleMaster
 
                     string idleStatus = null;
 
-                    if (_profile.Library.IsIdling)
+                    if (!_profile.Library.IsPaused)
                     {
-                        if (_profile.Library.IsPaused)
+                        switch (game.Status)
                         {
-                            int index = _profile.Library.Games.IndexOf(game);
-                            int firstIndex = _profile.Library.FirstIdlingIndex;
-                            int lastIndex = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle;
-
-                            if (firstIndex <= index && index < lastIndex)
-                            {
-                                idleStatus = "Paused";
-                            }
-                        }
-
-                        if (game.IsIdling)
-                        {
-                            idleStatus = "Idling";
+                            case GameStatus.FastIdling:
+                                idleStatus = "Fast Idling";
+                                break;
+                            case GameStatus.Restarting:
+                                idleStatus = "Restarting";
+                                break;
+                            case GameStatus.NormalIdling:
+                                idleStatus = "Idling";
+                                break;
+                            case GameStatus.Finished:
+                                idleStatus = "Finished";
+                                break;
                         }
                     }
-
-                    if (!game.HasDrops)
+                    else
                     {
-                        idleStatus = "Finished";
+                        int index = _profile.Library.Games.IndexOf(game);
+                        int firstIndex = _profile.Library.FirstIdlingIndex;
+                        int lastIndex = _profile.Library.FirstIdlingIndex + UserSettings.GamesToIdle;
+
+                        if (firstIndex <= index && index < lastIndex)
+                        {
+                            idleStatus = "Paused";
+                        }
                     }
 
                     item.SubItems[3].Text = idleStatus;
@@ -264,6 +270,11 @@ namespace IdleMaster
 
             lblSteam.Text = $"Steam is {(!_isSteamRunning ? "not " : "")}running";
             lblSteam.ForeColor = _isSteamRunning ? Color.Green : Color.Red;
+
+            if (_isSteamRunning)
+            {
+                UpdateUserInterface("login");
+            }
         }
 
         ////////////////////////////////////////SESSION////////////////////////////////////////
@@ -330,7 +341,7 @@ namespace IdleMaster
             UpdateUserInterface("status");
 
             tmrNormalIdleStatus.Start();
-            //tmrFastIdleStop.Start();
+            tmrFastIdleStop.Start();
         }
 
         private void PauseIdle()
@@ -341,6 +352,10 @@ namespace IdleMaster
             }
 
             _profile.Library.PauseIdling();
+
+            tmrNormalIdleStatus.Stop();
+            tmrFastIdleStart.Stop();
+            tmrFastIdleStop.Stop();
 
             UpdateUserInterface("pause");
             UpdateUserInterface("status");
@@ -357,6 +372,9 @@ namespace IdleMaster
 
             UpdateUserInterface("resume");
             UpdateUserInterface("status");
+
+            tmrNormalIdleStatus.Start();
+            tmrFastIdleStop.Start();
         }
 
         private void SkipIdle()
@@ -398,7 +416,7 @@ namespace IdleMaster
                 return;
             }
 
-            _profile.Library.CheckNormalIdlingStatus();
+            _profile.Library.CheckIdlingStatus(GameStatus.NormalIdling);
             UpdateUserInterface("status");
 
             tmrNormalIdleStatus.Start();
@@ -414,7 +432,7 @@ namespace IdleMaster
             }
 
             _profile.Library.StartFastIdling();
-            _profile.Library.CheckFastIdlingStatus();
+            _profile.Library.CheckIdlingStatus(GameStatus.FastIdling);
             UpdateUserInterface("status");
 
             tmrFastIdleStop.Start();

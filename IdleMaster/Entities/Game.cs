@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using IdleMaster.Enums;
+using System.Diagnostics;
 
 namespace IdleMaster.Entities
 {
@@ -8,18 +8,18 @@ namespace IdleMaster.Entities
         //Fields
         private Process idleProcess;
 
-        private readonly int originalRemainingCards;
-
-        private int fastIdleTries;
-
         //Properties
         public string AppId { get; }
 
         public string Name { get; }
 
+        public int OriginalRemainingCards { get; private set; }
+
         public int RemainingCards { get; private set; }
 
         public double HoursPlayed { get; private set; }
+
+        public int FastIdleTries { get; set; }
 
         public bool HasDrops
         {
@@ -29,83 +29,49 @@ namespace IdleMaster.Entities
             }
         }
 
-        public bool IsIdling
-        {
-            get
-            {
-                return idleProcess != null && !idleProcess.HasExited;
-            }
-        }
+        //public bool IsIdling
+        //{
+        //    get
+        //    {
+        //        return idleProcess != null && !idleProcess.HasExited;
+        //    }
+        //}
 
-        public IdleStyle CurrentIdleStyle { get; private set; }
+        public GameStatus Status { get; set; }
 
         //Constructors
-        public Game(string appId, string name, string remaining, string hours)
+        public Game(string appId, string name, int remaining, double hours)
         {
             AppId = appId;
             Name = name;
+            Status = GameStatus.Stopped;
 
-            int.TryParse(remaining, out originalRemainingCards);
+            FastIdleTries = 2;
+
+            OriginalRemainingCards = remaining;
             UpdateStats(remaining, hours);
-
-            SetToNormalIdling();
         }
 
         //Methods
-        private void SetToNormalIdling()
-        {
-            CurrentIdleStyle = IdleStyle.Normal;
-            fastIdleTries = 0;
-        }
-
-        private void SetToFastIdling()
-        {
-            CurrentIdleStyle = IdleStyle.Fast;
-            fastIdleTries = 2;
-        }
-
         public void StartIdling()
         {
-            if (IsIdling)
-            {
-                return;
-            }
-
             idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId)
             {
-                WindowStyle = ProcessWindowStyle.Hidden
+                WindowStyle = ProcessWindowStyle.Normal
             });
         }
 
         public void StopIdling()
         {
-            if (!IsIdling)
-            {
-                return;
-            }
-
             idleProcess.Kill();
             idleProcess.Dispose();
             idleProcess = null;
         }
 
-        public void UpdateStats(string remaining, string hours)
+        public void UpdateStats(int remainingCards, double hoursPlayed)
         {
-            int.TryParse(remaining, out int remainingCards);
-            double.TryParse(hours, NumberStyles.Any, new NumberFormatInfo(), out double hoursPlayed);
-
             RemainingCards = remainingCards;
             HoursPlayed = hoursPlayed;
-
-            if (CurrentIdleStyle == IdleStyle.Fast)
-            {
-                fastIdleTries--;
-
-                if (fastIdleTries == 0 && RemainingCards == originalRemainingCards)
-                {
-                    SetToNormalIdling();
-                }
-            }
         }
     }
 }

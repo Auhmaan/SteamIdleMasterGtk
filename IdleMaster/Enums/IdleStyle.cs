@@ -1,4 +1,4 @@
-﻿namespace IdleMaster
+﻿namespace IdleMaster.Enums
 {
     public enum IdleStyle
     {

@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
 using IdleMaster.ControlEntities;
+using IdleMaster.Enums;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 
@@ -44,6 +46,7 @@ namespace IdleMaster.Entities
             foreach (Game game in Games.Skip(FirstIdlingIndex).Take(UserSettings.GamesToIdle))
             {
                 game.StartIdling();
+                game.Status = GameStatus.FastIdling;
             }
 
             IsIdling = true;
@@ -56,7 +59,14 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.IsIdling))
+            List<GameStatus> idleStatuses = new List<GameStatus>()
+            {
+                GameStatus.FastIdling,
+                GameStatus.Restarting,
+                GameStatus.NormalIdling
+            };
+
+            foreach (Game game in Games.Where(x => idleStatuses.Contains(x.Status)))
             {
                 game.StopIdling();
             }
@@ -87,7 +97,10 @@ namespace IdleMaster.Entities
             }
 
             Games[FirstIdlingIndex].StopIdling();
+            Games[FirstIdlingIndex].Status = GameStatus.Stopped;
+
             Games[FirstIdlingIndex + UserSettings.GamesToIdle].StartIdling();
+            Games[FirstIdlingIndex + UserSettings.GamesToIdle].Status = GameStatus.FastIdling;
 
             FirstIdlingIndex++;
         }
@@ -99,23 +112,31 @@ namespace IdleMaster.Entities
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.IsIdling))
+            List<GameStatus> idleStatuses = new List<GameStatus>()
+            {
+                GameStatus.FastIdling,
+                GameStatus.Restarting,
+                GameStatus.NormalIdling
+            };
+
+            foreach (Game game in Games.Where(x => idleStatuses.Contains(x.Status)))
             {
                 game.StopIdling();
+                game.Status = GameStatus.Stopped;
             }
 
             IsIdling = false;
             IsPaused = false;
         }
 
-        public void CheckNormalIdlingStatus()
+        public void CheckIdlingStatus(GameStatus gameStatus)
         {
             if (!IsIdling)
             {
                 return;
             }
 
-            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Normal))
+            foreach (Game game in Games.Where(x => x.Status == gameStatus))
             {
                 HtmlDocument document = new HtmlDocument();
                 string response = CookieClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
@@ -128,62 +149,44 @@ namespace IdleMaster.Entities
                 HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
                 string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
 
-                game.UpdateStats(cards, playtime);
+                int.TryParse(cards, out int remainingCards);
+                double.TryParse(playtime, NumberStyles.Any, new NumberFormatInfo(), out double hoursPlayed);
+
+                game.UpdateStats(remainingCards, hoursPlayed);
 
                 if (!game.HasDrops)
                 {
                     game.StopIdling();
                 }
-            }
 
-            Games.RemoveAll(x => x.CurrentIdleStyle == IdleStyle.Normal && !x.HasDrops);
+                if (game.Status == GameStatus.FastIdling && game.FastIdleTries > 0)
+                {
+                    game.FastIdleTries--;
+
+                    if (game.FastIdleTries == 0 && game.RemainingCards == game.OriginalRemainingCards)
+                    {
+                        game.Status = GameStatus.NormalIdling;
+                    }
+                }
+            }
         }
 
         public void StartFastIdling()
         {
-            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast))
+            foreach (Game game in Games.Where(x => x.Status == GameStatus.Restarting))
             {
                 game.StartIdling();
+                game.Status = GameStatus.FastIdling;
             }
         }
 
         public void StopFastIdling()
         {
-            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast).ToList())
+            foreach (Game game in Games.Where(x => x.Status == GameStatus.FastIdling).ToList())
             {
                 game.StopIdling();
+                game.Status = GameStatus.Restarting;
             }
-        }
-
-        public void CheckFastIdlingStatus()
-        {
-            if (!IsIdling)
-            {
-                return;
-            }
-
-            foreach (Game game in Games.Where(x => x.CurrentIdleStyle == IdleStyle.Fast))
-            {
-                HtmlDocument document = new HtmlDocument();
-                string response = CookieClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
-
-                document.LoadHtml(response);
-
-                HtmlNode cardsNode = document.DocumentNode.SelectSingleNode(".//span[@class='progress_info_bold']");
-                string cards = cardsNode?.InnerText.Split(' ').First();
-
-                HtmlNode playtimeNode = document.DocumentNode.SelectSingleNode(".//div[@class='badge_title_stats_playtime']");
-                string playtime = WebUtility.HtmlDecode(playtimeNode?.InnerText).Trim().Split(' ').First();
-
-                game.UpdateStats(cards, playtime);
-
-                if (!game.HasDrops)
-                {
-                    game.StopIdling();
-                }
-            }
-
-            Games.RemoveAll(x => x.CurrentIdleStyle == IdleStyle.Fast && !x.HasDrops);
         }
     }
 }

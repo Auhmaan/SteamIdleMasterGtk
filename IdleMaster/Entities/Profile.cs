@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using IdleMaster.ControlEntities;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Xml;
@@ -128,13 +129,16 @@ namespace IdleMaster.Entities
 
                     Game existingBadge = Library.Games.FirstOrDefault(x => x.AppId == appId);
 
+                    int.TryParse(cards, out int remainingCards);
+                    double.TryParse(playtime, NumberStyles.Any, new NumberFormatInfo(), out double hoursPlayed);
+
                     if (existingBadge != null)
                     {
-                        existingBadge.UpdateStats(cards, playtime);
+                        existingBadge.UpdateStats(remainingCards, hoursPlayed);
                         continue;
                     }
 
-                    Library.Games.Add(new Game(appId, name, cards, playtime));
+                    Library.Games.Add(new Game(appId, name, remainingCards, hoursPlayed));
                 }
             }
 

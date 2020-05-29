@@ -43,13 +43,13 @@
             this.tmrFastIdleStart = new System.Windows.Forms.Timer(this.components);
             this.tmrFastIdleStop = new System.Windows.Forms.Timer(this.components);
             this.mnsMainMenu = new System.Windows.Forms.MenuStrip();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnSkip = new System.Windows.Forms.Button();
             this.btnPauseResume = new System.Windows.Forms.Button();
             this.ptbAvatar = new System.Windows.Forms.PictureBox();
             this.btnRefresh = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnsMainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.SuspendLayout();
@@ -154,6 +154,13 @@
             this.mnsMainMenu.TabIndex = 8;
             this.mnsMainMenu.Text = "menuStrip1";
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
             // btnSkip
             // 
             this.btnSkip.BackgroundImage = global::IdleMaster.Properties.Resources.Skip;
@@ -216,13 +223,6 @@
             this.btnStart.TabIndex = 4;
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // frmMain
             // 
