@@ -100,7 +100,7 @@ namespace IdleMaster.Entities
             Games[FirstIdlingIndex].Status = GameStatus.Stopped;
 
             Games[FirstIdlingIndex + UserSettings.GamesToIdle].StartIdling();
-            Games[FirstIdlingIndex + UserSettings.GamesToIdle].Status = GameStatus.FastIdling;
+            Games[FirstIdlingIndex + UserSettings.GamesToIdle].Status = UserSettings.FastIdleEnabled ? GameStatus.FastIdling : GameStatus.NormalIdling;
 
             FirstIdlingIndex++;
         }
@@ -121,7 +121,11 @@ namespace IdleMaster.Entities
 
             foreach (Game game in Games.Where(x => idleStatuses.Contains(x.Status)))
             {
-                game.StopIdling();
+                if (!IsPaused)
+                {
+                    game.StopIdling();
+                }
+
                 game.Status = GameStatus.Stopped;
             }
 

@@ -330,6 +330,16 @@ namespace IdleMaster
                 return;
             }
 
+            if (UserSettings.FastIdleEnabled)
+            {
+                DialogResult result = MessageBox.Show($"Fast idle is enabled.{Environment.NewLine}This option will restart your games multiple times so it is recommended you first set yourself as invisible or offline on your friends window before idling to avoid annoying others.{Environment.NewLine}Do you wish to start idling now?", "Attention", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             _profile.Library.StartIdling();
 
             UpdateUserInterface("start");
@@ -538,6 +548,12 @@ namespace IdleMaster
 
         private void tsiSettings_Click(object sender, EventArgs e)
         {
+            if (_profile.Library.IsIdling)
+            {
+                MessageBox.Show("You must not be idling games to access the settings.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             frmSettings form = new frmSettings();
             form.ShowDialog();
         }
