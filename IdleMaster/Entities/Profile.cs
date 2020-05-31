@@ -4,6 +4,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Xml;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -18,28 +19,10 @@ namespace IdleMaster.Entities
 
         public string Avatar { get; private set; }
 
-        public string Status
-        {
-            get
-            {
-                string xmlUrl = $"{Url}/?xml=1";
-                XmlDocument xmlDocument = new XmlDocument();
-
-                using (WebClient webClient = new WebClient())
-                {
-                    string xml = webClient.DownloadString(xmlUrl);
-                    xmlDocument.LoadXml(xml);
-                }
-
-                XmlNode onlineState = xmlDocument.SelectSingleNode("//onlineState");
-                return WebUtility.HtmlDecode(onlineState?.InnerText);
-            }
-        }
-
         public Library Library { get; private set; }
 
         //Methods
-        public void LoadProfile()
+        public async Task LoadProfile()
         {
             string steamId64 = WebUtility.UrlDecode(UserSettings.CookieLoginSecure)?.Split('|').First();
 
@@ -51,7 +34,7 @@ namespace IdleMaster.Entities
 
             using (WebClient webClient = new WebClient())
             {
-                string xml = webClient.DownloadString(xmlUrl);
+                string xml = await webClient.DownloadStringTaskAsync(xmlUrl);
                 xmlDocument.LoadXml(xml);
             }
 
@@ -61,10 +44,10 @@ namespace IdleMaster.Entities
             XmlNode avatarMedium = xmlDocument.SelectSingleNode("//avatarMedium");
             Avatar = avatarMedium?.InnerText;
 
-            LoadGames();
+            await LoadGames();
         }
 
-        public void LoadGames()
+        public async Task LoadGames()
         {
             Library = new Library();
 
@@ -76,7 +59,7 @@ namespace IdleMaster.Entities
             {
                 currentPage++;
 
-                string response = CookieClient.GetHttp($"{profileLink}?p={currentPage}");
+                string response = await CookieClient.GetHttp($"{profileLink}?p={currentPage}");
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(response);

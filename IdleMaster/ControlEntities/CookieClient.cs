@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IdleMaster.ControlEntities
 {
@@ -35,7 +36,7 @@ namespace IdleMaster.ControlEntities
         }
 
         //Methods
-        public static string GetHttp(string url)
+        public static async Task<string> GetHttp(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
             {
@@ -46,7 +47,7 @@ namespace IdleMaster.ControlEntities
 
             using (CookieClient client = new CookieClient())
             {
-                content = client.DownloadString(url);
+                content = await client.DownloadStringTaskAsync(url);
             }
 
             return content;

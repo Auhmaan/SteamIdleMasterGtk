@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace IdleMaster.Entities
 {
@@ -133,7 +134,7 @@ namespace IdleMaster.Entities
             IsPaused = false;
         }
 
-        public void CheckIdlingStatus(GameStatus gameStatus)
+        public async Task CheckIdlingStatus(GameStatus gameStatus)
         {
             if (!IsIdling)
             {
@@ -143,7 +144,7 @@ namespace IdleMaster.Entities
             foreach (Game game in Games.Where(x => x.Status == gameStatus))
             {
                 HtmlDocument document = new HtmlDocument();
-                string response = CookieClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
+                string response = await CookieClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
 
                 document.LoadHtml(response);
 

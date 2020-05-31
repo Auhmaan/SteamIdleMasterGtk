@@ -3,11 +3,13 @@ using IdleMaster.Entities;
 using IdleMaster.Enums;
 using IdleMaster.Forms;
 using IdleMaster.Properties;
+using IdleMaster.UserControls;
 using Steamworks;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IdleMaster
@@ -31,14 +33,14 @@ namespace IdleMaster
             InitializeComponent();
         }
 
-        private void frmMain_Load(object sender, EventArgs e)
+        private async void frmMain_Load(object sender, EventArgs e)
         {
             CopyResources();
 
             CheckSteamStatus();
             tmrSteamStatus.Start();
 
-            LoadProfile();
+            await LoadProfile();
         }
 
         ////////////////////////////////////////METHODS////////////////////////////////////////
@@ -257,6 +259,23 @@ namespace IdleMaster
             }
         }
 
+        private void ShowWaitingAnimation()
+        {
+            ucLoading userControl = new ucLoading
+            {
+                Name = "ucLoading",
+                Location = new Point(12, 27)
+            };
+
+            Controls.Add(userControl);
+            userControl.BringToFront();
+        }
+
+        private void HideWaitingAnimation()
+        {
+            Controls.RemoveByKey("ucLoading");
+        }
+
         ////////////////////////////////////////STATUS////////////////////////////////////////
 
         private void tmrSteamStatus_Tick(object sender, EventArgs e)
@@ -274,12 +293,12 @@ namespace IdleMaster
 
         ////////////////////////////////////////SESSION////////////////////////////////////////
 
-        private void Login()
+        private async Task Login()
         {
             frmBrowser form = new frmBrowser();
             form.ShowDialog();
 
-            LoadProfile();
+            await LoadProfile();
         }
 
         private void Logout()
@@ -294,7 +313,7 @@ namespace IdleMaster
 
         ////////////////////////////////////////PROFILE////////////////////////////////////////
 
-        private void LoadProfile()
+        private async Task LoadProfile()
         {
             if (!IsLoggedIn)
             {
@@ -303,13 +322,13 @@ namespace IdleMaster
             }
 
             _profile = new Profile();
-            _profile.LoadProfile();
+            await _profile.LoadProfile();
 
             UpdateUserInterface("login");
             UpdateUserInterface("list");
         }
 
-        private void RefreshList()
+        private async Task RefreshList()
         {
             if (!IsLoggedIn)
             {
@@ -317,7 +336,7 @@ namespace IdleMaster
                 return;
             }
 
-            _profile.LoadGames();
+            await _profile.LoadGames();
             UpdateUserInterface("list");
         }
 
@@ -412,7 +431,7 @@ namespace IdleMaster
             UpdateUserInterface("status");
         }
 
-        private void CheckNormalIdleStatus()
+        private async Task CheckNormalIdleStatus()
         {
             tmrNormalIdleStatus.Stop();
 
@@ -421,13 +440,13 @@ namespace IdleMaster
                 return;
             }
 
-            _profile.Library.CheckIdlingStatus(GameStatus.NormalIdling);
+            await _profile.Library.CheckIdlingStatus(GameStatus.NormalIdling);
             UpdateUserInterface("status");
 
             tmrNormalIdleStatus.Start();
         }
 
-        private void FastIdleStart()
+        private async Task FastIdleStart()
         {
             tmrFastIdleStart.Stop();
 
@@ -437,7 +456,7 @@ namespace IdleMaster
             }
 
             _profile.Library.StartFastIdling();
-            _profile.Library.CheckIdlingStatus(GameStatus.FastIdling);
+            await _profile.Library.CheckIdlingStatus(GameStatus.FastIdling);
             UpdateUserInterface("status");
 
             tmrFastIdleStop.Start();
@@ -460,14 +479,14 @@ namespace IdleMaster
 
         ////////////////////////////////////////TIMERS////////////////////////////////////////
 
-        private void tmrNormalIdleStatus_Tick(object sender, EventArgs e)
+        private async void tmrNormalIdleStatus_Tick(object sender, EventArgs e)
         {
-            CheckNormalIdleStatus();
+            await CheckNormalIdleStatus();
         }
 
-        private void tmrFastIdleStart_Tick(object sender, EventArgs e)
+        private async void tmrFastIdleStart_Tick(object sender, EventArgs e)
         {
-            FastIdleStart();
+            await FastIdleStart();
         }
 
         private void tmrFastIdleStop_Tick(object sender, EventArgs e)
@@ -477,11 +496,11 @@ namespace IdleMaster
 
         ////////////////////////////////////////CONTROLS////////////////////////////////////////
 
-        private void lnkSession_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private async void lnkSession_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (!IsLoggedIn)
             {
-                Login();
+                await Login();
             }
             else
             {
@@ -489,9 +508,9 @@ namespace IdleMaster
             }
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            RefreshList();
+            await RefreshList();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
