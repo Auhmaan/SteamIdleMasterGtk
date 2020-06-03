@@ -7,126 +7,126 @@ using System.Windows.Forms;
 
 namespace IdleMaster.Forms
 {
-    public partial class frmBrowser : Form
-    {
-        [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool InternetSetOption(int hInternet, int dwOption, string lpBuffer, int dwBufferLength);
+	public partial class frmBrowser : Form
+	{
+		[DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern bool InternetSetOption(int hInternet, int dwOption, string lpBuffer, int dwBufferLength);
 
-        [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool InternetSetCookie(string lpszUrlName, string lpszCookieName, string lpszCookieData);
+		[DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		private static extern bool InternetSetCookie(string lpszUrlName, string lpszCookieName, string lpszCookieData);
 
-        [DllImport("wininet.dll", SetLastError = true)]
-        public static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, int dwFlags, IntPtr lpReserved);
+		[DllImport("wininet.dll", SetLastError = true)]
+		public static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, int dwFlags, IntPtr lpReserved);
 
-        public frmBrowser()
-        {
-            InitializeComponent();
-        }
+		public frmBrowser()
+		{
+			InitializeComponent();
+		}
 
-        private void frmBrowser_Load(object sender, EventArgs e)
-        {
-            //Remove any existing session state data
-            InternetSetOption(0, 42, null, 0);
+		private void frmBrowser_Load(object sender, EventArgs e)
+		{
+			//Remove any existing session state data
+			InternetSetOption(0, 42, null, 0);
 
-            //Delete Steam cookie data from the browser control
-            InternetSetCookie("http://steamcommunity.com", "sessionid", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
-            InternetSetCookie("http://steamcommunity.com", "steamLoginSecure", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
-            InternetSetCookie("http://steamcommunity.com", "steamRememberLogin", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
+			//Delete Steam cookie data from the browser control
+			InternetSetCookie("http://steamcommunity.com", "sessionid", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
+			InternetSetCookie("http://steamcommunity.com", "steamLoginSecure", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
+			InternetSetCookie("http://steamcommunity.com", "steamRememberLogin", ";expires=Mon, 01 Jan 0001 00:00:00 GMT");
 
-            wbSteam.Navigate("https://steamcommunity.com/login", "_self", null, "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko");
-        }
+			wbSteam.Navigate("https://steamcommunity.com/login", "_self", null, "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko");
+		}
 
-        private void wbAuth_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            wbSteam.Document.Body.Style = "overflow:hidden";
+		private void wbAuth_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+		{
+			wbSteam.Document.Body.Style = "overflow:hidden";
 
-            if (wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/login" ||
-                wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
-            {
-                dynamic htmldoc = wbSteam.Document.DomDocument;
-                dynamic idElement = htmldoc.GetElementById("global_header");
+			if (wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/login" ||
+				wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
+			{
+				dynamic htmldoc = wbSteam.Document.DomDocument;
+				dynamic idElement = htmldoc.GetElementById("global_header");
 
-                if (!object.ReferenceEquals(idElement, DBNull.Value))
-                {
-                    idElement.parentNode.removeChild(idElement);
-                }
-            }
+				if (!object.ReferenceEquals(idElement, DBNull.Value))
+				{
+					idElement.parentNode.removeChild(idElement);
+				}
+			}
 
-            if (wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
-            {
-                Height = 370;
-            }
+			if (wbSteam.Url.AbsoluteUri == "https://steamcommunity.com/my/goto")
+			{
+				Height = 370;
+			}
 
-            //Only gather the cookie information after reaching the profile page
-            if (!wbSteam.Url.AbsoluteUri.StartsWith("https://steamcommunity.com/id/"))
-            {
-                return;
-            }
+			//Only gather the cookie information after reaching the profile page
+			if (!wbSteam.Url.AbsoluteUri.StartsWith("https://steamcommunity.com/id/"))
+			{
+				return;
+			}
 
-            Height = 520;
+			Height = 520;
 
-            CookieContainer container = GetUriCookieContainer(wbSteam.Url);
-            CookieCollection cookies = container.GetCookies(wbSteam.Url);
+			CookieContainer container = GetUriCookieContainer(wbSteam.Url);
+			CookieCollection cookies = container.GetCookies(wbSteam.Url);
 
-            foreach (Cookie cookie in cookies)
-            {
-                switch (cookie.Name)
-                {
-                    case "sessionid":
-                        UserSettings.CookieSessionId = cookie.Value;
-                        break;
-                    case "steamLoginSecure":
-                        UserSettings.CookieLoginSecure = cookie.Value;
-                        break;
-                    case "steamMachineAuth":
-                        UserSettings.CookieMachineAuth = cookie.Value;
-                        break;
-                    case "steamRememberLogin":
-                        UserSettings.CookieRememberLogin = cookie.Value;
-                        break;
-                    case "steamparental":
-                        UserSettings.CookieParental = cookie.Value;
-                        break;
-                }
-            }
+			foreach (Cookie cookie in cookies)
+			{
+				switch (cookie.Name)
+				{
+					case "sessionid":
+						UserSettings.Cookies.SessionId = cookie.Value;
+						break;
+					case "steamLoginSecure":
+						UserSettings.Cookies.LoginSecure = cookie.Value;
+						break;
+					case "steamMachineAuth":
+						UserSettings.Cookies.MachineAuth = cookie.Value;
+						break;
+					case "steamRememberLogin":
+						UserSettings.Cookies.RememberLogin = cookie.Value;
+						break;
+					case "steamparental":
+						UserSettings.Cookies.Parental = cookie.Value;
+						break;
+				}
+			}
 
-            Close();
-        }
+			Close();
+		}
 
-        private CookieContainer GetUriCookieContainer(Uri uri)
-        {
-            //First, create a null cookie container
-            CookieContainer cookies = null;
+		private CookieContainer GetUriCookieContainer(Uri uri)
+		{
+			//First, create a null cookie container
+			CookieContainer cookies = null;
 
-            //Determine the size of the cookie
-            int datasize = 8192 * 16;
-            StringBuilder cookieData = new StringBuilder(datasize);
+			//Determine the size of the cookie
+			int datasize = 8192 * 16;
+			StringBuilder cookieData = new StringBuilder(datasize);
 
-            //Call InternetGetCookieEx from wininet.dll
-            if (!InternetGetCookieEx(uri.ToString(), null, cookieData, ref datasize, 0x2000, IntPtr.Zero))
-            {
-                if (datasize < 0)
-                {
-                    return null;
-                }
+			//Call InternetGetCookieEx from wininet.dll
+			if (!InternetGetCookieEx(uri.ToString(), null, cookieData, ref datasize, 0x2000, IntPtr.Zero))
+			{
+				if (datasize < 0)
+				{
+					return null;
+				}
 
-                //Allocate stringbuilder large enough to hold the cookie
-                cookieData = new StringBuilder(datasize);
-                if (!InternetGetCookieEx(uri.ToString(), null, cookieData, ref datasize, 0x2000, IntPtr.Zero))
-                {
-                    return null;
-                }
-            }
+				//Allocate stringbuilder large enough to hold the cookie
+				cookieData = new StringBuilder(datasize);
+				if (!InternetGetCookieEx(uri.ToString(), null, cookieData, ref datasize, 0x2000, IntPtr.Zero))
+				{
+					return null;
+				}
+			}
 
-            //If the cookie contains data, add it to the cookie container
-            if (cookieData.Length > 0)
-            {
-                cookies = new CookieContainer();
-                cookies.SetCookies(uri, cookieData.ToString().Replace(';', ','));
-            }
+			//If the cookie contains data, add it to the cookie container
+			if (cookieData.Length > 0)
+			{
+				cookies = new CookieContainer();
+				cookies.SetCookies(uri, cookieData.ToString().Replace(';', ','));
+			}
 
-            //Return the cookie container
-            return cookies;
-        }
-    }
+			//Return the cookie container
+			return cookies;
+		}
+	}
 }

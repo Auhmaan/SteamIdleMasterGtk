@@ -144,7 +144,7 @@ namespace IdleMaster.Entities
             foreach (Game game in Games.Where(x => x.Status == gameStatus))
             {
                 HtmlDocument document = new HtmlDocument();
-                string response = await CookieClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
+                string response = await UserWebClient.GetHttp($"{UserSettings.ProfileUrl}/gamecards/{game.AppId}");
 
                 document.LoadHtml(response);
 

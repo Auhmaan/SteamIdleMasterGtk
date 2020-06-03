@@ -115,13 +115,20 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControlEntities\UserCookies.cs" />
     <Compile Include="Entities\Game.cs" />
-    <Compile Include="ControlEntities\CookieClient.cs">
+    <Compile Include="ControlEntities\UserWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Entities\Library.cs" />
     <Compile Include="ControlEntities\UserSettings.cs" />
     <Compile Include="Enums\GameStatus.cs" />
+    <Compile Include="Forms\frmBlacklist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmBlacklist.Designer.cs">
+      <DependentUpon>frmBlacklist.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -159,6 +166,9 @@
     <Compile Include="UserControls\ucLoading.Designer.cs">
       <DependentUpon>ucLoading.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\frmBlacklist.resx">
+      <DependentUpon>frmBlacklist.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmBrowser.resx">
       <DependentUpon>frmBrowser.cs</DependentUpon>
     </EmbeddedResource>
