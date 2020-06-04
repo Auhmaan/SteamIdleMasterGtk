@@ -315,9 +315,12 @@ namespace IdleMaster
 
         private async Task LoadProfile()
         {
+            ShowWaitingAnimation();
+
             if (!IsLoggedIn)
             {
                 UpdateUserInterface("logout");
+                HideWaitingAnimation();
                 return;
             }
 
@@ -326,6 +329,8 @@ namespace IdleMaster
 
             UpdateUserInterface("login");
             UpdateUserInterface("list");
+
+            HideWaitingAnimation();
         }
 
         private async Task RefreshList()
@@ -567,7 +572,7 @@ namespace IdleMaster
 
         private void tsiSettings_Click(object sender, EventArgs e)
         {
-            if (_profile.Library.IsIdling)
+            if (IsLoggedIn && _profile.Library.IsIdling)
             {
                 MessageBox.Show("You must not be idling games to access the settings.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
