@@ -24,7 +24,7 @@ namespace IdleMaster.Entities
         //Methods
         public async Task LoadProfile()
         {
-            string steamId64 = WebUtility.UrlDecode(UserSettings.CookieLoginSecure)?.Split('|').First();
+            string steamId64 = WebUtility.UrlDecode(UserSettings.Cookies.LoginSecure)?.Split('|').First();
 
             UserSettings.ProfileUrl = $"https://steamcommunity.com/profiles/{steamId64}";
             Url = UserSettings.ProfileUrl;
@@ -59,7 +59,7 @@ namespace IdleMaster.Entities
             {
                 currentPage++;
 
-                string response = await CookieClient.GetHttp($"{profileLink}?p={currentPage}");
+                string response = await UserWebClient.GetHttp($"{profileLink}?p={currentPage}");
 
                 HtmlDocument document = new HtmlDocument();
                 document.LoadHtml(response);

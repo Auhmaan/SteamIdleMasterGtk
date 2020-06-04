@@ -29,14 +29,6 @@ namespace IdleMaster.Entities
             }
         }
 
-        //public bool IsIdling
-        //{
-        //    get
-        //    {
-        //        return idleProcess != null && !idleProcess.HasExited;
-        //    }
-        //}
-
         public GameStatus Status { get; set; }
 
         //Constructors

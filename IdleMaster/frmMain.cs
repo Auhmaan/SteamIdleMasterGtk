@@ -24,7 +24,7 @@ namespace IdleMaster
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(UserSettings.CookieSessionId) && !string.IsNullOrWhiteSpace(UserSettings.CookieLoginSecure);
+                return !string.IsNullOrWhiteSpace(UserSettings.Cookies.SessionId) && !string.IsNullOrWhiteSpace(UserSettings.Cookies.LoginSecure);
             }
         }
 
@@ -306,7 +306,7 @@ namespace IdleMaster
             StopIdle();
             _profile = null;
 
-            UserSettings.ClearCookies();
+            UserSettings.Cookies.Clear();
 
             UpdateUserInterface("logout");
         }
@@ -579,6 +579,12 @@ namespace IdleMaster
             }
 
             frmSettings form = new frmSettings();
+            form.ShowDialog();
+        }
+
+        private void tsiBlacklist_Click(object sender, EventArgs e)
+        {
+            frmBlacklist form = new frmBlacklist();
             form.ShowDialog();
         }
     }

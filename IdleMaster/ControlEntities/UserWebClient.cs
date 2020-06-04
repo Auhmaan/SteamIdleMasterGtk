@@ -5,33 +5,33 @@ using System.Threading.Tasks;
 
 namespace IdleMaster.ControlEntities
 {
-    public class CookieClient : WebClient
+    public class UserWebClient : WebClient
     {
-        //Properties
-        public CookieContainer CookieContainer { get; set; }
+        //Fields
+        private readonly CookieContainer cookieContainer;
 
         //Constructors
-        public CookieClient()
+        public UserWebClient()
         {
             CookieContainer cookieContainer = new CookieContainer();
 
             Uri uri = new Uri("http://steamcommunity.com");
 
-            cookieContainer.Add(new Cookie("sessionid", UserSettings.CookieSessionId) { Domain = uri.Host });
-            cookieContainer.Add(new Cookie("steamLoginSecure", UserSettings.CookieLoginSecure) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("sessionid", UserSettings.Cookies.SessionId) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("steamLoginSecure", UserSettings.Cookies.LoginSecure) { Domain = uri.Host });
 
             string cookieMachineAuth = "steamMachineAuth";
 
-            if (UserSettings.CookieLoginSecure != null && UserSettings.CookieLoginSecure.Length > 17)
+            if (UserSettings.Cookies.LoginSecure != null && UserSettings.Cookies.LoginSecure.Length > 17)
             {
-                cookieMachineAuth = $"steamMachineAuth{UserSettings.CookieLoginSecure.Substring(0, 17)}";
+                cookieMachineAuth = $"steamMachineAuth{UserSettings.Cookies.LoginSecure.Substring(0, 17)}";
             }
 
-            cookieContainer.Add(new Cookie(cookieMachineAuth, UserSettings.CookieMachineAuth) { Domain = uri.Host });
-            cookieContainer.Add(new Cookie("steamRememberLogin", UserSettings.CookieRememberLogin) { Domain = uri.Host });
-            cookieContainer.Add(new Cookie("steamparental", UserSettings.CookieParental) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie(cookieMachineAuth, UserSettings.Cookies.MachineAuth) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("steamRememberLogin", UserSettings.Cookies.RememberLogin) { Domain = uri.Host });
+            cookieContainer.Add(new Cookie("steamparental", UserSettings.Cookies.Parental) { Domain = uri.Host });
 
-            CookieContainer = cookieContainer;
+            this.cookieContainer = cookieContainer;
             Encoding = Encoding.UTF8;
         }
 
@@ -45,7 +45,7 @@ namespace IdleMaster.ControlEntities
 
             string content;
 
-            using (CookieClient client = new CookieClient())
+            using (UserWebClient client = new UserWebClient())
             {
                 content = await client.DownloadStringTaskAsync(url);
             }
@@ -59,7 +59,7 @@ namespace IdleMaster.ControlEntities
 
             if (webRequest is HttpWebRequest)
             {
-                (webRequest as HttpWebRequest).CookieContainer = CookieContainer;
+                (webRequest as HttpWebRequest).CookieContainer = cookieContainer;
             }
 
             return webRequest;
@@ -75,7 +75,7 @@ namespace IdleMaster.ControlEntities
             {
                 if (cookieCollection["steamLoginSecure"] != null && cookieCollection["steamLoginSecure"].Value == "deleted")
                 {
-                    UserSettings.ClearCookies();
+                    UserSettings.Cookies.Clear();
                 }
             }
 

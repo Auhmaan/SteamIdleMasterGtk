@@ -73,19 +73,19 @@ namespace IdleMaster.Forms
                 switch (cookie.Name)
                 {
                     case "sessionid":
-                        UserSettings.CookieSessionId = cookie.Value;
+                        UserSettings.Cookies.SessionId = cookie.Value;
                         break;
                     case "steamLoginSecure":
-                        UserSettings.CookieLoginSecure = cookie.Value;
+                        UserSettings.Cookies.LoginSecure = cookie.Value;
                         break;
                     case "steamMachineAuth":
-                        UserSettings.CookieMachineAuth = cookie.Value;
+                        UserSettings.Cookies.MachineAuth = cookie.Value;
                         break;
                     case "steamRememberLogin":
-                        UserSettings.CookieRememberLogin = cookie.Value;
+                        UserSettings.Cookies.RememberLogin = cookie.Value;
                         break;
                     case "steamparental":
-                        UserSettings.CookieParental = cookie.Value;
+                        UserSettings.Cookies.Parental = cookie.Value;
                         break;
                 }
             }
