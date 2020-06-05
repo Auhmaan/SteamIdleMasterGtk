@@ -45,26 +45,26 @@
             this.mnsMainMenu = new System.Windows.Forms.MenuStrip();
             this.tsiBlacklist = new System.Windows.Forms.ToolStripMenuItem();
             this.tsiSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnSkip = new System.Windows.Forms.Button();
-            this.btnPauseResume = new System.Windows.Forms.Button();
-            this.ptbAvatar = new System.Windows.Forms.PictureBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.btnStart = new System.Windows.Forms.Button();
             this.tbcPanels = new System.Windows.Forms.TabControl();
             this.tabBadgeIdle = new System.Windows.Forms.TabPage();
             this.tabManualIdle = new System.Windows.Forms.TabPage();
-            this.btnManualStop = new System.Windows.Forms.Button();
-            this.btnManualStart = new System.Windows.Forms.Button();
             this.lblAppId = new System.Windows.Forms.Label();
             this.txtAppId = new System.Windows.Forms.TextBox();
             this.lsbManualIdle = new System.Windows.Forms.ListBox();
             this.lblSteam = new System.Windows.Forms.Label();
+            this.ptbAvatar = new System.Windows.Forms.PictureBox();
+            this.btnSkip = new System.Windows.Forms.Button();
+            this.btnStart = new System.Windows.Forms.Button();
+            this.btnPauseResume = new System.Windows.Forms.Button();
+            this.btnStop = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnManualStop = new System.Windows.Forms.Button();
+            this.btnManualStart = new System.Windows.Forms.Button();
             this.mnsMainMenu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.tbcPanels.SuspendLayout();
             this.tabBadgeIdle.SuspendLayout();
             this.tabManualIdle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.SuspendLayout();
             // 
             // tmrSteamStatus
@@ -181,69 +181,6 @@
             this.tsiSettings.Text = "Settings";
             this.tsiSettings.Click += new System.EventHandler(this.tsiSettings_Click);
             // 
-            // btnSkip
-            // 
-            this.btnSkip.BackgroundImage = global::IdleMaster.Properties.Resources.Skip;
-            this.btnSkip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnSkip.Location = new System.Drawing.Point(366, 38);
-            this.btnSkip.Name = "btnSkip";
-            this.btnSkip.Size = new System.Drawing.Size(32, 32);
-            this.btnSkip.TabIndex = 4;
-            this.btnSkip.UseVisualStyleBackColor = true;
-            this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
-            // 
-            // btnPauseResume
-            // 
-            this.btnPauseResume.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnPauseResume.BackgroundImage")));
-            this.btnPauseResume.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnPauseResume.Location = new System.Drawing.Point(328, 38);
-            this.btnPauseResume.Name = "btnPauseResume";
-            this.btnPauseResume.Size = new System.Drawing.Size(32, 32);
-            this.btnPauseResume.TabIndex = 3;
-            this.btnPauseResume.UseVisualStyleBackColor = true;
-            this.btnPauseResume.Click += new System.EventHandler(this.btnPauseResume_Click);
-            // 
-            // ptbAvatar
-            // 
-            this.ptbAvatar.Location = new System.Drawing.Point(6, 6);
-            this.ptbAvatar.Name = "ptbAvatar";
-            this.ptbAvatar.Size = new System.Drawing.Size(64, 64);
-            this.ptbAvatar.TabIndex = 5;
-            this.ptbAvatar.TabStop = false;
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.BackgroundImage = global::IdleMaster.Properties.Resources.Refresh;
-            this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnRefresh.Location = new System.Drawing.Point(76, 38);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(32, 32);
-            this.btnRefresh.TabIndex = 1;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // btnStop
-            // 
-            this.btnStop.BackgroundImage = global::IdleMaster.Properties.Resources.Stop;
-            this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStop.Location = new System.Drawing.Point(404, 38);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(33, 32);
-            this.btnStop.TabIndex = 5;
-            this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // btnStart
-            // 
-            this.btnStart.BackgroundImage = global::IdleMaster.Properties.Resources.Play;
-            this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnStart.Location = new System.Drawing.Point(290, 38);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(32, 32);
-            this.btnStart.TabIndex = 2;
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
-            // 
             // tbcPanels
             // 
             this.tbcPanels.Controls.Add(this.tabBadgeIdle);
@@ -288,29 +225,6 @@
             this.tabManualIdle.Text = "Manual Idle";
             this.tabManualIdle.UseVisualStyleBackColor = true;
             // 
-            // btnManualStop
-            // 
-            this.btnManualStop.BackgroundImage = global::IdleMaster.Properties.Resources.Stop;
-            this.btnManualStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnManualStop.Enabled = false;
-            this.btnManualStop.Location = new System.Drawing.Point(405, 241);
-            this.btnManualStop.Name = "btnManualStop";
-            this.btnManualStop.Size = new System.Drawing.Size(32, 32);
-            this.btnManualStop.TabIndex = 9;
-            this.btnManualStop.UseVisualStyleBackColor = true;
-            this.btnManualStop.Click += new System.EventHandler(this.btnManualStop_Click);
-            // 
-            // btnManualStart
-            // 
-            this.btnManualStart.BackgroundImage = global::IdleMaster.Properties.Resources.Play;
-            this.btnManualStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnManualStart.Location = new System.Drawing.Point(367, 241);
-            this.btnManualStart.Name = "btnManualStart";
-            this.btnManualStart.Size = new System.Drawing.Size(32, 32);
-            this.btnManualStart.TabIndex = 8;
-            this.btnManualStart.UseVisualStyleBackColor = true;
-            this.btnManualStart.Click += new System.EventHandler(this.btnManualStart_Click);
-            // 
             // lblAppId
             // 
             this.lblAppId.AutoSize = true;
@@ -346,6 +260,92 @@
             this.lblSteam.TabIndex = 4;
             this.lblSteam.Text = "Steam status:";
             // 
+            // ptbAvatar
+            // 
+            this.ptbAvatar.Location = new System.Drawing.Point(6, 6);
+            this.ptbAvatar.Name = "ptbAvatar";
+            this.ptbAvatar.Size = new System.Drawing.Size(64, 64);
+            this.ptbAvatar.TabIndex = 5;
+            this.ptbAvatar.TabStop = false;
+            // 
+            // btnSkip
+            // 
+            this.btnSkip.BackgroundImage = global::IdleMaster.Properties.Resources.Skip;
+            this.btnSkip.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnSkip.Location = new System.Drawing.Point(366, 38);
+            this.btnSkip.Name = "btnSkip";
+            this.btnSkip.Size = new System.Drawing.Size(32, 32);
+            this.btnSkip.TabIndex = 4;
+            this.btnSkip.UseVisualStyleBackColor = true;
+            this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
+            // 
+            // btnStart
+            // 
+            this.btnStart.BackgroundImage = global::IdleMaster.Properties.Resources.Play;
+            this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStart.Location = new System.Drawing.Point(290, 38);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(32, 32);
+            this.btnStart.TabIndex = 2;
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // btnPauseResume
+            // 
+            this.btnPauseResume.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnPauseResume.BackgroundImage")));
+            this.btnPauseResume.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnPauseResume.Location = new System.Drawing.Point(328, 38);
+            this.btnPauseResume.Name = "btnPauseResume";
+            this.btnPauseResume.Size = new System.Drawing.Size(32, 32);
+            this.btnPauseResume.TabIndex = 3;
+            this.btnPauseResume.UseVisualStyleBackColor = true;
+            this.btnPauseResume.Click += new System.EventHandler(this.btnPauseResume_Click);
+            // 
+            // btnStop
+            // 
+            this.btnStop.BackgroundImage = global::IdleMaster.Properties.Resources.Stop;
+            this.btnStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnStop.Location = new System.Drawing.Point(404, 38);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(33, 32);
+            this.btnStop.TabIndex = 5;
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackgroundImage = global::IdleMaster.Properties.Resources.Refresh;
+            this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnRefresh.Location = new System.Drawing.Point(76, 38);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(32, 32);
+            this.btnRefresh.TabIndex = 1;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // btnManualStop
+            // 
+            this.btnManualStop.BackgroundImage = global::IdleMaster.Properties.Resources.Stop;
+            this.btnManualStop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnManualStop.Enabled = false;
+            this.btnManualStop.Location = new System.Drawing.Point(405, 241);
+            this.btnManualStop.Name = "btnManualStop";
+            this.btnManualStop.Size = new System.Drawing.Size(32, 32);
+            this.btnManualStop.TabIndex = 9;
+            this.btnManualStop.UseVisualStyleBackColor = true;
+            this.btnManualStop.Click += new System.EventHandler(this.btnManualStop_Click);
+            // 
+            // btnManualStart
+            // 
+            this.btnManualStart.BackgroundImage = global::IdleMaster.Properties.Resources.Play;
+            this.btnManualStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnManualStart.Location = new System.Drawing.Point(367, 241);
+            this.btnManualStart.Name = "btnManualStart";
+            this.btnManualStart.Size = new System.Drawing.Size(32, 32);
+            this.btnManualStart.TabIndex = 8;
+            this.btnManualStart.UseVisualStyleBackColor = true;
+            this.btnManualStart.Click += new System.EventHandler(this.btnManualStart_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -364,12 +364,12 @@
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.mnsMainMenu.ResumeLayout(false);
             this.mnsMainMenu.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).EndInit();
             this.tbcPanels.ResumeLayout(false);
             this.tabBadgeIdle.ResumeLayout(false);
             this.tabBadgeIdle.PerformLayout();
             this.tabManualIdle.ResumeLayout(false);
             this.tabManualIdle.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -19,7 +19,7 @@ namespace IdleMaster.Entities
 
         public string Avatar { get; private set; }
 
-        public Library Library { get; private set; }
+        public Library Library { get; private set; } = new Library();
 
         //Methods
         public async Task LoadProfile()

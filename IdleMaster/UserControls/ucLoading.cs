@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace IdleMaster.UserControls
@@ -15,6 +8,13 @@ namespace IdleMaster.UserControls
         public ucLoading()
         {
             InitializeComponent();
+        }
+
+        private void ucLoading_Load(object sender, System.EventArgs e)
+        {
+            Name = "ucLoading";
+            Location = new Point(12, 27);
+            BringToFront();
         }
     }
 }

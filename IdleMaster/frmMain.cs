@@ -92,14 +92,7 @@ namespace IdleMaster
                 ptbAvatar.ImageLocation = null;
                 lblUsername.Text = null;
 
-                btnRefresh.Enabled = false;
-                lsvGames.Enabled = false;
                 lsvGames.Items.Clear();
-
-                btnStart.Enabled = false;
-                btnPauseResume.Enabled = false;
-                btnSkip.Enabled = false;
-                btnStop.Enabled = false;
 
                 btnPauseResume.BackgroundImage = Resources.Pause;
             }
@@ -251,14 +244,8 @@ namespace IdleMaster
 
         private void ShowWaitingAnimation()
         {
-            ucLoading userControl = new ucLoading
-            {
-                Name = "ucLoading",
-                Location = new Point(12, 27)
-            };
-
+            ucLoading userControl = new ucLoading();
             Controls.Add(userControl);
-            userControl.BringToFront();
         }
 
         private void HideWaitingAnimation()
@@ -525,7 +512,7 @@ namespace IdleMaster
 
             Process idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", appId.ToString())
             {
-                WindowStyle = ProcessWindowStyle.Normal
+                WindowStyle = ProcessWindowStyle.Hidden
             });
 
             KeyValuePair<int, Process> game = new KeyValuePair<int, Process>(appId, idleProcess);

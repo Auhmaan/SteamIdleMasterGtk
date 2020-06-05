@@ -40,7 +40,7 @@
             this.lblLoading.AutoSize = true;
             this.lblLoading.BackColor = System.Drawing.Color.White;
             this.lblLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoading.Location = new System.Drawing.Point(157, 139);
+            this.lblLoading.Location = new System.Drawing.Point(167, 156);
             this.lblLoading.Name = "lblLoading";
             this.lblLoading.Size = new System.Drawing.Size(182, 25);
             this.lblLoading.TabIndex = 1;
@@ -49,7 +49,7 @@
             // ptbLoading
             // 
             this.ptbLoading.Image = global::IdleMaster.Properties.Resources.Loading;
-            this.ptbLoading.Location = new System.Drawing.Point(92, 126);
+            this.ptbLoading.Location = new System.Drawing.Point(102, 143);
             this.ptbLoading.Name = "ptbLoading";
             this.ptbLoading.Size = new System.Drawing.Size(50, 50);
             this.ptbLoading.TabIndex = 0;
@@ -58,7 +58,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Location = new System.Drawing.Point(65, 101);
+            this.pictureBox1.Location = new System.Drawing.Point(75, 118);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(300, 100);
             this.pictureBox1.TabIndex = 2;
@@ -73,7 +73,8 @@
             this.Controls.Add(this.ptbLoading);
             this.Controls.Add(this.pictureBox1);
             this.Name = "ucLoading";
-            this.Size = new System.Drawing.Size(431, 302);
+            this.Size = new System.Drawing.Size(451, 336);
+            this.Load += new System.EventHandler(this.ucLoading_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoading)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

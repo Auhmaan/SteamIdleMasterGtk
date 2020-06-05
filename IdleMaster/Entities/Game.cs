@@ -38,7 +38,7 @@ namespace IdleMaster.Entities
             Name = name;
             Status = GameStatus.Stopped;
 
-            FastIdleTries = 2;
+            FastIdleTries = 10;
 
             OriginalRemainingCards = remaining;
             UpdateStats(remaining, hours);
@@ -49,7 +49,7 @@ namespace IdleMaster.Entities
         {
             idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", AppId)
             {
-                WindowStyle = ProcessWindowStyle.Normal
+                WindowStyle = ProcessWindowStyle.Hidden
             });
         }
 
