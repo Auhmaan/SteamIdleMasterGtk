@@ -28,22 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ucLoading));
-            this.ptbLoading = new System.Windows.Forms.PictureBox();
             this.lblLoading = new System.Windows.Forms.Label();
+            this.ptbLoading = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoading)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // ptbLoading
-            // 
-            this.ptbLoading.Image = ((System.Drawing.Image)(resources.GetObject("ptbLoading.Image")));
-            this.ptbLoading.Location = new System.Drawing.Point(92, 126);
-            this.ptbLoading.Name = "ptbLoading";
-            this.ptbLoading.Size = new System.Drawing.Size(50, 50);
-            this.ptbLoading.TabIndex = 0;
-            this.ptbLoading.TabStop = false;
             // 
             // lblLoading
             // 
@@ -55,6 +45,15 @@
             this.lblLoading.Size = new System.Drawing.Size(182, 25);
             this.lblLoading.TabIndex = 1;
             this.lblLoading.Text = "Loading information";
+            // 
+            // ptbLoading
+            // 
+            this.ptbLoading.Image = global::IdleMaster.Properties.Resources.Loading;
+            this.ptbLoading.Location = new System.Drawing.Point(92, 126);
+            this.ptbLoading.Name = "ptbLoading";
+            this.ptbLoading.Size = new System.Drawing.Size(50, 50);
+            this.ptbLoading.TabIndex = 0;
+            this.ptbLoading.TabStop = false;
             // 
             // pictureBox1
             // 

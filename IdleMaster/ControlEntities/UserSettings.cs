@@ -1,4 +1,7 @@
 ﻿using IdleMaster.Properties;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 
 namespace IdleMaster.ControlEntities
 {
@@ -16,6 +19,7 @@ namespace IdleMaster.ControlEntities
             set
             {
                 Settings.Default.ProfileUrl = value;
+                Settings.Default.Save();
             }
         }
 
@@ -44,6 +48,20 @@ namespace IdleMaster.ControlEntities
             set
             {
                 Settings.Default.FastIdleEnabled = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public static List<string> GamesBlacklist
+        {
+            get
+            {
+                return Settings.Default.GamesBlacklist?.Cast<string>().ToList();
+            }
+            set
+            {
+                Settings.Default.GamesBlacklist = new StringCollection();
+                Settings.Default.GamesBlacklist.AddRange(value.ToArray());
                 Settings.Default.Save();
             }
         }

@@ -224,6 +224,9 @@
     <None Include="Resources\pause.png" />
     <None Include="Resources\resume.png" />
     <None Include="Resources\skip.png" />
+    <None Include="Resources\add.png" />
+    <None Include="Resources\trash.png" />
+    <None Include="Resources\hourglass.gif" />
     <Content Include="steam_api64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

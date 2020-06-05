@@ -1,48 +1,88 @@
-﻿using System;
+﻿using IdleMaster.ControlEntities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace IdleMaster.Forms
 {
-	public partial class frmBlacklist : Form
-	{
-		public frmBlacklist()
-		{
-			InitializeComponent();
-		}
+    public partial class frmBlacklist : Form
+    {
+        public frmBlacklist()
+        {
+            InitializeComponent();
+        }
 
-		////////////////////////////////////////METHODS////////////////////////////////////////
+        private void frmBlacklist_Load(object sender, EventArgs e)
+        {
+            string[] gamesBlacklist = UserSettings.GamesBlacklist?.ToArray();
 
-		private void ApplySettings()
-		{
+            if (gamesBlacklist == null)
+            {
+                return;
+            }
 
-		}
+            lsbBlacklist.Items.AddRange(gamesBlacklist);
+        }
 
-		////////////////////////////////////////CONTROLS////////////////////////////////////////
+        ////////////////////////////////////////METHODS////////////////////////////////////////
 
-		private void lsbBlacklist_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			btnDelete.Enabled = lsbBlacklist.SelectedIndices.Count > 0;
-		}
+        private void ApplySettings()
+        {
+            UserSettings.GamesBlacklist = lsbBlacklist.Items.Cast<string>().ToList();
+        }
 
-		private void btnAdd_Click(object sender, EventArgs e)
-		{
+        ////////////////////////////////////////CONTROLS////////////////////////////////////////
 
-		}
+        private void lsbBlacklist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            btnDelete.Enabled = lsbBlacklist.SelectedIndices.Count > 0;
+        }
 
-		private void btnRemove_Click(object sender, EventArgs e)
-		{
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtAppId.Text))
+            {
+                return;
+            }
 
-		}
+            int.TryParse(txtAppId.Text, out int appId);
 
-		private void btnOk_Click(object sender, EventArgs e)
-		{
-			ApplySettings();
-			Close();
-		}
+            if (appId == 0)
+            {
+                txtAppId.Text = null;
+                return;
+            }
 
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			Close();
-		}
-	}
+            if (lsbBlacklist.Items.Contains(txtAppId.Text))
+            {
+                txtAppId.Text = null;
+                return;
+            }
+
+            lsbBlacklist.Items.Add(txtAppId.Text);
+            txtAppId.Text = null;
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            List<int> selectedIndices = lsbBlacklist.SelectedIndices.Cast<int>().Reverse().ToList();
+
+            foreach (int index in selectedIndices)
+            {
+                lsbBlacklist.Items.RemoveAt(index);
+            }
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            ApplySettings();
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+    }
 }
