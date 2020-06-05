@@ -54,13 +54,13 @@ namespace IdleMaster.Forms
                 return;
             }
 
-            if (lsbBlacklist.Items.Contains(txtAppId.Text))
+            if (lsbBlacklist.Items.Contains(appId))
             {
                 txtAppId.Text = null;
                 return;
             }
 
-            lsbBlacklist.Items.Add(txtAppId.Text);
+            lsbBlacklist.Items.Add(appId);
             txtAppId.Text = null;
         }
 

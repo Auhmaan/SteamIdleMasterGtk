@@ -2,6 +2,7 @@
 using IdleMaster.ControlEntities;
 using IdleMaster.Enums;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,9 @@ namespace IdleMaster.Entities
     public class Library
     {
         //Properties
-        public List<Game> Games { get; private set; }
+        public List<Game> Games { get; private set; } = new List<Game>();
+
+        public List<KeyValuePair<int, Process>> ManualGames { get; private set; } = new List<KeyValuePair<int, Process>>();
 
         public bool HasGames
         {
@@ -27,12 +30,6 @@ namespace IdleMaster.Entities
         public bool IsPaused { get; private set; }
 
         public int FirstIdlingIndex { get; private set; }
-
-        //Constructors
-        public Library()
-        {
-            Games = new List<Game>();
-        }
 
         //Methods
         public void StartIdling()
@@ -162,6 +159,8 @@ namespace IdleMaster.Entities
                 if (!game.HasDrops)
                 {
                     game.StopIdling();
+                    game.Status = GameStatus.Finished;
+                    continue;
                 }
 
                 if (game.Status == GameStatus.FastIdling && game.FastIdleTries > 0)
@@ -173,6 +172,11 @@ namespace IdleMaster.Entities
                         game.Status = GameStatus.NormalIdling;
                     }
                 }
+            }
+            if (Games.All(x => x.Status == GameStatus.Stopped || x.Status == GameStatus.Finished))
+            {
+                IsIdling = false;
+                IsPaused = false;
             }
         }
 

@@ -6,6 +6,8 @@ using IdleMaster.Properties;
 using IdleMaster.UserControls;
 using Steamworks;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -84,6 +86,8 @@ namespace IdleMaster
             if (uiProfile == "logout")
             {
                 lnkSession.Text = "Login";
+                tbcPanels.SelectedIndex = 0;
+                tbcPanels.Enabled = false;
 
                 ptbAvatar.ImageLocation = null;
                 lblUsername.Text = null;
@@ -108,6 +112,7 @@ namespace IdleMaster
             if (uiProfile == "login")
             {
                 lnkSession.Text = "Logout";
+                tbcPanels.Enabled = true;
 
                 ptbAvatar.ImageLocation = _profile.Avatar;
                 lblUsername.Text = _profile.Username;
@@ -196,11 +201,7 @@ namespace IdleMaster
 
             if (uiProfile == "start")
             {
-                ptbAvatar.ImageLocation = _profile.Avatar;
-                lblUsername.Text = _profile.Username;
-
                 btnRefresh.Enabled = false;
-                lsvGames.Enabled = _profile.Library.HasGames;
 
                 btnStart.Enabled = false;
                 btnPauseResume.Enabled = true;
@@ -212,11 +213,7 @@ namespace IdleMaster
 
             if (uiProfile == "pause")
             {
-                ptbAvatar.ImageLocation = _profile.Avatar;
-                lblUsername.Text = _profile.Username;
-
                 btnRefresh.Enabled = false;
-                lsvGames.Enabled = _profile.Library.HasGames;
 
                 btnStart.Enabled = false;
                 btnPauseResume.Enabled = true;
@@ -228,11 +225,7 @@ namespace IdleMaster
 
             if (uiProfile == "resume")
             {
-                ptbAvatar.ImageLocation = _profile.Avatar;
-                lblUsername.Text = _profile.Username;
-
                 btnRefresh.Enabled = false;
-                lsvGames.Enabled = _profile.Library.HasGames;
 
                 btnStart.Enabled = false;
                 btnPauseResume.Enabled = true;
@@ -244,9 +237,6 @@ namespace IdleMaster
 
             if (uiProfile == "stop")
             {
-                ptbAvatar.ImageLocation = _profile.Avatar;
-                lblUsername.Text = _profile.Username;
-
                 btnRefresh.Enabled = true;
                 lsvGames.Enabled = _profile.Library.HasGames;
 
@@ -287,8 +277,17 @@ namespace IdleMaster
         {
             _isSteamRunning = SteamAPI.IsSteamRunning();
 
-            lblSteam.Text = $"Steam is {(!_isSteamRunning ? "not " : "")}running";
-            lblSteam.ForeColor = _isSteamRunning ? Color.Green : Color.Red;
+            switch (_isSteamRunning)
+            {
+                case true:
+                    lblSteamStatus.Text = "Running";
+                    lblSteamStatus.ForeColor = Color.Green;
+                    break;
+                case false:
+                    lblSteamStatus.Text = "Not running";
+                    lblSteamStatus.ForeColor = Color.Red;
+                    break;
+            }
         }
 
         ////////////////////////////////////////SESSION////////////////////////////////////////
@@ -448,10 +447,12 @@ namespace IdleMaster
             await _profile.Library.CheckIdlingStatus(GameStatus.NormalIdling);
             UpdateUserInterface("status");
 
+
+
             tmrNormalIdleStatus.Start();
         }
 
-        private async Task FastIdleStart()
+        private async Task StartFastIdle()
         {
             tmrFastIdleStart.Stop();
 
@@ -467,7 +468,7 @@ namespace IdleMaster
             tmrFastIdleStop.Start();
         }
 
-        private void FastIdleStop()
+        private void StopFastIdle()
         {
             tmrFastIdleStop.Stop();
 
@@ -491,15 +492,85 @@ namespace IdleMaster
 
         private async void tmrFastIdleStart_Tick(object sender, EventArgs e)
         {
-            await FastIdleStart();
+            await StartFastIdle();
         }
 
         private void tmrFastIdleStop_Tick(object sender, EventArgs e)
         {
-            FastIdleStop();
+            StopFastIdle();
+        }
+
+        ////////////////////////////////////////IDLE////////////////////////////////////////
+
+        private void StartManualIdle()
+        {
+            if (string.IsNullOrWhiteSpace(txtAppId.Text))
+            {
+                return;
+            }
+
+            int.TryParse(txtAppId.Text, out int appId);
+
+            if (appId == 0)
+            {
+                txtAppId.Text = null;
+                return;
+            }
+
+            if (lsbManualIdle.Items.Contains(appId))
+            {
+                txtAppId.Text = null;
+                return;
+            }
+
+            Process idleProcess = Process.Start(new ProcessStartInfo("steam-idle.exe", appId.ToString())
+            {
+                WindowStyle = ProcessWindowStyle.Normal
+            });
+
+            KeyValuePair<int, Process> game = new KeyValuePair<int, Process>(appId, idleProcess);
+            _profile.Library.ManualGames.Add(game);
+
+            lsbManualIdle.Items.Add(txtAppId.Text);
+            txtAppId.Text = null;
+        }
+
+        private void StopManualIdle()
+        {
+            List<int> selectedIndices = lsbManualIdle.SelectedIndices.Cast<int>().Reverse().ToList();
+
+            foreach (int index in selectedIndices)
+            {
+                _profile.Library.ManualGames[index].Value.Kill();
+                _profile.Library.ManualGames.RemoveAt(index);
+
+                lsbManualIdle.Items.RemoveAt(index);
+            }
         }
 
         ////////////////////////////////////////CONTROLS////////////////////////////////////////
+
+        private void tsiBlacklist_Click(object sender, EventArgs e)
+        {
+            if (IsLoggedIn && _profile.Library.IsIdling)
+            {
+                StopIdle();
+            }
+
+            frmBlacklist form = new frmBlacklist();
+            form.ShowDialog();
+        }
+
+        private void tsiSettings_Click(object sender, EventArgs e)
+        {
+            if (IsLoggedIn && _profile.Library.IsIdling)
+            {
+                StopIdle();
+            }
+
+            frmSettings form = new frmSettings();
+            form.ShowDialog();
+        }
 
         private async void lnkSession_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -545,6 +616,16 @@ namespace IdleMaster
             StopIdle();
         }
 
+        private void btnManualStart_Click(object sender, EventArgs e)
+        {
+            StartManualIdle();
+        }
+
+        private void btnManualStop_Click(object sender, EventArgs e)
+        {
+            StopManualIdle();
+        }
+
         ////////////////////////////////////////DESIGN////////////////////////////////////////
 
         private void lsvGames_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
@@ -570,22 +651,21 @@ namespace IdleMaster
             }
         }
 
-        private void tsiSettings_Click(object sender, EventArgs e)
+        private void lsbManualIdle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (IsLoggedIn && _profile.Library.IsIdling)
-            {
-                MessageBox.Show("You must not be idling games to access the settings.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            frmSettings form = new frmSettings();
-            form.ShowDialog();
+            btnManualStop.Enabled = lsbManualIdle.SelectedIndices.Count > 0;
         }
 
-        private void tsiBlacklist_Click(object sender, EventArgs e)
+        private void tbcPanels_Selecting(object sender, TabControlCancelEventArgs e)
         {
-            frmBlacklist form = new frmBlacklist();
-            form.ShowDialog();
+            StopIdle();
+
+            for (int index = 0; index < lsbManualIdle.Items.Count; index++)
+            {
+                lsbManualIdle.SetSelected(index, true);
+            }
+
+            StopManualIdle();
         }
     }
 }
