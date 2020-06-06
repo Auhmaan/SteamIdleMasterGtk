@@ -109,16 +109,6 @@ namespace IdleMaster
 
                 ptbAvatar.ImageLocation = _profile.Avatar;
                 lblUsername.Text = _profile.Username;
-
-                btnRefresh.Enabled = true;
-                lsvGames.Enabled = _profile.Library.HasGames;
-
-                btnStart.Enabled = _profile.Library.HasGames && _isSteamRunning;
-                btnPauseResume.Enabled = false;
-                btnSkip.Enabled = false;
-                btnStop.Enabled = false;
-
-                btnPauseResume.BackgroundImage = Resources.Pause;
             }
 
             if (uiProfile == "list")
@@ -143,6 +133,15 @@ namespace IdleMaster
                         lsvGames.Items.Add(item);
                     }
                 }
+
+                lblGamesToIdle.Text = _profile.Library.Games.Count.ToString();
+
+                prgDroppedCards.Value = 0;
+                lblDroppedCards.Text = "0";
+
+                int originalRemainingCards = _profile.Library.Games.Sum(x => x.OriginalRemainingCards);
+                prgDroppedCards.Maximum = originalRemainingCards;
+                lblOriginalRemainingCards.Text = originalRemainingCards.ToString();
             }
 
             if (uiProfile == "status")
@@ -190,6 +189,11 @@ namespace IdleMaster
 
                     item.SubItems[3].Text = idleStatus;
                 }
+
+                int droppedCards = _profile.Library.Games.Sum(x => x.OriginalRemainingCards - x.RemainingCards);
+
+                prgDroppedCards.Value = droppedCards;
+                lblDroppedCards.Text = droppedCards.ToString();
             }
 
             if (uiProfile == "start")
@@ -202,6 +206,13 @@ namespace IdleMaster
                 btnStop.Enabled = true;
 
                 btnPauseResume.BackgroundImage = Resources.Pause;
+
+                prgDroppedCards.Value = 0;
+                lblDroppedCards.Text = "0";
+
+                int originalRemainingCards = _profile.Library.Games.Sum(x => x.OriginalRemainingCards);
+                prgDroppedCards.Maximum = originalRemainingCards;
+                lblOriginalRemainingCards.Text = originalRemainingCards.ToString();
             }
 
             if (uiProfile == "pause")
@@ -315,6 +326,7 @@ namespace IdleMaster
 
             UpdateUserInterface("login");
             UpdateUserInterface("list");
+            UpdateUserInterface("stop");
 
             HideWaitingAnimation();
         }
@@ -329,6 +341,7 @@ namespace IdleMaster
 
             await _profile.LoadGames();
             UpdateUserInterface("list");
+            UpdateUserInterface("stop");
         }
 
         ////////////////////////////////////////IDLE////////////////////////////////////////
@@ -433,8 +446,6 @@ namespace IdleMaster
 
             await _profile.Library.CheckIdlingStatus(GameStatus.NormalIdling);
             UpdateUserInterface("status");
-
-
 
             tmrNormalIdleStatus.Start();
         }
@@ -653,6 +664,16 @@ namespace IdleMaster
             }
 
             StopManualIdle();
+        }
+
+        private void lblOriginalRemainingCards_TextChanged(object sender, EventArgs e)
+        {
+            if (lblOriginalRemainingCards.Text.StartsWith("/"))
+            {
+                return;
+            }
+
+            lblOriginalRemainingCards.Text = $"/ {lblOriginalRemainingCards.Text}";
         }
     }
 }

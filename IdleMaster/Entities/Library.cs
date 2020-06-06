@@ -173,6 +173,7 @@ namespace IdleMaster.Entities
                     }
                 }
             }
+
             if (Games.All(x => x.Status == GameStatus.Stopped || x.Status == GameStatus.Finished))
             {
                 IsIdling = false;

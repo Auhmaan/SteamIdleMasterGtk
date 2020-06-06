@@ -47,24 +47,29 @@
             this.tsiSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.tbcPanels = new System.Windows.Forms.TabControl();
             this.tabBadgeIdle = new System.Windows.Forms.TabPage();
-            this.tabManualIdle = new System.Windows.Forms.TabPage();
-            this.lblAppId = new System.Windows.Forms.Label();
-            this.txtAppId = new System.Windows.Forms.TextBox();
-            this.lsbManualIdle = new System.Windows.Forms.ListBox();
-            this.lblSteam = new System.Windows.Forms.Label();
+            this.lblOriginalRemainingCards = new System.Windows.Forms.Label();
+            this.lblDroppedCards = new System.Windows.Forms.Label();
+            this.prgDroppedCards = new System.Windows.Forms.ProgressBar();
             this.ptbAvatar = new System.Windows.Forms.PictureBox();
             this.btnSkip = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnPauseResume = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.tabManualIdle = new System.Windows.Forms.TabPage();
             this.btnManualStop = new System.Windows.Forms.Button();
             this.btnManualStart = new System.Windows.Forms.Button();
+            this.lblAppId = new System.Windows.Forms.Label();
+            this.txtAppId = new System.Windows.Forms.TextBox();
+            this.lsbManualIdle = new System.Windows.Forms.ListBox();
+            this.lblSteam = new System.Windows.Forms.Label();
+            this.lblGames = new System.Windows.Forms.Label();
+            this.lblGamesToIdle = new System.Windows.Forms.Label();
             this.mnsMainMenu.SuspendLayout();
             this.tbcPanels.SuspendLayout();
             this.tabBadgeIdle.SuspendLayout();
-            this.tabManualIdle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
+            this.tabManualIdle.SuspendLayout();
             this.SuspendLayout();
             // 
             // tmrSteamStatus
@@ -85,7 +90,7 @@
             // lblSteamStatus
             // 
             this.lblSteamStatus.AutoSize = true;
-            this.lblSteamStatus.Location = new System.Drawing.Point(77, 33);
+            this.lblSteamStatus.Location = new System.Drawing.Point(76, 33);
             this.lblSteamStatus.Name = "lblSteamStatus";
             this.lblSteamStatus.Size = new System.Drawing.Size(47, 13);
             this.lblSteamStatus.TabIndex = 1;
@@ -153,7 +158,7 @@
             // 
             // tmrFastIdleStop
             // 
-            this.tmrFastIdleStop.Interval = 10000;
+            this.tmrFastIdleStop.Interval = 30000;
             this.tmrFastIdleStop.Tick += new System.EventHandler(this.tmrFastIdleStop_Tick);
             // 
             // mnsMainMenu
@@ -188,12 +193,17 @@
             this.tbcPanels.Location = new System.Drawing.Point(12, 58);
             this.tbcPanels.Name = "tbcPanels";
             this.tbcPanels.SelectedIndex = 0;
-            this.tbcPanels.Size = new System.Drawing.Size(451, 305);
+            this.tbcPanels.Size = new System.Drawing.Size(451, 334);
             this.tbcPanels.TabIndex = 3;
             this.tbcPanels.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tbcPanels_Selecting);
             // 
             // tabBadgeIdle
             // 
+            this.tabBadgeIdle.Controls.Add(this.lblGamesToIdle);
+            this.tabBadgeIdle.Controls.Add(this.lblGames);
+            this.tabBadgeIdle.Controls.Add(this.lblOriginalRemainingCards);
+            this.tabBadgeIdle.Controls.Add(this.lblDroppedCards);
+            this.tabBadgeIdle.Controls.Add(this.prgDroppedCards);
             this.tabBadgeIdle.Controls.Add(this.ptbAvatar);
             this.tabBadgeIdle.Controls.Add(this.btnSkip);
             this.tabBadgeIdle.Controls.Add(this.btnStart);
@@ -205,60 +215,37 @@
             this.tabBadgeIdle.Location = new System.Drawing.Point(4, 22);
             this.tabBadgeIdle.Name = "tabBadgeIdle";
             this.tabBadgeIdle.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBadgeIdle.Size = new System.Drawing.Size(443, 279);
+            this.tabBadgeIdle.Size = new System.Drawing.Size(443, 308);
             this.tabBadgeIdle.TabIndex = 0;
             this.tabBadgeIdle.Text = "Bagde Idle";
             this.tabBadgeIdle.UseVisualStyleBackColor = true;
             // 
-            // tabManualIdle
+            // lblOriginalRemainingCards
             // 
-            this.tabManualIdle.Controls.Add(this.btnManualStop);
-            this.tabManualIdle.Controls.Add(this.btnManualStart);
-            this.tabManualIdle.Controls.Add(this.lblAppId);
-            this.tabManualIdle.Controls.Add(this.txtAppId);
-            this.tabManualIdle.Controls.Add(this.lsbManualIdle);
-            this.tabManualIdle.Location = new System.Drawing.Point(4, 22);
-            this.tabManualIdle.Name = "tabManualIdle";
-            this.tabManualIdle.Padding = new System.Windows.Forms.Padding(3);
-            this.tabManualIdle.Size = new System.Drawing.Size(443, 279);
-            this.tabManualIdle.TabIndex = 1;
-            this.tabManualIdle.Text = "Manual Idle";
-            this.tabManualIdle.UseVisualStyleBackColor = true;
+            this.lblOriginalRemainingCards.AutoSize = true;
+            this.lblOriginalRemainingCards.Location = new System.Drawing.Point(404, 284);
+            this.lblOriginalRemainingCards.Name = "lblOriginalRemainingCards";
+            this.lblOriginalRemainingCards.Size = new System.Drawing.Size(33, 13);
+            this.lblOriginalRemainingCards.TabIndex = 8;
+            this.lblOriginalRemainingCards.Text = "/ 999";
+            this.lblOriginalRemainingCards.TextChanged += new System.EventHandler(this.lblOriginalRemainingCards_TextChanged);
             // 
-            // lblAppId
+            // lblDroppedCards
             // 
-            this.lblAppId.AutoSize = true;
-            this.lblAppId.Location = new System.Drawing.Point(215, 251);
-            this.lblAppId.Name = "lblAppId";
-            this.lblAppId.Size = new System.Drawing.Size(40, 13);
-            this.lblAppId.TabIndex = 7;
-            this.lblAppId.Text = "App ID";
+            this.lblDroppedCards.Location = new System.Drawing.Point(383, 284);
+            this.lblDroppedCards.Name = "lblDroppedCards";
+            this.lblDroppedCards.Size = new System.Drawing.Size(25, 13);
+            this.lblDroppedCards.TabIndex = 7;
+            this.lblDroppedCards.Text = "999";
+            this.lblDroppedCards.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // txtAppId
+            // prgDroppedCards
             // 
-            this.txtAppId.Location = new System.Drawing.Point(261, 248);
-            this.txtAppId.Name = "txtAppId";
-            this.txtAppId.Size = new System.Drawing.Size(100, 20);
-            this.txtAppId.TabIndex = 6;
-            // 
-            // lsbManualIdle
-            // 
-            this.lsbManualIdle.FormattingEnabled = true;
-            this.lsbManualIdle.Location = new System.Drawing.Point(6, 6);
-            this.lsbManualIdle.Name = "lsbManualIdle";
-            this.lsbManualIdle.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lsbManualIdle.Size = new System.Drawing.Size(431, 225);
-            this.lsbManualIdle.TabIndex = 5;
-            this.lsbManualIdle.SelectedIndexChanged += new System.EventHandler(this.lsbManualIdle_SelectedIndexChanged);
-            // 
-            // lblSteam
-            // 
-            this.lblSteam.AutoSize = true;
-            this.lblSteam.Location = new System.Drawing.Point(9, 33);
-            this.lblSteam.Name = "lblSteam";
-            this.lblSteam.Size = new System.Drawing.Size(71, 13);
-            this.lblSteam.TabIndex = 4;
-            this.lblSteam.Text = "Steam status:";
+            this.prgDroppedCards.Location = new System.Drawing.Point(6, 279);
+            this.prgDroppedCards.Name = "prgDroppedCards";
+            this.prgDroppedCards.Size = new System.Drawing.Size(371, 23);
+            this.prgDroppedCards.Step = 1;
+            this.prgDroppedCards.TabIndex = 5;
             // 
             // ptbAvatar
             // 
@@ -323,6 +310,21 @@
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // tabManualIdle
+            // 
+            this.tabManualIdle.Controls.Add(this.btnManualStop);
+            this.tabManualIdle.Controls.Add(this.btnManualStart);
+            this.tabManualIdle.Controls.Add(this.lblAppId);
+            this.tabManualIdle.Controls.Add(this.txtAppId);
+            this.tabManualIdle.Controls.Add(this.lsbManualIdle);
+            this.tabManualIdle.Location = new System.Drawing.Point(4, 22);
+            this.tabManualIdle.Name = "tabManualIdle";
+            this.tabManualIdle.Padding = new System.Windows.Forms.Padding(3);
+            this.tabManualIdle.Size = new System.Drawing.Size(443, 387);
+            this.tabManualIdle.TabIndex = 1;
+            this.tabManualIdle.Text = "Manual Idle";
+            this.tabManualIdle.UseVisualStyleBackColor = true;
+            // 
             // btnManualStop
             // 
             this.btnManualStop.BackgroundImage = global::IdleMaster.Properties.Resources.Stop;
@@ -346,16 +348,69 @@
             this.btnManualStart.UseVisualStyleBackColor = true;
             this.btnManualStart.Click += new System.EventHandler(this.btnManualStart_Click);
             // 
+            // lblAppId
+            // 
+            this.lblAppId.AutoSize = true;
+            this.lblAppId.Location = new System.Drawing.Point(215, 251);
+            this.lblAppId.Name = "lblAppId";
+            this.lblAppId.Size = new System.Drawing.Size(40, 13);
+            this.lblAppId.TabIndex = 7;
+            this.lblAppId.Text = "App ID";
+            // 
+            // txtAppId
+            // 
+            this.txtAppId.Location = new System.Drawing.Point(261, 248);
+            this.txtAppId.Name = "txtAppId";
+            this.txtAppId.Size = new System.Drawing.Size(100, 20);
+            this.txtAppId.TabIndex = 6;
+            // 
+            // lsbManualIdle
+            // 
+            this.lsbManualIdle.FormattingEnabled = true;
+            this.lsbManualIdle.Location = new System.Drawing.Point(6, 6);
+            this.lsbManualIdle.Name = "lsbManualIdle";
+            this.lsbManualIdle.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lsbManualIdle.Size = new System.Drawing.Size(431, 225);
+            this.lsbManualIdle.TabIndex = 5;
+            this.lsbManualIdle.SelectedIndexChanged += new System.EventHandler(this.lsbManualIdle_SelectedIndexChanged);
+            // 
+            // lblSteam
+            // 
+            this.lblSteam.AutoSize = true;
+            this.lblSteam.Location = new System.Drawing.Point(9, 33);
+            this.lblSteam.Name = "lblSteam";
+            this.lblSteam.Size = new System.Drawing.Size(71, 13);
+            this.lblSteam.TabIndex = 4;
+            this.lblSteam.Text = "Steam status:";
+            // 
+            // lblGames
+            // 
+            this.lblGames.AutoSize = true;
+            this.lblGames.Location = new System.Drawing.Point(114, 57);
+            this.lblGames.Name = "lblGames";
+            this.lblGames.Size = new System.Drawing.Size(74, 13);
+            this.lblGames.TabIndex = 5;
+            this.lblGames.Text = "Games to idle:";
+            // 
+            // lblGamesToIdle
+            // 
+            this.lblGamesToIdle.AutoSize = true;
+            this.lblGamesToIdle.Location = new System.Drawing.Point(184, 57);
+            this.lblGamesToIdle.Name = "lblGamesToIdle";
+            this.lblGamesToIdle.Size = new System.Drawing.Size(25, 13);
+            this.lblGamesToIdle.TabIndex = 5;
+            this.lblGamesToIdle.Text = "999";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(475, 375);
-            this.Controls.Add(this.lblSteam);
+            this.ClientSize = new System.Drawing.Size(475, 404);
             this.Controls.Add(this.tbcPanels);
             this.Controls.Add(this.lblSteamStatus);
             this.Controls.Add(this.lnkSession);
             this.Controls.Add(this.mnsMainMenu);
+            this.Controls.Add(this.lblSteam);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "frmMain";
@@ -367,9 +422,9 @@
             this.tbcPanels.ResumeLayout(false);
             this.tabBadgeIdle.ResumeLayout(false);
             this.tabBadgeIdle.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).EndInit();
             this.tabManualIdle.ResumeLayout(false);
             this.tabManualIdle.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -407,5 +462,10 @@
         private System.Windows.Forms.Label lblAppId;
         private System.Windows.Forms.TextBox txtAppId;
         private System.Windows.Forms.ListBox lsbManualIdle;
+        private System.Windows.Forms.ProgressBar prgDroppedCards;
+        private System.Windows.Forms.Label lblOriginalRemainingCards;
+        private System.Windows.Forms.Label lblDroppedCards;
+        private System.Windows.Forms.Label lblGames;
+        private System.Windows.Forms.Label lblGamesToIdle;
     }
 }
