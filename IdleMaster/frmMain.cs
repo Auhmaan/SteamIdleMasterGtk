@@ -92,6 +92,9 @@ namespace IdleMaster
                 ptbAvatar.ImageLocation = null;
                 lblUsername.Text = null;
 
+                lblGames.Visible = false;
+                lblGamesToIdle.Visible = false;
+
                 lsvGames.Items.Clear();
 
                 btnPauseResume.BackgroundImage = Resources.Pause;
@@ -109,6 +112,9 @@ namespace IdleMaster
 
                 ptbAvatar.ImageLocation = _profile.Avatar;
                 lblUsername.Text = _profile.Username;
+
+                lblGames.Visible = true;
+                lblGamesToIdle.Visible = true;
             }
 
             if (uiProfile == "list")

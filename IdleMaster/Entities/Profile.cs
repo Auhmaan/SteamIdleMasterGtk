@@ -49,6 +49,8 @@ namespace IdleMaster.Entities
 
         public async Task LoadGames()
         {
+            Library.Games.Clear();
+
             string profileLink = $"{Url}/badges";
             int totalPages = 1;
             int currentPage = 0;
